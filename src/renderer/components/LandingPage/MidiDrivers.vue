@@ -1,43 +1,31 @@
 <template>
-  <section class="drivers">
-    <h2>MIDI Driver Configuration</h2>
-    <div class="drivers-input">
-      <h3>Select Input Port</h3>
-      <select class="drivers-input-select" name="" @change="selectInput">
-        <option v-for="port in inputPorts" :key="port" :value="port" :selected="isSelectedInput(port)">
-          {{ port }}
-        </option>
-      </select>
-    </div>
-    <div class="drivers-output">
-      <h3>Select Output Port</h3>
-      <select class="drivers-output-select" name="" @change="selectOutput">
-        <option v-for="port in outputPorts" :key="port" :value="port" :selected="isSelectedOutput(port)">
-          {{ port }}
-        </option>
-      </select>
-    </div>
-  </section>
+  <transition>
+    <section class="drivers" v-if="showConfigurationEdit">
+      <h2>Port Configuration</h2>
+      <div class="drivers-wrapper">
+        <div class="drivers-item input">
+          <h4>Select Input Port</h4>
+          <select class="drivers-input-select" name="" @change="selectInput">
+            <option v-for="port in inputPorts" :key="port" :value="port" :selected="isSelectedInput(port)">
+              {{ port }}
+            </option>
+          </select>
+        </div>
+        <div class="drivers-item output">
+          <h4>Select Output Port</h4>
+          <select class="drivers-output-select" name="" @change="selectOutput">
+            <option v-for="port in outputPorts" :key="port" :value="port" :selected="isSelectedOutput(port)">
+              {{ port }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </section>
+  </transition>
 </template>
 
 <script>
-  function getPortNames() {
-    return window.navigator.requestMIDIAccess()
-      .then((access) => {
-        const inputs = [];
-        const outputs = [];
-
-        access.inputs.forEach((entry) => {
-          inputs.push(entry.name);
-        });
-
-        access.outputs.forEach((entry) => {
-          outputs.push(entry.name);
-        });
-
-        return { inputs, outputs };
-      });
-  }
+  import midi from '../../lib/midi';
 
   export default {
     data() {
@@ -47,6 +35,9 @@
       };
     },
     computed: {
+      showConfigurationEdit() {
+        return this.$store.state.Config.showConfigurationEdit;
+      },
       inputPort() {
         return this.$store.state.Config.inputPort;
       },
@@ -54,11 +45,19 @@
         return this.$store.state.Config.outputPort;
       },
     },
-    created() {
-      getPortNames()
+    mounted() {
+      midi.getPortNames()
         .then(({ inputs, outputs }) => {
           this.inputPorts = inputs;
           this.outputPorts = outputs;
+
+          if (this.inputPort) {
+            midi.setInput(this.inputPort);
+          }
+
+          if (this.outputPort) {
+            midi.setOutput(this.outputPort);
+          }
         });
     },
     methods: {
@@ -69,40 +68,29 @@
         return this.outputPort === port;
       },
       selectInput(e) {
-        this.$store.commit('SET_INPUT_PORT', e.target.value);
+        const portName = e.target.value;
+        midi.setInput(portName);
+        this.$store.commit('SET_INPUT_PORT', portName);
         this.$store.dispatch('saveConfig');
       },
       selectOutput(e) {
-        this.$store.commit('SET_OUTPUT_PORT', e.target.value);
+        const portName = e.target.value;
+        midi.setOutput(portName);
+        this.$store.commit('SET_OUTPUT_PORT', portName);
         this.$store.dispatch('saveConfig');
       },
     },
   };
 </script>
 
-<style scoped>
-  .title {
-    color: #888;
-    font-size: 18px;
-    font-weight: initial;
-    letter-spacing: .25px;
-    margin-top: 10px;
-  }
-
-  .items { margin-top: 8px; }
-
-  .item {
+<style scoped lang="scss">
+  .drivers-wrapper {
     display: flex;
-    margin-bottom: 6px;
   }
 
-  .item .name {
-    color: #6a6a6a;
-    margin-right: 6px;
-  }
-
-  .item .value {
-    color: #35495e;
-    font-weight: bold;
+  .drivers {
+    &-item {
+      flex-basis: 250px;
+    }
   }
 </style>
