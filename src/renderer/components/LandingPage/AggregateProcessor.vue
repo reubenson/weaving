@@ -68,7 +68,7 @@
         buffer.pop();
         buffer.unshift(this.maxLevel);
         this.level = Math.round(_.mean(buffer));
-        midi.sendControlChange(this.outputLevelChannel, this.outputLevelController, this.level);
+        // midi.sendControlChange(this.outputLevelChannel, this.outputLevelController, this.level);
       });
     },
     methods: {

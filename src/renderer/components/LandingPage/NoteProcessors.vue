@@ -1,10 +1,12 @@
 <template>
   <section class="note-processors">
     <h2>Note Processors</h2>
-    <note-processor 
-      v-for="(item, index) in noteProcessors" :key="item.id" :id="item.id" :index="index">
-    </note-processor>
-    <button @click="addNoteProcessor" class="btn btn-primary">Add Note Processor</button>
+    <div class="note-processors-items">
+      <note-processor 
+        v-for="(item, index) in noteProcessors" :key="item.id" :id="item.id" :index="index">
+      </note-processor>
+    </div>
+    <button @click="addNoteProcessor" class="btn btn-primary" v-if="showConfigurationEdit">Add Note Processor</button>
   </section>
 </template>
 
@@ -21,6 +23,9 @@
       return {};
     },
     computed: {
+      showConfigurationEdit() {
+        return this.$store.getters.showConfigurationEdit;
+      },
       noteProcessors() {
         return this.$store.state.Config.noteProcessors;
       },
@@ -52,6 +57,12 @@
 
 <style lang="scss" scoped>
 .note-processors {
+  &-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
   &-item {
     background-color: #fff;
     border-radius: 10px;

@@ -1,16 +1,16 @@
 <template>
   <ul class="map-list">
     <li class="map-list-item" v-bind:class="{'is-on': isOn}">
-      <div class="map-list-item-section">Listening on Note:
-        <select class="map-list-item-select" name="" v-model="onNote">
+      <div class="map-list-item-section">Listening on Note: {{ onNote }}
+        <select class="map-list-item-select" name="" v-model="onNote" v-if="showConfigurationEdit">
           <option v-for="item in onNotes" :key="item.id" :value="item" :selected="isSelectedOnNote(item)">
             {{ item }} ({{ noteNames[item] }})
           </option>
         </select>
       </div>
       <div class="map-list-item-section">
-        Output Channel:
-        <select class="map-list-item-select" name="" v-model="channel">
+        Output Channel: {{ channel }}
+        <select class="map-list-item-select" name="" v-model="channel" v-if="showConfigurationEdit">
           <option v-for="channelOpt in channels" :key="channelOpt" :value="channelOpt" :selected="isSelectedChannel(channelOpt)">
             {{ channelOpt }}
           </option>
@@ -25,10 +25,10 @@
         Velocity Level: {{ velocityLevel }}
         <p class="info">Note velocity averaged over time</p>
       </div>
-      <div class="map-list-item-section">
+      <div class="map-list-item-section" v-if="showConfigurationEdit">
         <select class="map-list-item-select" name="" @change="setTestController">
-          <option v-for="controllerOpt in controllers" :key="controllerOpt" :value="controllerOpt" :selected="isSelected('testSignalController', controllerOpt)">
-            {{ controllerOpt }}
+          <option v-for="(controllerOpt, key) in controllers" :key="controllerOpt" :value="controllerOpt" :selected="isSelected('testSignalController', controllerOpt)">
+            {{ controllerOpt }} - {{ key }}
           </option>
         </select>
         <button class="btn" @click="sendTestSignal">Send MIDI test signal to {{ testSignalController }}</button>
@@ -63,9 +63,9 @@
     },
     spin: {
       start() {
-        const lfoSpeed = 0.5; // Hz
-        const period = lfoSpeed * 1000; // ms
-        const phaseOffset = (2 * Math.PI * this.index) / this.$store.getters.processorsCount;
+        const lfoSpeed = 1; // Hz
+        const period = 1000 / lfoSpeed; // ms
+        const phaseOffset = period * (this.index / this.$store.getters.processorsCount);
 
         this.spinTracker = new BufferTimer();
         // console.log('this.index', this.index);
@@ -75,10 +75,17 @@
         this.spinTracker.setInterval(() => {
           const now = Date.now();
           const spinController = store.state.Config.noteProcessorSettings.spin;
-          let val = 0.5 + (0.5 * Math.sin((2 * Math.PI * (now / period)) + phaseOffset));
+          // let val = 0.5 + (0.5 * Math.sin((2 * Math.PI * (now / period)) + phaseOffset));
+          let val = ((now + phaseOffset) % period) / period;
+
+          // console.log('phaseOffset', phaseOffset);
+
+          // const test = 0.5 + (0.5 * Math.sin((2 * Math.PI * (now / period))));
+          // console.log('test', test);
 
           // normalize to MIDI range
           val = Math.round(val * 127);
+          // val = 127;
           midi.sendControlChange(this.channel, spinController, val);
           // console.log('val', val);
         });
@@ -88,6 +95,18 @@
       },
     },
   };
+
+  function getTrackers(names) {
+    return _.filter(trackers, (val, key) => names.includes(key));
+  }
+
+  function startTrackers(names = []) {
+    getTrackers(names).forEach(tracker => tracker.start.call(this));
+  }
+
+  function stopTrackers(names = []) {
+    getTrackers(names).forEach(tracker => tracker.stop.call(this));
+  }
 
   export default {
     name: 'note-processor',
@@ -99,6 +118,9 @@
       };
     },
     computed: {
+      showConfigurationEdit() {
+        return this.$store.getters.showConfigurationEdit;
+      },
       isOn() {
         return this.$store.getters.getNoteProcessor(this.id).isOn;
       },
@@ -159,7 +181,7 @@
         },
       },
       controllers() {
-        return Object.values(this.$store.getters.noteProcessorSettings);
+        return this.$store.getters.noteProcessorSettings;
       },
     },
     props: ['id', 'index'],
@@ -167,8 +189,6 @@
     },
     methods: {
       sendTestSignal() {
-        console.log('this.channel', this.channel);
-        console.log('this.testSignalController', this.testSignalController);
         midi.sendControlChange(this.channel, this.testSignalController, 69);
       },
       setTestController(e) {
@@ -204,17 +224,15 @@
       },
     },
     mounted() {
-      [this.testSignalController] = this.controllers;
-      trackers.velocity.start.call(this);
-      trackers.spin.start.call(this);
-
-      this.$store.watch(() => this.$store.getters.showConfigurationEdit, (val) => {
+      const trackerTypes = ['velocity', 'spin'];
+      const testSignalField = Object.keys(this.controllers)[0];
+      this.testSignalController = this.controllers[testSignalField];
+      startTrackers.call(this, trackerTypes);
+      this.$store.watch(() => this.showConfigurationEdit, (val) => {
         if (val) {
-          trackers.velocity.stop.call(this);
-          trackers.spin.stop.call(this);
+          stopTrackers.call(this, trackerTypes);
         } else {
-          trackers.velocity.start.call(this);
-          trackers.spin.start.call(this);
+          startTrackers.call(this, trackerTypes);
         }
       });
     },
@@ -223,6 +241,9 @@
 
 <style lang="scss" scoped>
 .map-list {
+  justify-content: space-between;
+  margin: 10px;
+
   &-item {
     background-color: #fff;
     border-radius: 10px;

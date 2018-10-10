@@ -107,9 +107,27 @@ function noteOff(channel, note, velocity) {
 
 // controllerNumber must be 0 to 119
 function sendControlChange(channel, controllerNumber, controllerValue) {
-  if (midiOutput) {
-    midiOutput.send([176 + channel - 1, controllerNumber, controllerValue ]);
+  if (typeof channel !== 'number') {
+    console.error('channel not specified');
+    return;
   }
+
+  if (typeof controllerNumber !== 'number') {
+    console.error('controllerNumber not specified');
+    return;
+  }
+
+  if (typeof controllerValue !== 'number') {
+    console.error('controllerValue not specified');
+    return;
+  }
+
+  if (!midiOutput) {
+    console.error('midi output not specified');
+    return;
+  }
+
+  midiOutput.send([176 + channel - 1, controllerNumber, controllerValue ]);
 }
 
 export default {

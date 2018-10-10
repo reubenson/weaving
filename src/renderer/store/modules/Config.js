@@ -21,7 +21,7 @@ const bootstrap = {
   channel: 1,
   isOn: false,
   velocity: 0,
-  velocityThreshold: 127,
+  velocityThreshold: 0,
 };
 
 function getUnassignedChannel(assignedChannels) {
