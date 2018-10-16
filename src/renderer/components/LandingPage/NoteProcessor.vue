@@ -43,18 +43,21 @@
   import BufferTimer from '../../lib/buffer-timer';
   import store from '../../store';
   import midi from '../../lib/midi';
+  import noteModel from '../../lib/note-model';
   const noteNames = require('../../lib/noteNames');
   const trackers = {
     velocity: {
       start() {
+        const propName = 'velocity';
         this.velocityTracker = new BufferTimer();
         this.velocityTracker.setInterval((buffer) => {
           const velocityController = store.state.Config.noteProcessorSettings.velocity;
+          const val = this.isOn ? this.velocity : 0;
 
           buffer.pop();
-          buffer.unshift(this.velocity);
+          buffer.unshift(val);
           this.velocityLevel = Math.round(_.mean(buffer));
-          midi.sendControlChange(this.channel, velocityController, this.velocityLevel);
+          noteModel.sendControlChange(this.channel, velocityController, this.velocityLevel, propName);
         });
       },
       stop() {
@@ -230,6 +233,7 @@
       startTrackers.call(this, trackerTypes);
       this.$store.watch(() => this.showConfigurationEdit, (val) => {
         if (val) {
+          console.log('val', val);
           stopTrackers.call(this, trackerTypes);
         } else {
           startTrackers.call(this, trackerTypes);

@@ -29,19 +29,51 @@
 <script>
   import _ from 'lodash';
   import BufferTimer from '../../lib/buffer-timer';
-  import store from '../../store';
   import midi from '../../lib/midi';
+
+  const trackers = {
+    velocity: {
+      start() {
+        const channel = this.outputLevelChannel;
+        const controller = this.outputLevelController;
+        this.velocityTracker = new BufferTimer();
+        this.velocityTracker.setInterval((buffer) => {
+          buffer.pop();
+          buffer.unshift(this.maxLevel);
+          this.level = Math.round(_.mean(buffer));
+          midi.sendControlChange(channel, controller, this.level);
+        });
+      },
+      stop() {
+        this.velocityTracker.clearInterval();
+      },
+    },
+  };
+
+  function getTrackers(names) {
+    return _.filter(trackers, (val, key) => names.includes(key));
+  }
+
+  function startTrackers(names = []) {
+    getTrackers(names).forEach(tracker => tracker.start.call(this));
+  }
+
+  function stopTrackers(names = []) {
+    getTrackers(names).forEach(tracker => tracker.stop.call(this));
+  }
 
   export default {
     name: 'aggregate-proceessor',
     components: { },
-    store,
     data() {
       return {
         level: 0,
       };
     },
     computed: {
+      showConfigurationEdit() {
+        return this.$store.getters.showConfigurationEdit;
+      },
       channels() {
         return _.times(16, i => i + 1);
       },
@@ -62,13 +94,15 @@
     created() {
     },
     mounted() {
-      const bt = new BufferTimer();
+      const trackerTypes = ['velocity'];
+      startTrackers.call(this, trackerTypes);
 
-      bt.setInterval((buffer) => {
-        buffer.pop();
-        buffer.unshift(this.maxLevel);
-        this.level = Math.round(_.mean(buffer));
-        // midi.sendControlChange(this.outputLevelChannel, this.outputLevelController, this.level);
+      this.$store.watch(() => this.showConfigurationEdit, (val) => {
+        if (val) {
+          stopTrackers.call(this, trackerTypes);
+        } else {
+          startTrackers.call(this, trackerTypes);
+        }
       });
     },
     methods: {

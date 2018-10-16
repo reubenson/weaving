@@ -3,7 +3,7 @@ import _ from 'lodash';
 import uuid from 'uuid/v1';
 
 const levelSampleFrequency = 40; // per second
-const levelBufferDuration = 5; // seconds
+const levelBufferDuration = 1; // seconds
 const levelBufferSize = levelBufferDuration * levelSampleFrequency;
 const interval = `${1000 / levelSampleFrequency}m`;
 const timer = new Nanotimer; // eslint-disable-line

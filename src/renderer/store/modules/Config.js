@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import _ from 'lodash';
 import datastore from '../../datastore';
 import noteNames from '../../lib/noteNames';
@@ -7,8 +8,8 @@ const state = {
   inputPort: '',
   outputPort: '',
   noteProcessors: [],
-  outputLevelChannel: '',
-  outputLevelController: '',
+  outputLevelChannel: 1,
+  outputLevelController: 1,
   noteProcessorSettings: {
     velocity: '',
     spin: '',
@@ -43,6 +44,7 @@ const mutations = {
   UPDATE_NOTE_PROCESSOR(state, data) {
     const id = _.get(data, 'id');
     const channel = _.get(data, 'channel');
+    let noteProcessor;
     let index;
 
     if (typeof id === 'number') {
@@ -52,7 +54,10 @@ const mutations = {
     }
 
     if (typeof index === 'number') {
-      _.assign(state.noteProcessors[index], data);
+      noteProcessor = state.noteProcessors[index];
+      _.assign(noteProcessor, data);
+      Vue.set(state.noteProcessors, index, noteProcessor);
+      // _.assign(state.noteProcessors[index], data);
     }
   },
   ADD_NOTE_PROCESSOR(state) {

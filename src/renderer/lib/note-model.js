@@ -35,7 +35,15 @@ function sendNoteOff(note) {
   }
 }
 
+function sendControlChange(channel, controller, value, property) {
+  const data = { channel };
+  data[property] = value;
+  midi.sendControlChange(channel, controller, value);
+  store.commit('UPDATE_NOTE_PROCESSOR', data);
+}
+
 export default {
   sendNoteOn,
   sendNoteOff,
+  sendControlChange,
 };
