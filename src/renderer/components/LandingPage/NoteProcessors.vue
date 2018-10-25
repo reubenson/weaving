@@ -1,23 +1,32 @@
 <template>
   <section class="note-processors">
-    <h2>Note Processors</h2>
+    <h3>Note Listeners</h3>
     <div class="note-processors-items">
-      <note-processor 
+      <note-listener 
         v-for="(item, index) in noteProcessors" :key="item.id" :id="item.id" :index="index">
-      </note-processor>
+      </note-listener>
     </div>
     <button @click="addNoteProcessor" class="btn btn-primary" v-if="showConfigurationEdit">Add Note Processor</button>
+    <h3>Note Models</h3>
+    <div class="note-models">
+      <note-model
+        v-for="(item, index) in noteModels" :key="item.id" :id="item.id" 
+          :generator="item.generator" :index="index" :receiveNoteOn="item.receiveNoteOn">
+      </note-model>
+    </div>
+    <button @click="addNoteModel" class="btn btn-primary" v-if="showConfigurationEdit">Add Note Model</button>
   </section>
 </template>
 
 <script>
   import store from '../../store';
-  import NoteProcessor from './NoteProcessor';
+  import NoteListener from './NoteListener';
+  import NoteModel from './NoteModel';
   import midi from '../../lib/midi';
 
   export default {
     name: 'note-processors',
-    components: { NoteProcessor },
+    components: { NoteListener, NoteModel },
     store,
     data() {
       return {};
@@ -29,8 +38,10 @@
       noteProcessors() {
         return this.$store.state.Config.noteProcessors;
       },
+      noteModels() {
+        return this.$store.state.Config.noteModels;
+      },
     },
-    // props: ['noteProcessors'],
     created() {
     },
     mounted() {
@@ -38,6 +49,10 @@
     methods: {
       addNoteProcessor() {
         this.$store.commit('ADD_NOTE_PROCESSOR');
+        this.$store.dispatch('saveConfig');
+      },
+      addNoteModel() {
+        this.$store.commit('ADD_NOTE_MODEL');
         this.$store.dispatch('saveConfig');
       },
       showInfo({ target }) {
@@ -57,7 +72,8 @@
 
 <style lang="scss" scoped>
 .note-processors {
-  &-items {
+  &-items,
+  .note-models {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

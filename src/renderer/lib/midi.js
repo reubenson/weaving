@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import _ from 'lodash';
-import noteModel from './note-model';
+import store from '../store';
 
 let inputs = [];
 let outputs = [];
@@ -36,15 +36,13 @@ function parseMidiMessage(message) {
 }
 
 function onNote(noteValue, velocity) {
-  // noteModel.sendNoteOn(noteValue, velocity);
   if (velocity > 0) {
-    // note start
-    noteModel.sendNoteOn(noteValue, velocity);
+    store.commit('HANDLE_NOTE_ON', { noteValue, velocity });
   } else {
-    // note end
-    noteModel.sendNoteOff(noteValue, -velocity);
+    store.commit('HANDLE_NOTE_OFF', { noteValue });
   }
 }
+
 function onPad(pad, velocity) {}
 function onPitchBend(value) {}
 function onModWheel(value) {}

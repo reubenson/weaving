@@ -22,6 +22,14 @@
         <input type="range" min="0" max="127" class="slider" v-model="velocityThreshold">
       </div>
       <div class="map-list-item-section">
+        Select Model: {{ modelName }}
+        <select class="map-list-item-select" name="" v-model="noteModel" v-if="showConfigurationEdit">
+          <option v-for="model in models" :key="model.id" :value="model" :selected="isSelectedModel(model)">
+            {{ model.name }}
+          </option>
+        </select>
+      </div>
+      <div class="map-list-item-section">
         Velocity Level: {{ velocityLevel }}
         <p class="info">Note velocity averaged over time</p>
       </div>
@@ -43,12 +51,10 @@
   import BufferTimer from '../../lib/buffer-timer';
   import store from '../../store';
   import midi from '../../lib/midi';
-  import noteModel from '../../lib/note-model';
   const noteNames = require('../../lib/noteNames');
   const trackers = {
     velocity: {
       start() {
-        const propName = 'velocity';
         this.velocityTracker = new BufferTimer();
         this.velocityTracker.setInterval((buffer) => {
           const velocityController = store.state.Config.noteProcessorSettings.velocity;
@@ -57,7 +63,11 @@
           buffer.pop();
           buffer.unshift(val);
           this.velocityLevel = Math.round(_.mean(buffer));
-          noteModel.sendControlChange(this.channel, velocityController, this.velocityLevel, propName);
+          midi.sendControlChange(this.channel, velocityController, this.velocityLevel);
+          store.commit('UPDATE_NOTE_PROCESSOR', {
+            id: this.id,
+            velocity: this.velocityLevel,
+          });
         });
       },
       stop() {
@@ -121,6 +131,9 @@
       };
     },
     computed: {
+      models() {
+        return this.$store.getters.models;
+      },
       showConfigurationEdit() {
         return this.$store.getters.showConfigurationEdit;
       },
@@ -159,6 +172,21 @@
           this.$store.dispatch('saveConfig');
         },
       },
+      noteModel: {
+        get() {
+          return this.$store.getters.getNoteProcessor(this.id).model;
+        },
+        set(val) {
+          this.$store.commit('UPDATE_NOTE_PROCESSOR', {
+            id: this.id,
+            model: val,
+          });
+          this.$store.dispatch('saveConfig');
+        },
+      },
+      modelName() {
+        return this.model && this.model.name;
+      },
       onNote: {
         get() {
           return this.$store.getters.getNoteProcessor(this.id).onNote;
@@ -191,6 +219,13 @@
     created() {
     },
     methods: {
+      sendTriggerToModel() {
+        if (this.model) {
+          console.log('triggering model');
+          console.log('this.velocity', this.velocity);
+          midi.noteOn(this.channel, 80, this.velocity);
+        }
+      },
       sendTestSignal() {
         midi.sendControlChange(this.channel, this.testSignalController, 69);
       },
@@ -202,6 +237,9 @@
       },
       isSelectedChannel(channel) {
         return this.channel === parseInt(channel, 10);
+      },
+      isSelectedModel(model) {
+        return this.model && this.model.id === model.id;
       },
       isSelected(field, val) {
         return this[field] === parseInt(val, 10);
@@ -238,6 +276,13 @@
         } else {
           startTrackers.call(this, trackerTypes);
         }
+      });
+
+      // initialize state
+      store.commit('UPDATE_NOTE_PROCESSOR', {
+        id: this.id,
+        velocity: 0,
+        isOn: false,
       });
     },
   };
