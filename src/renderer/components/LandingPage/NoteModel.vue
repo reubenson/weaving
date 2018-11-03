@@ -1,6 +1,6 @@
 <template>
   <div class="note-model">
-    <p>Name: 
+    <p>Name:
       <span v-if="!showConfigurationEdit">{{ name }}</span>
       <input v-model="name" v-if="showConfigurationEdit">
     </p>
@@ -9,6 +9,27 @@
         <span v-if="!showConfigurationEdit">{{ scale }}</span>
         <select v-model="scale" v-if="showConfigurationEdit">
           <option v-for="item in scaleNames" :key="item" :value="item" :selected="isSelected('scale', item)">
+            {{ item }}
+          </option>
+        </select>
+      </p>
+    </div>
+    <div>
+      <p>Tonic: 
+        <span v-if="!showConfigurationEdit">{{ tonic }}</span>
+        <select v-model="tonic" v-if="showConfigurationEdit">
+          <option v-for="item in tonics" :key="item" :value="item" :selected="isSelected('tonic', item)">
+            {{ item }}
+          </option>
+        </select>
+      </p>
+    </div>
+    <div>
+      <p>Octave:
+        <span v-if="!showConfigurationEdit">{{ octave }}</span>
+        <select v-model="octave" v-if="showConfigurationEdit">
+          <option v-for="item in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]" 
+            :key="item" :value="item" :selected="isSelected('octave', item)">
             {{ item }}
           </option>
         </select>
@@ -25,7 +46,8 @@
       </p>
     </div>
     <div>
-      Output Channel: {{ channel }}
+      Output Channel:
+      <span v-if="!showConfigurationEdit">{{ channel }}</span>
       <select class="map-list-item-select" name="" v-model="channel" v-if="showConfigurationEdit">
         <option v-for="channelOpt in channels" :key="channelOpt" :value="channelOpt" :selected="isSelectedChannel(channelOpt)">
           {{ channelOpt }}
@@ -42,19 +64,33 @@ import midi from '../../lib/midi';
 import generators from '../../lib/generators';
 import scale from '../../lib/scale';
 
+function noteDistance(a, b) {
+  // const A0 = { midi: 21, freq: 27.5 };
+  return Math.abs(b - a);
+}
+
+// MIDI note retrieval from noteArr
+function getNearestNote(noteArr, note) {
+  return _.reduce(noteArr, (acc, item) => {
+    const distances = [noteDistance(item, note), noteDistance(acc, note)];
+
+    return distances[0] < distances[1] ? item : acc;
+  }, null);
+}
 
 export default {
   name: 'note-model',
-  props: ['id', 'index', 'receiveNoteOn'],
+  props: ['id', 'index'],
   data() {
     return {
       scaleNames: scale.names,
+      tonics: scale.tonics,
     };
   },
   computed: {
     name: {
       get() {
-        return _.get(this.$store.getters.getNoteModel(this.id), 'name');
+        return this.$store.state.Config.noteModels[this.id].name;
       },
       set(val) {
         this.$store.commit('UPDATE_NOTE_MODEL', {
@@ -82,7 +118,6 @@ export default {
           id: this.id,
           channel: parseInt(val, 10),
         });
-        this.$store.dispatch('saveConfig');
       },
     },
     generator: {
@@ -94,7 +129,6 @@ export default {
           id: this.id,
           generator: val,
         });
-        this.$store.dispatch('saveConfig');
       },
     },
     scale: {
@@ -106,13 +140,33 @@ export default {
           id: this.id,
           scale: val,
         });
-        this.$store.dispatch('saveConfig');
       },
     },
-    // remove(id) {
-    //   this.$store.commit('REMOVE_NOTE_MODEL', id);
-    //   this.$store.dispatch('saveConfig');
-    // },
+    tonic: {
+      get() {
+        return _.get(this.$store.getters.getNoteModel(this.id), 'tonic');
+      },
+      set(val) {
+        this.$store.commit('UPDATE_NOTE_MODEL', {
+          id: this.id,
+          tonic: val,
+        });
+      },
+    },
+    octave: {
+      get() {
+        return _.get(this.$store.getters.getNoteModel(this.id), 'octave');
+      },
+      set(val) {
+        this.$store.commit('UPDATE_NOTE_MODEL', {
+          id: this.id,
+          octave: val,
+        });
+      },
+    },
+    noteSet() {
+      return scale.noteSet(this.scale, this.tonic, this.octave);
+    },
     generatorOptions() {
       return Object.keys(generators);
     },
@@ -121,7 +175,9 @@ export default {
     getNextNote() {
       let note = generators[this.generator]();
 
+      // TODO normalize generator to note range
       note = Math.round(note * 127);
+      note = getNearestNote(this.noteSet, note);
       // TODO: normalize to scale and range
 
       this.note = note;
@@ -134,12 +190,10 @@ export default {
     },
     sendNoteOn(velocity) {
       this.getNextNote();
-      console.log('this.note', this.note);
       if (this.note) {
         midi.noteOn(this.channel, this.note, velocity);
         midi.noteOn(this.channel, this.note - 15, velocity);
       }
-      this.$store.commit('UNTRIGGER_NOTE_MODEL', this.id);
     },
     sendNoteOff() {
       // TODO: this.note may not correlated to the correct note
@@ -151,24 +205,22 @@ export default {
     },
     remove(id) {
       this.$store.commit('REMOVE_NOTE_MODEL', id);
-      this.$store.dispatch('saveConfig');
     },
-  },
-  watch: {
-    receiveNoteOn(velocity) {
-      if (this.receiveNoteOn) {
-        this.sendNoteOn(velocity);
-      }
-    },
-    receiveNoteOff() {
-      if (this.receiveNoteOff) {
-        console.log('noteOff', this.channel);
-        this.sendNoteOff();
-      }
+    handleTrigger(triggerOn) {
+      const handleOn = this.sendNoteOn;
+      const handleOff = this.sendNoteOff;
+      const handler = triggerOn ? handleOn : handleOff;
+
+      return (id, velocity) => {
+        if (id === this.id) {
+          handler(velocity);
+        }
+      };
     },
   },
   mounted() {
-    this.receiveNoteOn = 0;
+    this.$eventBus.on('note-model:trigger-on', this.handleTrigger(true));
+    this.$eventBus.on('note-model:trigger-off', this.handleTrigger(false));
   },
 };
 </script>

@@ -90,7 +90,6 @@
         return this.$store.state.Config.outputLevelController;
       },
     },
-    // props: ['noteProcessors'],
     created() {
     },
     mounted() {

@@ -1,41 +1,47 @@
 import Vue from 'vue';
 import _ from 'lodash';
+import nanoid from 'nanoid/generate';
 import datastore from '../../datastore';
 import noteNames from '../../lib/noteNames';
+import eventBus from '../../lib/eventBus';
+
+function genID() {
+  return nanoid('abcdefghijklmnopqrstuvwxyz', 6);
+}
 
 const state = {
   showConfigurationEdit: true,
   inputPort: '',
   outputPort: '',
-  noteProcessors: [],
-  noteModels: [],
+  noteListeners: {},
+  noteModels: {},
   outputLevelChannel: 1,
   outputLevelController: 1,
-  noteProcessorSettings: {
+  noteListenerSettings: {
     velocity: '',
     spin: '',
   },
 };
 
 const bootstrap = {
-  id: 0,
-  onNote: 36,
-  channel: 1,
-  isOn: false,
-  velocity: 0,
-  velocityThreshold: 0,
-  model: '',
-  generator: '',
-  scale: '',
-};
-
-bootstrap.noteModel = {
-  id: 0,
-  channel: 1,
-  velocity: 0,
-  name: '',
-  receiveNoteOn: 0, // set to note velocity
-  receiveNoteOff: false,
+  noteListener: {
+    id: '',
+    onNote: 36,
+    channel: 1,
+    isOn: false,
+    velocity: 0,
+    velocityThreshold: 0,
+    noteModelId: '',
+  },
+  noteModel: {
+    id: '',
+    channel: 1,
+    velocity: 0,
+    name: '',
+    generator: '',
+    scale: '',
+    tonic: '',
+  },
 };
 
 function getUnassignedChannel(assignedChannels) {
@@ -51,133 +57,46 @@ function getUnassignedOnNote(assignedOnNotes) {
 }
 
 function getNoteModelById(id) {
-  return _.find(state.noteModels, item => item.id === id);
+  return state.noteModels[id];
 }
 
 function getNoteListenerByNote(note) {
-  return _.find(state.noteProcessors, item => item.onNote === note);
+  return _.find(state.noteListeners, item => item.onNote === note);
 }
 
-const mutations = {
-  HANDLE_NOTE_ON(state, { noteValue, velocity }) {
-    const noteListener = getNoteListenerByNote(noteValue);
-    const noteModel = noteListener && noteListener.model && getNoteModelById(noteListener.model.id);
-
-    if (noteListener && velocity >= noteListener.velocityThreshold) {
-      Vue.set(noteListener, 'isOn', true);
-      Vue.set(noteListener, 'velocity', velocity);
-
-      if (noteModel) {
-        Vue.set(noteModel, 'receiveNoteOn', velocity);
-      }
-    }
+const getters = {
+  showConfigurationEdit(state) {
+    return state.showConfigurationEdit;
   },
-  // does NOTE_OFF need to be specific to a velocity value?
-  HANDLE_NOTE_OFF(state, { noteValue }) {
-    const noteListener = getNoteListenerByNote(noteValue);
-    const noteModel = noteListener && noteListener.model && getNoteModelById(noteListener.model.id);
-
-    Vue.set(noteListener, 'isOn', false);
-    Vue.set(noteListener, 'velocity', 0);
-
-    if (noteModel) {
-      Vue.set(noteModel, 'receiveNoteOff', false);
-    }
+  noteListenerSettings(state) {
+    return state.noteListenerSettings;
   },
-  TRIGGER_NOTE_MODEL(state, { id, velocity }) {
-    const noteModel = getNoteModelById(id);
-
-    if (noteModel) {
-      Vue.set(noteModel, 'receiveNoteOn', velocity);
-    }
+  listenersCount(state) {
+    return state.noteListeners.length;
   },
-  UNTRIGGER_NOTE_MODEL(state, id) {
-    const noteModel = getNoteModelById(id);
-
-    if (noteModel) {
-      Vue.set(noteModel, 'receiveNoteOn', 0);
-    }
+  channels(state) {
+    return _.map(state.noteListeners, item => parseInt(item.channel, 10));
   },
-  RESET_NOTE_MODEL(state, id) {
-    const noteModel = getNoteModelById(id);
-
-    if (noteModel) {
-      Vue.set(noteModel, 'receiveNoteOff', false);
-    }
+  onNotes(state) {
+    return _.map(state.noteListeners, item => parseInt(item.onNote, 10));
   },
-  UPDATE_CONFIG(state, data) {
-    _.merge(state, data);
+  models(state) {
+    return state.noteModels;
   },
-  UPDATE_NOTE_MODEL(state, data) {
-    const id = _.get(data, 'id');
-    const channel = _.get(data, 'channel');
-    let noteModel;
-    let index;
-
-    if (typeof id === 'number') {
-      index = _.findIndex(state.noteModels, item => item.id === id);
-    } else if (typeof channel === 'number') {
-      index = _.findIndex(state.noteModels, item => item.channel === channel);
-    }
-
-    if (typeof index === 'number') {
-      noteModel = state.noteModels[index];
-      _.assign(noteModel, data);
-      Vue.set(state.noteModels, index, noteModel);
-    }
+  modelNames(state) {
+    return _.map(state.noteModels, item => item.name);
   },
-  UPDATE_NOTE_PROCESSOR(state, data) {
-    const id = _.get(data, 'id');
-    const channel = _.get(data, 'channel');
-    let noteProcessor;
-    let index;
-
-    if (typeof id === 'number') {
-      index = _.findIndex(state.noteProcessors, item => item.id === id);
-    } else if (typeof channel === 'number') {
-      index = _.findIndex(state.noteProcessors, item => item.channel === channel);
-    }
-
-    if (typeof index === 'number') {
-      noteProcessor = state.noteProcessors[index];
-      _.assign(noteProcessor, data);
-      Vue.set(state.noteProcessors, index, noteProcessor);
-    }
+  getNoteListener(state) {
+    return id => _.find(state.noteListeners, (item => id === item.id));
   },
-  ADD_NOTE_PROCESSOR(state) {
-    const noteProcessor = _.clone(bootstrap);
-    const assignedChannels = state.noteProcessors.map(item => item.channel);
-    const assignedOnNotes = state.noteProcessors.map(item => item.onNote);
+  getNoteModel() {
+    return id => getNoteModelById(id);
+  },
+  maxLevel(state) {
+    const onNotes = _.filter(state.noteListeners, item => item.isOn);
+    const velocities = _.map(onNotes, item => item.velocity);
 
-    noteProcessor.id = Date.now();
-    noteProcessor.channel = getUnassignedChannel(assignedChannels);
-    noteProcessor.onNote = getUnassignedOnNote(assignedOnNotes);
-
-    state.noteProcessors.push(noteProcessor);
-  },
-  ADD_NOTE_MODEL(state) {
-    const noteModel = _.clone(bootstrap.noteModel);
-    const assignedChannels = state.noteModels.map(item => item.channel);
-
-    noteModel.id = Date.now();
-    noteModel.channel = getUnassignedChannel(assignedChannels);
-    noteModel.name = `Model ${noteModel.id}`;
-
-    state.noteModels.push(noteModel);
-  },
-  REMOVE_NOTE_PROCESSOR(state, channel) {
-    const index = _.findIndex(state.noteProcessors, item => item.channel === channel);
-    state.noteProcessors.splice(index, 1);
-  },
-  REMOVE_NOTE_MODEL(state, id) {
-    const index = _.findIndex(state.noteModels, item => item.id === id);
-    state.noteModels.splice(index, 1);
-  },
-  SET_INPUT_PORT(state, port) {
-    state.inputPort = port;
-  },
-  SET_OUTPUT_PORT(state, port) {
-    state.outputPort = port;
+    return _.max(velocities) || 0;
   },
 };
 
@@ -190,12 +109,123 @@ const actions = {
     datastore.saveConfig({
       inputPort: state.inputPort,
       outputPort: state.outputPort,
-      noteProcessorSettings: state.noteProcessorSettings,
-      noteProcessors: state.noteProcessors,
+      noteListenerSettings: state.noteListenerSettings,
+      noteListeners: state.noteListeners,
       noteModels: state.noteModels,
       outputLevelChannel: state.outputLevelChannel,
       outputLevelController: state.outputLevelController,
     });
+  },
+};
+
+const mutations = {
+  HANDLE_NOTE_ON(state, { noteValue, velocity }) {
+    const noteListener = getNoteListenerByNote(noteValue);
+    const noteModelId = noteListener && noteListener.noteModelId;
+    const noteModel = noteModelId && getNoteModelById(noteModelId);
+
+    if (noteListener && velocity >= noteListener.velocityThreshold) {
+      Vue.set(noteListener, 'isOn', true);
+      Vue.set(noteListener, 'velocity', velocity);
+
+      if (noteModel) {
+        eventBus.emit('note-model:trigger-on', noteModel.id, velocity);
+      }
+    }
+  },
+  // does NOTE_OFF need to be specific to a velocity value?
+  HANDLE_NOTE_OFF(state, { noteValue }) {
+    const noteListener = getNoteListenerByNote(noteValue);
+    const noteModel = noteListener && noteListener.model && getNoteModelById(noteListener.model.id);
+
+    Vue.set(noteListener, 'isOn', false);
+    Vue.set(noteListener, 'velocity', 0);
+
+    if (noteModel) {
+      eventBus.emit('note-model:trigger-on', noteModel.id);
+    }
+  },
+  RESET_NOTE_MODEL(state, id) {
+    const noteModel = getNoteModelById(id);
+
+    if (noteModel) {
+      Vue.set(noteModel, 'receiveNoteOff', false);
+    }
+  },
+
+  // should probably use normalizr
+  UPDATE_CONFIG(state, data) {
+    const keys = Object.keys(data);
+
+    keys.forEach((key) => {
+      const val = data[key];
+
+      if (typeof val === 'object') {
+        _.forEach(val, (val2, key2) => {
+          Vue.set(state[key], key2, val2);
+        });
+      } else {
+        Vue.set(state, key, val);
+      }
+    });
+    actions.saveConfig();
+  },
+  ADD_NOTE_LISTENER(state) {
+    const noteListener = _.clone(bootstrap.noteListener);
+    const assignedChannels = _.map(state.noteListeners, (item => item.channel));
+    const assignedOnNotes = _.map(state.noteListeners, (item => item.onNote));
+
+    noteListener.id = genID();
+    noteListener.channel = getUnassignedChannel(assignedChannels);
+    noteListener.onNote = getUnassignedOnNote(assignedOnNotes);
+
+    Vue.set(state.noteListeners, noteListener.id, noteListener);
+  },
+  UPDATE_NOTE_LISTENER(state, data) {
+    const id = _.get(data, 'id');
+    const noteListener = getters.getNoteListener(id);
+    const keys = Object.keys(data).filter(key => key !== 'id');
+
+    if (noteListener) {
+      keys.forEach((key) => {
+        // Vue.set(state.noteListeners[index], key, data[key]);
+        _.set(state.noteListeners[id], key, data[key]);
+      });
+    }
+  },
+  REMOVE_NOTE_LISTENER(state, id) {
+    Vue.delete(state.noteListeners, id);
+  },
+
+  ADD_NOTE_MODEL(state) {
+    const noteModel = _.clone(bootstrap.noteModel);
+    const assignedChannels = _.map(state.noteModels, item => item.channel);
+
+    noteModel.id = genID();
+    noteModel.channel = getUnassignedChannel(assignedChannels);
+    noteModel.name = `${noteModel.id}`;
+
+    Vue.set(state.noteModels, noteModel.id, noteModel);
+  },
+  UPDATE_NOTE_MODEL(state, data) {
+    const id = _.get(data, 'id');
+    const keys = Object.keys(data).filter(key => key !== 'id');
+    const noteModel = getNoteModelById(id);
+
+    if (noteModel) {
+      keys.forEach(key => _.set(noteModel, key, data[key]));
+    }
+    actions.saveConfig();
+  },
+  REMOVE_NOTE_MODEL(state, id) {
+    Vue.delete(state.noteModels, id);
+    actions.saveConfig();
+  },
+  SET_INPUT_PORT(state, port) {
+    state.inputPort = port;
+  },
+  SET_OUTPUT_PORT(state, port) {
+    state.outputPort = port;
   },
 };
 
@@ -209,39 +239,6 @@ const actions = {
 //     },
 //   },
 // };
-
-const getters = {
-  showConfigurationEdit(state) {
-    return state.showConfigurationEdit;
-  },
-  noteProcessorSettings(state) {
-    return state.noteProcessorSettings;
-  },
-  processorsCount(state) {
-    return state.noteProcessors.length;
-  },
-  channels(state) {
-    return _.map(state.noteProcessors, item => parseInt(item.channel, 10));
-  },
-  onNotes(state) {
-    return _.map(state.noteProcessors, item => parseInt(item.onNote, 10));
-  },
-  models(state) {
-    return state.noteModels;
-  },
-  getNoteProcessor(state) {
-    return id => state.noteProcessors.find(item => id === item.id);
-  },
-  getNoteModel(state) {
-    return id => state.noteModels.find(item => id === item.id);
-  },
-  maxLevel(state) {
-    const onNotes = _.filter(state.noteProcessors, item => item.isOn);
-    const velocities = _.map(onNotes, item => item.velocity);
-
-    return _.max(velocities) || 0;
-  },
-};
 
 export default {
   state,

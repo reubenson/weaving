@@ -1,7 +1,7 @@
 <template>
   <transition>
-    <section class="note-processor-settings" v-if="showConfigurationEdit">
-      <h2>Note Processor Settings</h2>
+    <section class="note-listener-settings" v-if="showConfigurationEdit">
+      <h2>Note Listener Settings</h2>
       <div>
         Velocity Controller Assignment:
         <select class="map-list-item-select" name="" v-model="velocityController">
@@ -27,7 +27,7 @@
   import store from '../../store';
 
   export default {
-    name: 'note-processor-settings',
+    name: 'note-listener-settings',
     components: { },
     store,
     data() {
@@ -44,29 +44,22 @@
       },
       velocityController: {
         get() {
-          return this.$store.state.Config.noteProcessorSettings.velocity;
+          return this.$store.state.Config.noteListenerSettings.velocity;
         },
         set(velocity) {
           velocity = parseInt(velocity, 10);
-          this.$store.commit('UPDATE_CONFIG', { noteProcessorSettings: { velocity } });
-          this.$store.dispatch('saveConfig');
+          this.$store.commit('UPDATE_CONFIG', { noteListenerSettings: { velocity } });
         },
       },
       spinController: {
         get() {
-          return this.$store.state.Config.noteProcessorSettings.spin;
+          return this.$store.state.Config.noteListenerSettings.spin;
         },
         set(spin) {
           spin = parseInt(spin, 10);
-          this.$store.commit('UPDATE_CONFIG', { noteProcessorSettings: { spin } });
-          this.$store.dispatch('saveConfig');
+          this.$store.commit('UPDATE_CONFIG', { noteListenerSettings: { spin } });
         },
       },
-    },
-    // props: ['noteProcessors'],
-    created() {
-    },
-    mounted() {
     },
     methods: {
       isSelectedController(field, val) {
@@ -83,6 +76,6 @@
 </script>
 
 <style lang="scss" scoped>
-.note-processor-settings {
+.note-listener-settings {
 }
 </style>

@@ -3,15 +3,14 @@
     <h3>Note Listeners</h3>
     <div class="note-processors-items">
       <note-listener 
-        v-for="(item, index) in noteProcessors" :key="item.id" :id="item.id" :index="index">
+        v-for="(item) in noteListeners" :key="item.id" :id="item.id">
       </note-listener>
     </div>
-    <button @click="addNoteProcessor" class="btn btn-primary" v-if="showConfigurationEdit">Add Note Processor</button>
+    <button @click="addNoteListener" class="btn btn-primary" v-if="showConfigurationEdit">Add Note Listener</button>
     <h3>Note Models</h3>
     <div class="note-models">
       <note-model
-        v-for="(item, index) in noteModels" :key="item.id" :id="item.id" 
-          :generator="item.generator" :index="index" :receiveNoteOn="item.receiveNoteOn">
+        v-for="(item) in noteModels" :key="item.id" :id="item.id">
       </note-model>
     </div>
     <button @click="addNoteModel" class="btn btn-primary" v-if="showConfigurationEdit">Add Note Model</button>
@@ -19,7 +18,6 @@
 </template>
 
 <script>
-  import store from '../../store';
   import NoteListener from './NoteListener';
   import NoteModel from './NoteModel';
   import midi from '../../lib/midi';
@@ -27,33 +25,25 @@
   export default {
     name: 'note-processors',
     components: { NoteListener, NoteModel },
-    store,
-    data() {
-      return {};
-    },
     computed: {
       showConfigurationEdit() {
         return this.$store.getters.showConfigurationEdit;
       },
-      noteProcessors() {
-        return this.$store.state.Config.noteProcessors;
+      noteListeners() {
+        return this.$store.state.Config.noteListeners;
       },
       noteModels() {
-        return this.$store.state.Config.noteModels;
+        return this.$store.getters.models;
       },
     },
-    created() {
-    },
-    mounted() {
-    },
     methods: {
-      addNoteProcessor() {
-        this.$store.commit('ADD_NOTE_PROCESSOR');
-        this.$store.dispatch('saveConfig');
+      addNoteListener() {
+        this.$store.commit('ADD_NOTE_LISTENER');
+        // this.$store.dispatch('saveConfig');
       },
       addNoteModel() {
         this.$store.commit('ADD_NOTE_MODEL');
-        this.$store.dispatch('saveConfig');
+        // this.$store.dispatch('saveConfig');
       },
       showInfo({ target }) {
         target.classList.add('show');

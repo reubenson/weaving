@@ -3,7 +3,7 @@
     <top-nav></top-nav>
     <main>
       <midi-drivers></midi-drivers>
-      <note-processor-settings></note-processor-settings>
+      <note-listener-settings></note-listener-settings>
       <noteProcessors></noteProcessors>
       <aggregate-processor></aggregate-processor>
     </main>
@@ -14,25 +14,22 @@
   import MidiDrivers from './LandingPage/MidiDrivers';
   import TopNav from './LandingPage/TopNav';
   import NoteProcessors from './LandingPage/NoteProcessors';
-  import NoteProcessorSettings from './LandingPage/NoteProcessorSettings';
+  import NoteListenerSettings from './LandingPage/NoteListenerSettings';
+  import NoteModel from './Landingpage/NoteModel';
   import AggregateProcessor from './LandingPage/AggregateProcessor';
   import store from '../store';
+  import eventBus from '../lib/eventBus';
 
   export default {
     name: 'landing-page',
     components: {
-      MidiDrivers, TopNav, NoteProcessorSettings, NoteProcessors, AggregateProcessor,
+      MidiDrivers, TopNav, NoteListenerSettings, NoteProcessors, AggregateProcessor, NoteModel,
     },
-    data() {
-      return {
-      };
-    },
-    computed: {},
     store,
     created() {
+      this.$eventBus = eventBus;
       this.$store.dispatch('retrieveConfig');
     },
-    methods: {},
   };
 </script>
 

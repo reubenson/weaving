@@ -1,17 +1,20 @@
 <template>
   <ul class="map-list">
     <li class="map-list-item" v-bind:class="{'is-on': isOn}">
-      <div class="map-list-item-section">Listening on Note: {{ onNote }}
+      <div class="map-list-item-section">
+        Listening on Note: 
+        <span v-if="!showConfigurationEdit">{{ onNote }}</span>
         <select class="map-list-item-select" name="" v-model="onNote" v-if="showConfigurationEdit">
-          <option v-for="item in onNotes" :key="item.id" :value="item" :selected="isSelectedOnNote(item)">
+          <option v-for="item in onNotes" :key="item.id" :value="item" :selected="isSelected('onNote', item)">
             {{ item }} ({{ noteNames[item] }})
           </option>
         </select>
       </div>
       <div class="map-list-item-section">
-        Output Channel: {{ channel }}
+        Output Channel: 
+        <span v-if="!showConfigurationEdit">{{ channel }}</span>
         <select class="map-list-item-select" name="" v-model="channel" v-if="showConfigurationEdit">
-          <option v-for="channelOpt in channels" :key="channelOpt" :value="channelOpt" :selected="isSelectedChannel(channelOpt)">
+          <option v-for="channelOpt in channels" :key="channelOpt" :value="channelOpt" :selected="isSelected('channel', channelOpt)">
             {{ channelOpt }}
           </option>
         </select>
@@ -22,10 +25,11 @@
         <input type="range" min="0" max="127" class="slider" v-model="velocityThreshold">
       </div>
       <div class="map-list-item-section">
-        Select Model: {{ modelName }}
-        <select class="map-list-item-select" name="" v-model="noteModel" v-if="showConfigurationEdit">
-          <option v-for="model in models" :key="model.id" :value="model" :selected="isSelectedModel(model)">
-            {{ model.name }}
+        Model:
+        <span v-if="!showConfigurationEdit">{{ modelName }}</span>
+        <select class="map-list-item-select" name="" v-model="noteModelId" v-if="showConfigurationEdit">
+          <option v-for="item in noteModels" :key="item.id" :value="item.id" :selected="isSelected('noteModelId', item.id)">
+            {{ item.name }}
           </option>
         </select>
       </div>
@@ -41,7 +45,7 @@
         </select>
         <button class="btn" @click="sendTestSignal">Send MIDI test signal to {{ testSignalController }}</button>
       </div>
-      <button @click="remove(channel)" class="btn btn-secondary remove">x</button>
+      <button @click="remove" class="btn btn-secondary remove">x</button>
     </li>
   </ul>
 </template>
@@ -57,14 +61,14 @@
       start() {
         this.velocityTracker = new BufferTimer();
         this.velocityTracker.setInterval((buffer) => {
-          const velocityController = store.state.Config.noteProcessorSettings.velocity;
+          const velocityController = store.state.Config.noteListenerSettings.velocity;
           const val = this.isOn ? this.velocity : 0;
 
           buffer.pop();
           buffer.unshift(val);
           this.velocityLevel = Math.round(_.mean(buffer));
           midi.sendControlChange(this.channel, velocityController, this.velocityLevel);
-          store.commit('UPDATE_NOTE_PROCESSOR', {
+          store.commit('UPDATE_NOTE_LISTENER', {
             id: this.id,
             velocity: this.velocityLevel,
           });
@@ -78,16 +82,16 @@
       start() {
         const lfoSpeed = 1; // Hz
         const period = 1000 / lfoSpeed; // ms
-        const phaseOffset = period * (this.index / this.$store.getters.processorsCount);
+        const phaseOffset = period * (this.index / this.$store.getters.listenersCount);
 
         this.spinTracker = new BufferTimer();
         // console.log('this.index', this.index);
-        // console.log('this.$store.getters.processorsCount', this.$store.getters.processorsCount);
+        // console.log('this.$store.getters.listenersCount', this.$store.getters.listenersCount);
         // console.log('phaseOffset', phaseOffset);
 
         this.spinTracker.setInterval(() => {
           const now = Date.now();
-          const spinController = store.state.Config.noteProcessorSettings.spin;
+          const spinController = store.state.Config.noteListenerSettings.spin;
           // let val = 0.5 + (0.5 * Math.sin((2 * Math.PI * (now / period)) + phaseOffset));
           let val = ((now + phaseOffset) % period) / period;
 
@@ -122,7 +126,7 @@
   }
 
   export default {
-    name: 'note-processor',
+    name: 'note-listener',
     data() {
       return {
         noteNames,
@@ -131,17 +135,17 @@
       };
     },
     computed: {
-      models() {
-        return this.$store.getters.models;
+      noteModels() {
+        return this.$store.state.Config.noteModels;
       },
       showConfigurationEdit() {
         return this.$store.getters.showConfigurationEdit;
       },
       isOn() {
-        return this.$store.getters.getNoteProcessor(this.id).isOn;
+        return this.$store.getters.getNoteListener(this.id).isOn;
       },
       velocity() {
-        return this.$store.getters.getNoteProcessor(this.id).velocity;
+        return this.$store.getters.getNoteListener(this.id).velocity;
       },
       channels() {
         const allChannels = _.times(16, i => i + 1);
@@ -162,37 +166,40 @@
       },
       channel: {
         get() {
-          return this.$store.getters.getNoteProcessor(this.id).channel;
+          return this.$store.getters.getNoteListener(this.id).channel;
         },
         set(val) {
-          this.$store.commit('UPDATE_NOTE_PROCESSOR', {
+          this.$store.commit('UPDATE_NOTE_LISTENER', {
             id: this.id,
             channel: parseInt(val, 10),
           });
           this.$store.dispatch('saveConfig');
         },
       },
-      noteModel: {
+      noteModelId: {
         get() {
-          return this.$store.getters.getNoteProcessor(this.id).model;
+          return _.get(this.$store.state.Config.noteListeners[this.id], 'noteModelId');
         },
         set(val) {
-          this.$store.commit('UPDATE_NOTE_PROCESSOR', {
+          this.$store.commit('UPDATE_NOTE_LISTENER', {
             id: this.id,
-            model: val,
+            noteModelId: val,
           });
           this.$store.dispatch('saveConfig');
         },
       },
+      noteModel() {
+        return this.$store.state.Config.noteModels[this.noteModelId];
+      },
       modelName() {
-        return this.model && this.model.name;
+        return _.get(this.noteModel, 'name', '');
       },
       onNote: {
         get() {
-          return this.$store.getters.getNoteProcessor(this.id).onNote;
+          return this.$store.getters.getNoteListener(this.id).onNote;
         },
         set(val) {
-          this.$store.commit('UPDATE_NOTE_PROCESSOR', {
+          this.$store.commit('UPDATE_NOTE_LISTENER', {
             id: this.id,
             onNote: parseInt(val, 10),
           });
@@ -201,10 +208,10 @@
       },
       velocityThreshold: {
         get() {
-          return this.$store.getters.getNoteProcessor(this.id).velocityThreshold;
+          return this.$store.getters.getNoteListener(this.id).velocityThreshold;
         },
         set(val) {
-          this.$store.commit('UPDATE_NOTE_PROCESSOR', {
+          this.$store.commit('UPDATE_NOTE_LISTENER', {
             id: this.id,
             velocityThreshold: parseInt(val, 10),
           });
@@ -212,49 +219,37 @@
         },
       },
       controllers() {
-        return this.$store.getters.noteProcessorSettings;
+        return this.$store.getters.noteListenerSettings;
       },
     },
-    props: ['id', 'index'],
-    created() {
-    },
+    props: ['id'],
     methods: {
-      sendTriggerToModel() {
-        if (this.model) {
-          console.log('triggering model');
-          console.log('this.velocity', this.velocity);
-          midi.noteOn(this.channel, 80, this.velocity);
-        }
-      },
       sendTestSignal() {
         midi.sendControlChange(this.channel, this.testSignalController, 69);
       },
       setTestController(e) {
         this.testSignalController = parseInt(e.target.value, 10);
       },
-      isSelectedOnNote(onNote) {
-        return this.onNote === parseInt(onNote, 10);
+      isSelected(field, value) {
+        return this[field] === parseInt(value, 10) || this[field] === value;
       },
-      isSelectedChannel(channel) {
-        return this.channel === parseInt(channel, 10);
-      },
-      isSelectedModel(model) {
-        return this.model && this.model.id === model.id;
-      },
-      isSelected(field, val) {
-        return this[field] === parseInt(val, 10);
-      },
+      // isSelectedOnNote(onNote) {
+      //   return this.onNote === parseInt(onNote, 10);
+      // },
+      // isSelectedModel(modelId) {
+      //   return this.noteModelId === modelId;
+      // },
       setVelocityThreshold(e) {
         const val = parseInt(e.target.value, 10);
 
-        this.$store.commit('UPDATE_NOTE_PROCESSOR', {
+        this.$store.commit('UPDATE_NOTE_LISTENER', {
           id: this.id,
           velocityThreshold: val,
         });
         this.$store.dispatch('saveConfig');
       },
-      remove(channel) {
-        this.$store.commit('REMOVE_NOTE_PROCESSOR', channel);
+      remove() {
+        this.$store.commit('REMOVE_NOTE_LISTENER', this.id);
         this.$store.dispatch('saveConfig');
       },
       showInfo({ target }) {
@@ -271,7 +266,6 @@
       startTrackers.call(this, trackerTypes);
       this.$store.watch(() => this.showConfigurationEdit, (val) => {
         if (val) {
-          console.log('val', val);
           stopTrackers.call(this, trackerTypes);
         } else {
           startTrackers.call(this, trackerTypes);
@@ -279,7 +273,7 @@
       });
 
       // initialize state
-      store.commit('UPDATE_NOTE_PROCESSOR', {
+      store.commit('UPDATE_NOTE_LISTENER', {
         id: this.id,
         velocity: 0,
         isOn: false,

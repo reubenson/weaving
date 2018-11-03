@@ -1,6 +1,6 @@
 import Nanotimer from 'nanotimer';
 import _ from 'lodash';
-import uuid from 'uuid/v1';
+import nanoid from 'nanoid';
 
 const levelSampleFrequency = 40; // per second
 const levelBufferDuration = 1; // seconds
@@ -12,7 +12,7 @@ const callbacks = {};
 function BufferTimer() {
   this.timer = new Nanotimer;  // eslint-disable-line
   this.buffer = _.times(levelBufferSize, _.constant(0));
-  this.id = uuid();
+  this.id = nanoid();
 }
 
 function setInterval(fn) {
