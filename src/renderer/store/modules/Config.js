@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import _ from 'lodash';
 import nanoid from 'nanoid/generate';
+import { ipcRenderer } from 'electron';
 import datastore from '../../datastore';
 import noteNames from '../../lib/noteNames';
 import eventBus from '../../lib/eventBus';
@@ -115,6 +116,9 @@ const actions = {
       outputLevelChannel: state.outputLevelChannel,
       outputLevelController: state.outputLevelController,
     });
+
+    console.log('sending');
+    ipcRenderer.send('engine:initialize', 'hi');
   },
 };
 
@@ -129,7 +133,7 @@ const mutations = {
       Vue.set(noteListener, 'velocity', velocity);
 
       if (noteModel) {
-        eventBus.emit('note-model:trigger-on', noteModel.id, velocity);
+        // eventBus.emit('note-model:trigger-on', noteModel.id, velocity);
       }
     }
   },

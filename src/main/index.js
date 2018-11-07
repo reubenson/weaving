@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron' // eslint-disable-line
+import handler from './lib/engineHandler';
 
 /**
  * Set `__static` path to static files in production
@@ -24,6 +25,8 @@ function createWindow() {
   });
 
   mainWindow.loadURL(winURL);
+
+  handler.initialize();
 
   mainWindow.on('closed', () => {
     mainWindow = null;
