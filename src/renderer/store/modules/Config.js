@@ -4,7 +4,7 @@ import nanoid from 'nanoid/generate';
 import { ipcRenderer } from 'electron';
 import datastore from '../../datastore';
 import noteNames from '../../lib/noteNames';
-import eventBus from '../../lib/eventBus';
+// import eventBus from '../../lib/eventBus';
 
 function genID() {
   return nanoid('abcdefghijklmnopqrstuvwxyz', 6);
@@ -16,6 +16,7 @@ const state = {
   outputPort: '',
   noteListeners: {},
   noteModels: {},
+  spatialModels: {},
   outputLevelChannel: 1,
   outputLevelController: 1,
   noteListenerSettings: {
@@ -42,6 +43,15 @@ const bootstrap = {
     generator: '',
     scale: '',
     tonic: '',
+    spatialModelId: '',
+  },
+  spatialModel: {
+    id: '',
+    name: '',
+    channe: '',
+    controller: 0,
+    lfoSpeed: 0.1,
+    depth: 1,
   },
 };
 
@@ -49,6 +59,12 @@ function getUnassignedChannel(assignedChannels) {
   const allChannels = _.times(16, i => i + 1);
 
   return allChannels.find(item => assignedChannels.indexOf(item) < 0);
+}
+
+function getControllerValue() {
+  const allValues = _.times(120, i => i + 1);
+
+  return allValues[0];
 }
 
 function getUnassignedOnNote(assignedOnNotes) {
@@ -93,6 +109,9 @@ const getters = {
   getNoteModel() {
     return id => getNoteModelById(id);
   },
+  spatialModelById() {
+    return id => _.find(state.spatialModels, item => id === item.id);
+  },
   maxLevel(state) {
     const onNotes = _.filter(state.noteListeners, item => item.isOn);
     const velocities = _.map(onNotes, item => item.velocity);
@@ -113,49 +132,58 @@ const actions = {
       noteListenerSettings: state.noteListenerSettings,
       noteListeners: state.noteListeners,
       noteModels: state.noteModels,
+      spatialModels: state.spatialModels,
       outputLevelChannel: state.outputLevelChannel,
       outputLevelController: state.outputLevelController,
     });
 
-    console.log('sending');
-    ipcRenderer.send('engine:initialize', 'hi');
+    // force engine to re-initialize based on save configuration
+    // TODO: make best
+    ipcRenderer.send('engine:initialize');
+  },
+  startEngine() {
+    ipcRenderer.send('engine:start');
+  },
+  stopEngine() {
+    ipcRenderer.send('engine:stop');
   },
 };
 
 const mutations = {
   HANDLE_NOTE_ON(state, { noteValue, velocity }) {
     const noteListener = getNoteListenerByNote(noteValue);
-    const noteModelId = noteListener && noteListener.noteModelId;
-    const noteModel = noteModelId && getNoteModelById(noteModelId);
+    // const noteModelId = noteListener && noteListener.noteModelId;
+    // const noteModel = noteModelId && getNoteModelById(noteModelId);
 
     if (noteListener && velocity >= noteListener.velocityThreshold) {
       Vue.set(noteListener, 'isOn', true);
       Vue.set(noteListener, 'velocity', velocity);
 
-      if (noteModel) {
-        // eventBus.emit('note-model:trigger-on', noteModel.id, velocity);
-      }
+      // if (noteModel) {
+      // eventBus.emit('note-model:trigger-on', noteModel.id, velocity);
+      // }
     }
   },
   // does NOTE_OFF need to be specific to a velocity value?
   HANDLE_NOTE_OFF(state, { noteValue }) {
     const noteListener = getNoteListenerByNote(noteValue);
-    const noteModel = noteListener && noteListener.model && getNoteModelById(noteListener.model.id);
+    // const noteModel = noteListener && noteListener.model &&
+    //   getNoteModelById(noteListener.model.id);
 
     Vue.set(noteListener, 'isOn', false);
     Vue.set(noteListener, 'velocity', 0);
 
-    if (noteModel) {
-      eventBus.emit('note-model:trigger-on', noteModel.id);
-    }
+    // if (noteModel) {
+    //   eventBus.emit('note-model:trigger-on', noteModel.id);
+    // }
   },
-  RESET_NOTE_MODEL(state, id) {
-    const noteModel = getNoteModelById(id);
+  // RESET_NOTE_MODEL(state, id) {
+  //   const noteModel = getNoteModelById(id);
 
-    if (noteModel) {
-      Vue.set(noteModel, 'receiveNoteOff', false);
-    }
-  },
+  //   if (noteModel) {
+  //     Vue.set(noteModel, 'receiveNoteOff', false);
+  //   }
+  // },
 
   // should probably use normalizr
   UPDATE_CONFIG(state, data) {
@@ -225,6 +253,34 @@ const mutations = {
     Vue.delete(state.noteModels, id);
     actions.saveConfig();
   },
+
+  ADD_SPATIAL_MODEL(state) {
+    const spatialModel = _.clone(bootstrap.spatialModel);
+    // const assignedChannels = _.map(state.noteModels, item => item.channel);
+
+    spatialModel.id = genID();
+    spatialModel.controller = getControllerValue();
+    spatialModel.name = `${spatialModel.id}`;
+
+    Vue.set(state.spatialModels, spatialModel.id, spatialModel);
+    console.log('state', state);
+    actions.saveConfig();
+  },
+  UPDATE_SPATIAL_MODEL(state, data) {
+    const id = _.get(data, 'id');
+    const keys = Object.keys(data).filter(key => key !== 'id');
+    const spatialModel = state.spatialModels[id];
+
+    if (spatialModel) {
+      keys.forEach(key => _.set(spatialModel, key, data[key]));
+    }
+    actions.saveConfig();
+  },
+  REMOVE_SPATIAL_MODEL(state, id) {
+    Vue.delete(state.spatialModels, id);
+    actions.saveConfig();
+  },
+
   SET_INPUT_PORT(state, port) {
     state.inputPort = port;
   },

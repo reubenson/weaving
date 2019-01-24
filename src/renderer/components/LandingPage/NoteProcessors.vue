@@ -14,17 +14,25 @@
       </note-model>
     </div>
     <button @click="addNoteModel" class="btn btn-primary" v-if="showConfigurationEdit">Add Note Model</button>
+    <h3>Spatial Models</h3>
+    <div class="spatial-models">
+      <spatial-model
+        v-for="(item) in spatialModels" :key="item.id" :id="item.id">
+      </spatial-model>
+    </div>
+    <button @click="addSpatialModel" class="btn btn-primary" v-if="showConfigurationEdit">Add Spatial Model</button>
   </section>
 </template>
 
 <script>
   import NoteListener from './NoteListener';
   import NoteModel from './NoteModel';
+  import SpatialModel from './SpatialModel';
   import midi from '../../lib/midi';
 
   export default {
     name: 'note-processors',
-    components: { NoteListener, NoteModel },
+    components: { NoteListener, NoteModel, SpatialModel },
     computed: {
       showConfigurationEdit() {
         return this.$store.getters.showConfigurationEdit;
@@ -35,6 +43,9 @@
       noteModels() {
         return this.$store.getters.models;
       },
+      spatialModels() {
+        return this.$store.state.Config.spatialModels;
+      },
     },
     methods: {
       addNoteListener() {
@@ -44,6 +55,9 @@
       addNoteModel() {
         this.$store.commit('ADD_NOTE_MODEL');
         // this.$store.dispatch('saveConfig');
+      },
+      addSpatialModel() {
+        this.$store.commit('ADD_SPATIAL_MODEL');
       },
       showInfo({ target }) {
         target.classList.add('show');

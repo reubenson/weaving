@@ -5,8 +5,6 @@ import Buffer from 'buffer';
 
 const input = new midi.input(); // eslint-disable-line
 const output = new midi.output(); // eslint-disable-line
-// const inputPortCount = input.getPortCount();
-// const outputPortCount = output.getPortCount();
 
 function setInput(name) {
   const inputPortCount = input.getPortCount();
@@ -38,7 +36,50 @@ function setOutput(name) {
   }
 }
 
+
+function sendNoteOff(channel, note, velocity) {
+  const status = 128 + channel;
+
+  output.sendMessage([status, note, velocity]);
+}
+
+function sendNoteOn(channel, note, velocity) {
+  if (channel === 1) {
+    console.log('note send', note);
+  }
+  output.sendMessage([144 + channel - 1, note, velocity ]);
+}
+
+// controllerNumber must be 0 to 119
+function sendControlChange(channel, controllerNumber, controllerValue) {
+  if (typeof channel !== 'number') {
+    console.error('channel not specified');
+    return;
+  }
+
+  if (typeof controllerNumber !== 'number') {
+    console.error('controllerNumber not specified');
+    return;
+  }
+
+  if (typeof controllerValue !== 'number') {
+    console.error('controllerValue not specified');
+    return;
+  }
+
+  if (!output) {
+    console.error('midi output not specified');
+    return;
+  }
+
+  // console.log('[176 + channel - 1, controllerNumber, controllerValue ]', [176 + channel - 1, controllerNumber, controllerValue ]);
+  output.sendMessage([176 + channel - 1, controllerNumber, controllerValue ]);
+}
+
 export default {
   setInput,
   setOutput,
+  sendControlChange,
+  sendNoteOff,
+  sendNoteOn,
 };

@@ -22,13 +22,17 @@
         return this.showConfigurationEdit ? 'Hide Configuration Settings' : 'Show ConfigurationSettings';
       },
     },
-    mounted() {
-    },
     methods: {
       toggleConfigurationMode() {
         const showConfigurationEdit = !this.showConfigurationEdit;
 
         this.$store.commit('UPDATE_CONFIG', { showConfigurationEdit });
+
+        if (showConfigurationEdit) {
+          this.$store.dispatch('stopEngine');
+        } else {
+          this.$store.dispatch('startEngine');
+        }
       },
     },
   };

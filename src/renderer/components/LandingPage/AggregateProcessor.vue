@@ -94,7 +94,7 @@
     },
     mounted() {
       const trackerTypes = ['velocity'];
-      startTrackers.call(this, trackerTypes);
+      // startTrackers.call(this, trackerTypes);
 
       this.$store.watch(() => this.showConfigurationEdit, (val) => {
         if (val) {

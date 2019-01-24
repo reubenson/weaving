@@ -2,6 +2,7 @@
 package-lock.json
 dist/electron/*
 dist/web/*
+dist/bundle*
 build/*
 !build/icons
 coverage

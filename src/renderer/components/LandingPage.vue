@@ -29,6 +29,7 @@
     created() {
       this.$eventBus = eventBus;
       this.$store.dispatch('retrieveConfig');
+      console.log('store.state.Config', store.state.Config);
     },
   };
 </script>

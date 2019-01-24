@@ -46,6 +46,16 @@
       </p>
     </div>
     <div>
+      <p>Spatial Model: {{ spatialModelName }}
+        <span v-if="!showConfigurationEdit">{{ spatialModelName }}</span>
+        <select v-model="spatialModelId" v-if="showConfigurationEdit">
+          <option v-for="item in spatialModels" :key="item.id" :value="item.id" :selected="isSelected('spatialModelId', item.id)">
+            {{ item.name }}
+          </option>
+        </select>
+      </p>
+    </div>
+    <div>
       Output Channel:
       <span v-if="!showConfigurationEdit">{{ channel }}</span>
       <select class="map-list-item-select" name="" v-model="channel" v-if="showConfigurationEdit">
@@ -60,23 +70,23 @@
 
 <script>
 import _ from 'lodash';
-import midi from '../../lib/midi';
+// import midi from '../../lib/midi';
 import generators from '../../lib/generators';
 import scale from '../../lib/scale';
 
-function noteDistance(a, b) {
-  // const A0 = { midi: 21, freq: 27.5 };
-  return Math.abs(b - a);
-}
+// function noteDistance(a, b) {
+//   // const A0 = { midi: 21, freq: 27.5 };
+//   return Math.abs(b - a);
+// }
 
 // MIDI note retrieval from noteArr
-function getNearestNote(noteArr, note) {
-  return _.reduce(noteArr, (acc, item) => {
-    const distances = [noteDistance(item, note), noteDistance(acc, note)];
+// function getNearestNote(noteArr, note) {
+//   return _.reduce(noteArr, (acc, item) => {
+//     const distances = [noteDistance(item, note), noteDistance(acc, note)];
 
-    return distances[0] < distances[1] ? item : acc;
-  }, null);
-}
+//     return distances[0] < distances[1] ? item : acc;
+//   }, null);
+// }
 
 export default {
   name: 'note-model',
@@ -164,63 +174,80 @@ export default {
         });
       },
     },
+    spatialModelId: {
+      get() {
+        return _.get(this.$store.getters.getNoteModel(this.id), 'spatialModelId');
+      },
+      set(val) {
+        this.$store.commit('UPDATE_NOTE_MODEL', {
+          id: this.id,
+          spatialModelId: val,
+        });
+      },
+    },
+    spatialModelName() {
+      return _.get(this.spatialModels[this.spatialModelId], 'name');
+    },
     noteSet() {
       return scale.noteSet(this.scale, this.tonic, this.octave);
     },
     generatorOptions() {
       return Object.keys(generators);
     },
+    spatialModels() {
+      return this.$store.state.Config.spatialModels;
+    },
   },
   methods: {
-    getNextNote() {
-      let note = generators[this.generator]();
+    // getNextNote() {
+    //   let note = generators[this.generator]();
 
-      // TODO normalize generator to note range
-      note = Math.round(note * 127);
-      note = getNearestNote(this.noteSet, note);
-      // TODO: normalize to scale and range
+    //   // TODO normalize generator to note range
+    //   note = Math.round(note * 127);
+    //   note = getNearestNote(this.noteSet, note);
+    //   // TODO: normalize to scale and range
 
-      this.note = note;
-    },
+    //   this.note = note;
+    // },
     isSelected(field, value) {
       return this[field] === value;
     },
     isSelectedChannel(channel) {
       return this.channel === parseInt(channel, 10);
     },
-    sendNoteOn(velocity) {
-      this.getNextNote();
-      if (this.note) {
-        midi.noteOn(this.channel, this.note, velocity);
-        midi.noteOn(this.channel, this.note - 15, velocity);
-      }
-    },
-    sendNoteOff() {
-      // TODO: this.note may not correlated to the correct note
-      if (this.note) {
-        midi.noteOff(this.channel, this.note);
-        midi.noteOff(this.channel, this.note - 15);
-      }
-      this.$store.commit('RESET_NOTE_MODEL', this.id);
-    },
+    // sendNoteOn(velocity) {
+    //   this.getNextNote();
+    //   if (this.note) {
+    //     midi.noteOn(this.channel, this.note, velocity);
+    //     midi.noteOn(this.channel, this.note - 15, velocity);
+    //   }
+    // },
+    // sendNoteOff() {
+    //   // TODO: this.note may not correlated to the correct note
+    //   if (this.note) {
+    //     midi.noteOff(this.channel, this.note);
+    //     midi.noteOff(this.channel, this.note - 15);
+    //   }
+    //   this.$store.commit('RESET_NOTE_MODEL', this.id);
+    // },
     remove(id) {
       this.$store.commit('REMOVE_NOTE_MODEL', id);
     },
-    handleTrigger(triggerOn) {
-      const handleOn = this.sendNoteOn;
-      const handleOff = this.sendNoteOff;
-      const handler = triggerOn ? handleOn : handleOff;
+    // handleTrigger(triggerOn) {
+    //   const handleOn = this.sendNoteOn;
+    //   const handleOff = this.sendNoteOff;
+    //   const handler = triggerOn ? handleOn : handleOff;
 
-      return (id, velocity) => {
-        if (id === this.id) {
-          handler(velocity);
-        }
-      };
-    },
+    //   return (id, velocity) => {
+    //     if (id === this.id) {
+    //       handler(velocity);
+    //     }
+    //   };
+    // },
   },
   mounted() {
-    this.$eventBus.on('note-model:trigger-on', this.handleTrigger(true));
-    this.$eventBus.on('note-model:trigger-off', this.handleTrigger(false));
+    // this.$eventBus.on('note-model:trigger-on', this.handleTrigger(true));
+    // this.$eventBus.on('note-model:trigger-off', this.handleTrigger(false));
   },
 };
 </script>

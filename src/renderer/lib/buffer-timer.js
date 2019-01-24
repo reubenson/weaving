@@ -2,7 +2,7 @@ import Nanotimer from 'nanotimer';
 import _ from 'lodash';
 import nanoid from 'nanoid';
 
-const levelSampleFrequency = 40; // per second
+const levelSampleFrequency = 10; // per second
 const levelBufferDuration = 1; // seconds
 const levelBufferSize = levelBufferDuration * levelSampleFrequency;
 const interval = `${1000 / levelSampleFrequency}m`;

@@ -21,7 +21,8 @@
     "test": "npm run unit && npm run e2e",
     "unit": "karma start test/unit/karma.conf.js",
     "postinstall": "npm run lint:fix",
-    "open-config": "code ~/Library/Application Support/Electron/config.json"
+    "open-config": "code ~/Library/Application Support/Electron/config.json",
+    "start-engine": "npm run pack:standalone && node dist/bundle.js"
   },
   "build": {
     "productName": "eli-whitney",

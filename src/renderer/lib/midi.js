@@ -125,6 +125,7 @@ function sendControlChange(channel, controllerNumber, controllerValue) {
     return;
   }
 
+  console.log('controllerNumber', controllerNumber);
   midiOutput.send([176 + channel - 1, controllerNumber, controllerValue ]);
 }
 

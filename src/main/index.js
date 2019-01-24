@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron' // eslint-disable-line
-import handler from './lib/engineHandler';
+import handler from './lib/engine-handler';
 
 /**
  * Set `__static` path to static files in production

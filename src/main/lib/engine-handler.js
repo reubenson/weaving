@@ -7,6 +7,12 @@ function initialize() {
   ipcMain.on('engine:initialize', () => {
     engine.initialize();
   });
+  ipcMain.on('engine:start', () => {
+    // engine.start();
+  });
+  ipcMain.on('engine:stop', () => {
+    // engine.stop();
+  });
 }
 
 export default {

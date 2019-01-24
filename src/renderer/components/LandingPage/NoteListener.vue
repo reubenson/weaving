@@ -260,10 +260,11 @@
       },
     },
     mounted() {
+      // this needs to move to engine
       const trackerTypes = ['velocity', 'spin'];
       const testSignalField = Object.keys(this.controllers)[0];
       this.testSignalController = this.controllers[testSignalField];
-      startTrackers.call(this, trackerTypes);
+      // startTrackers.call(this, trackerTypes);
       this.$store.watch(() => this.showConfigurationEdit, (val) => {
         if (val) {
           stopTrackers.call(this, trackerTypes);
