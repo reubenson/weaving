@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
+import 'keen-ui/dist/keen-ui.css';
 
 import App from './App';
 import router from './router';
