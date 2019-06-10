@@ -37,6 +37,7 @@
 
       // temp init
       this.clocks = store.state.Weaving.clocks;
+      this.clocks = [{ length: 1000 }];
       console.log('this.clocks', this.clocks);
     },
   };

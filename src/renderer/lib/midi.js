@@ -21,6 +21,7 @@ function setInput(name) {
 
 function setOutput(name) {
   midiOutput = _.find(outputs, output => output.name === name);
+  console.log('midiOutput', midiOutput);
 }
 
 /**
@@ -93,6 +94,8 @@ function getPortNames() {
 
 function noteOn(channel, note, velocity) {
   const status = 144 + channel - 1;
+
+  console.log('sending', note);
 
   midiOutput.send([status, note, velocity]);
 }

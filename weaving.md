@@ -1,6 +1,11 @@
 ### TODO
+* Output channel selection
+* Configuration per cell (i.e. note length)
+* Handle multiple swatches
+* Different modes (non-static) for note generation (defined on woof)
 * Move configuration into a toolbar setting
 * Refine store implementation to handle weaving settings
+* Euclidean cell generator
 * Refactor to handle midi streams isomorphically
 
 #### Components

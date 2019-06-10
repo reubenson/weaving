@@ -6,15 +6,27 @@
       :options="scaleOptions"
       v-model="scale"
     ></ui-select>
-    <woof :length=width :scale=scale type="warp"></woof>
-    <woof :length=depth :scale=scale type="weft"></woof>
+    <woof :length=width :scale=scale type="warp"
+      :active="warpActive"
+      :index="warpIndex"
+      :tick="index"
+    ></woof>
+    <woof :length=depth :scale=scale type="weft"
+      :active="weftActive"
+      :index="weftIndex"
+      :tick="index"
+    ></woof>
     <div class="swatch-grid" 
       :style="{
         gridTemplateColumns: 'repeat(' + (width) + ', 1fr)',
         width: (50 * width) + 'px'
         }"
       >
-      <div v-for="(item, i) in gridItems" class="swatch-grid-note" :class="{top: item, active: i === index}">
+      <div 
+        class="swatch-grid-note"
+        :class="{top: item, active: i === index}"
+        v-for="(item, i) in gridItems"
+        :key="i">
       </div>
       <!-- <div v-for="n in width + 1" class="swatch-grid-label"></div> -->
       <!-- <div class="swatch-grid-row"> -->
@@ -38,14 +50,13 @@ import scale from '../../lib/scale';
 import eventBus from '../../lib/eventBus';
 import midi from '../../lib/midi';
 
-
 export default {
   name: 'swatch',
   data() {
     return {
       width: 4,
       depth: 4,
-      noteLength: 250,
+      noteLength: 50,
       noteGrid: [],
       scale: 'major',
       pattern: 'plain',
@@ -53,6 +64,10 @@ export default {
       scaleOptions: scale.names,
       timer: {},
       index: -1,
+      warpActive: false,
+      warpIndex: -1,
+      weftActive: false,
+      weftIndex: -1
     };
   },
   computed: {
@@ -74,8 +89,6 @@ export default {
           row.push( ( (i + j) % length) < pattern[0] ? true : false );
         });
 
-        console.log('row', row);
-
         this.noteGrid.push(row);
       });
 
@@ -92,10 +105,36 @@ export default {
     advance() {
       //
       this.index++;
-      midi.noteOn(0, 15, 127);
-      setTimeout(() => {
-        midi.noteOff(0, 15, 127);
-      }, 100);
+
+      // determine warp/weft coordinates
+      let warpIndex = this.index % this.width;
+      let weftIndex = Math.floor(this.index / this.width) % this.depth;
+
+      // determine whether the warp or weft is to be triggered
+      let isWarpActive = this.noteGrid[weftIndex][warpIndex];
+
+      // console.log('this.noteGrid[weftIndex][warpIndex]', this.noteGrid[weftIndex][warpIndex]);
+
+      // send MIDI note on the active channel
+      if (isWarpActive) {
+        // get note corresponding to warpIndex
+        this.warpActive = true;
+        this.weftActive = false;
+        this.warpIndex = warpIndex;
+      } 
+      
+      if (!isWarpActive) {
+        // get note corresponding to weftIndex
+        // this.warpActive = false;
+        // this.weftActive = true;
+        // this.weftIndex = weftIndex;
+      }
+
+      // midi.noteOn(1, 15, 127);
+      // setTimeout(() => {
+      //   midi.noteOff(1, 15, 127);
+      // }, 200);
+
       this.index = this.index % (this.width * this.depth);
       //
     }
