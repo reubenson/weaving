@@ -1,5 +1,5 @@
 const clock = {
-  length: 250,
+  bpm: 120,
 };
 
 const state = {

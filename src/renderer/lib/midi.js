@@ -21,7 +21,6 @@ function setInput(name) {
 
 function setOutput(name) {
   midiOutput = _.find(outputs, output => output.name === name);
-  console.log('midiOutput', midiOutput);
 }
 
 /**
@@ -95,15 +94,13 @@ function getPortNames() {
 function noteOn(channel, note, velocity) {
   const status = 144 + channel - 1;
 
-  console.log('sending', note);
-
-  midiOutput.send([status, note, velocity]);
+  midiOutput && midiOutput.send([status, note, velocity]);
 }
 
 function noteOff(channel, note, velocity) {
   const status = 128 + channel;
 
-  midiOutput.send([status, note, velocity]);
+  midiOutput && midiOutput.send([status, note, velocity]);
 }
 
 // controllerNumber must be 0 to 119
@@ -129,7 +126,7 @@ function sendControlChange(channel, controllerNumber, controllerValue) {
   }
 
   console.log('controllerNumber', controllerNumber);
-  midiOutput.send([176 + channel - 1, controllerNumber, controllerValue ]);
+  midiOutput && midiOutput.send([176 + channel - 1, controllerNumber, controllerValue ]);
 }
 
 export default {

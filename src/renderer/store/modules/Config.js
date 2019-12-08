@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import _ from 'lodash';
 import nanoid from 'nanoid/generate';
-import { ipcRenderer } from 'electron';
+// import { ipcRenderer } from 'electron';
 import datastore from '../../datastore';
 import noteNames from '../../lib/noteNames';
 // import eventBus from '../../lib/eventBus';
@@ -139,13 +139,13 @@ const actions = {
 
     // force engine to re-initialize based on save configuration
     // TODO: make best
-    ipcRenderer.send('engine:initialize');
+    // ipcRenderer.send('engine:initialize');
   },
   startEngine() {
-    ipcRenderer.send('engine:start');
+    // ipcRenderer.send('engine:start');
   },
   stopEngine() {
-    ipcRenderer.send('engine:stop');
+    // ipcRenderer.send('engine:stop');
   },
 };
 

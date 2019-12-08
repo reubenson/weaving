@@ -8,14 +8,22 @@ function noteSet(scaleName, tonic, octave, range) {
   let noteSet = [];
   // const notes = Scale(scaleName).map(Transpose('C2'));
 
-  noteSet = notes.map(note => Note.midi( `${note}${octave}` ));
+  range = Math.max(range, 1);
 
-  // todo
-  if (range) {
-    noteSet = _.merge(noteSet, notes.map(note => Note.midi( `${note}${octave+1}` )));
-    noteSet = _.merge(noteSet, notes.map(note => Note.midi( `${note}${octave+2}` )));
-  }
-  // return notes;
+  _.times(range, i => {
+    const rangeSet = notes.map(note => Note.midi( `${note}${octave + i}` ));
+
+    // console.log('rangeSet', rangeSet);
+    noteSet.push(rangeSet);
+    // _.merge(noteSet, rangeSet);
+  });
+
+  console.log('noteSet', noteSet);
+
+  noteSet = _.flattenDeep(noteSet);
+
+  noteSet.push(noteSet[0] + 12 * range); // include octave above;
+
 
   return noteSet;
 }

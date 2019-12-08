@@ -4,14 +4,25 @@
     <main>
       <midi-drivers></midi-drivers>
       <div class="clocks">
-        <clock v-for="clock in clocks" :length=clock.length></clock>
+        <clock v-for="clock in clocks" :bpm=clock.bpm></clock>
       </div>
+      <h4>Clock</h4>
+      <ui-slider
+        label="clock"
+        :min="100"
+        :max="2000"
+        :step="25"
+        snapToSteps=true
+        v-model="mainClock"
+      ></ui-slider>
       <swatch></swatch>
     </main>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue';
+  import { UiSlider } from 'keen-ui';
   import MidiDrivers from './LandingPage/MidiDrivers';
   import TopNav from './LandingPage/TopNav';
   import Swatch from './weaving/swatch';
@@ -22,11 +33,12 @@
   export default {
     name: 'landing-page',
     components: {
-      MidiDrivers, TopNav, Swatch, Clock,
+      MidiDrivers, TopNav, Swatch, Clock, UiSlider,
     },
     data() {
       return {
         clocks: [],
+        mainClock: 250,
       };
     },
     store,
@@ -36,9 +48,16 @@
       console.log('store.state.Weaving', store.state.Weaving);
 
       // temp init
-      this.clocks = store.state.Weaving.clocks;
-      this.clocks = [{ length: 1000 }];
-      console.log('this.clocks', this.clocks);
+      // this.clocks = store.state.Weaving.clocks;
+      this.clocks = [{ bpm: this.mainClock }];
+    },
+    watch: {
+      mainClock() {
+        console.log('this.mainClock', this.mainClock);
+        Vue.set(this, 'clocks', [{
+          bpm: this.mainClock,
+        }]);
+      },
     },
   };
 </script>

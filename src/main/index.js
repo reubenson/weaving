@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron' // eslint-disable-line
+import { app, BrowserWindow, powerMonitor, powerSaveBlocker } from 'electron' // eslint-disable-line
 import handler from './lib/engine-handler';
 
 /**
@@ -31,6 +31,12 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  // run in background
+  // powerMonitor.on("suspend", () => {
+  powerSaveBlocker.start('prevent-app-suspension');
+  powerSaveBlocker.start('prevent-display-sleep');
+  // });
 }
 
 app.on('ready', createWindow);
