@@ -94,11 +94,12 @@ function getPortNames() {
 function noteOn(channel, note, velocity) {
   const status = 144 + channel - 1;
 
+
   midiOutput && midiOutput.send([status, note, velocity]);
 }
 
 function noteOff(channel, note, velocity) {
-  const status = 128 + channel;
+  const status = 128 + channel - 1;
 
   midiOutput && midiOutput.send([status, note, velocity]);
 }
