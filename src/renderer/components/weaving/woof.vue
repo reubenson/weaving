@@ -57,7 +57,7 @@ export default {
   computed: {
     noteOptions() {
       const tonic = 'C';
-      const range = Math.max(this.rangeMax - this.rangeMin, 1);
+      const range = Math.max(this.rangeMax - this.rangeMin, 0);
 
       if (this.mode === 'stack') {
         if (this.type === 'warp') {
