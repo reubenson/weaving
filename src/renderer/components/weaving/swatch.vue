@@ -355,8 +355,6 @@ export default {
 
       const rows = this.depth;
 
-      
-
       _.times(rows, row => {
         const channel = row + 1;
         const isActive = this.noteGrid[row][warpIndex];
@@ -450,13 +448,22 @@ export default {
       }
 
       return false;
-    }
+    },
+    handleClockOff() {
+      // reset
+      this.index = -1;
+      this.warpActive = false;
+      this.warpIndex = -1;
+      this.weftActive = false;
+      this.weftIndex = -1;
+    },
   },
   created() {
     this.computeWeave();
     console.log('this.noteGrid', this.noteGrid);
 
     eventBus.on('tick', this.handleTick);
+    eventBus.on('clock-off', this.handleClockOff);
   },
   components: {
     Woof,

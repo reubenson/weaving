@@ -57,6 +57,8 @@
         this.timer.clearInterval();
         if (this.isOn) {
           this.timer.setInterval(this.tick, '', this.intervalString);
+        } else {
+          eventBus.emit('clock-off');
         }
       },
       bpm() {
