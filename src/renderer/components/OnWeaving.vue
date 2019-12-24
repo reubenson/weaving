@@ -44,8 +44,8 @@
     store,
     created() {
       this.$eventBus = eventBus;
-      // this.$store.dispatch('retrieveConfig');
-      console.log('store.state.Weaving', store.state.Weaving);
+      this.$store.dispatch('retrieveConfig');
+      console.log('store.state.Config', store.state.Config);
 
       // temp init
       // this.clocks = store.state.Weaving.clocks;

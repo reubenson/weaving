@@ -4,7 +4,7 @@ import nanoid from 'nanoid/generate';
 // import { ipcRenderer } from 'electron';
 import datastore from '../../datastore';
 import noteNames from '../../lib/noteNames';
-// import eventBus from '../../lib/eventBus';
+import eventBus from '../../lib/eventBus';
 
 function genID() {
   return nanoid('abcdefghijklmnopqrstuvwxyz', 6);
@@ -77,9 +77,9 @@ function getNoteModelById(id) {
   return state.noteModels[id];
 }
 
-function getNoteListenerByNote(note) {
-  return _.find(state.noteListeners, item => item.onNote === note);
-}
+// function getNoteListenerByNote(note) {
+//   return _.find(state.noteListeners, item => item.onNote === note);
+// }
 
 const getters = {
   showConfigurationEdit(state) {
@@ -126,16 +126,16 @@ const actions = {
     commit('UPDATE_CONFIG', config);
   },
   saveConfig() {
-    datastore.saveConfig({
-      inputPort: state.inputPort,
-      outputPort: state.outputPort,
-      noteListenerSettings: state.noteListenerSettings,
-      noteListeners: state.noteListeners,
-      noteModels: state.noteModels,
-      spatialModels: state.spatialModels,
-      outputLevelChannel: state.outputLevelChannel,
-      outputLevelController: state.outputLevelController,
-    });
+    // datastore.saveConfig({
+    //   inputPort: state.inputPort,
+    //   outputPort: state.outputPort,
+    //   noteListenerSettings: state.noteListenerSettings,
+    //   noteListeners: state.noteListeners,
+    //   noteModels: state.noteModels,
+    //   spatialModels: state.spatialModels,
+    //   outputLevelChannel: state.outputLevelChannel,
+    //   outputLevelController: state.outputLevelController,
+    // });
 
     // force engine to re-initialize based on save configuration
     // TODO: make best
@@ -150,28 +150,32 @@ const actions = {
 };
 
 const mutations = {
-  HANDLE_NOTE_ON(state, { noteValue, velocity }) {
-    const noteListener = getNoteListenerByNote(noteValue);
+  HANDLE_NOTE_ON() {
+    // const noteListener = getNoteListenerByNote(noteValue);
     // const noteModelId = noteListener && noteListener.noteModelId;
     // const noteModel = noteModelId && getNoteModelById(noteModelId);
 
-    if (noteListener && velocity >= noteListener.velocityThreshold) {
-      Vue.set(noteListener, 'isOn', true);
-      Vue.set(noteListener, 'velocity', velocity);
+    eventBus.emit('trigger-in');
 
-      // if (noteModel) {
-      // eventBus.emit('note-model:trigger-on', noteModel.id, velocity);
-      // }
-    }
+    // NOTE: just listening for clock trigger
+    // if (noteListener && velocity >= noteListener.velocityThreshold) {
+    // Vue.set(noteListener, 'isOn', true);
+    // Vue.set(noteListener, 'velocity', velocity);
+
+    // if (noteModel) {
+    // eventBus.emit('note-model:trigger-on', noteModel.id, velocity);
+    // }
+    // }
   },
   // does NOTE_OFF need to be specific to a velocity value?
-  HANDLE_NOTE_OFF(state, { noteValue }) {
-    const noteListener = getNoteListenerByNote(noteValue);
+  HANDLE_NOTE_OFF() {
+    // const noteListener = getNoteListenerByNote(noteValue);
     // const noteModel = noteListener && noteListener.model &&
     //   getNoteModelById(noteListener.model.id);
 
-    Vue.set(noteListener, 'isOn', false);
-    Vue.set(noteListener, 'velocity', 0);
+    // NOTE: just listening for clock trigger
+    // Vue.set(noteListener, 'isOn', false);
+    // Vue.set(noteListener, 'velocity', 0);
 
     // if (noteModel) {
     //   eventBus.emit('note-model:trigger-on', noteModel.id);

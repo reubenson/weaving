@@ -232,8 +232,10 @@ export default {
     handleRandomize() {
       this.$refs.warp.initNotes();
     },
-    handleTick() {
-      // console.log('val', val);
+    handleTick(source) {
+      // could differentiate behavior based on source
+      console.log('tick');
+      console.log('source', source);
       this.advance();
     },
     handleUpdateLength() {
@@ -345,6 +347,9 @@ export default {
         console.log('warp not found');
         return;
       }
+
+      console.log('warpIndex', warpIndex);
+      console.log('weftIndex', weftIndex);
 
       // read from randomize
       noteValue = parseInt(this.$refs.warp.getNote(warpIndex));
@@ -462,8 +467,9 @@ export default {
     this.computeWeave();
     console.log('this.noteGrid', this.noteGrid);
 
-    eventBus.on('tick', this.handleTick);
+    eventBus.on('tick', () => this.handleTick('internal'));
     eventBus.on('clock-off', this.handleClockOff);
+    eventBus.on('trigger-in', () => this.handleTick('external'));
   },
   components: {
     Woof,

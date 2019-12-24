@@ -33,7 +33,7 @@
       return {
         bpmString: '',
         timer: {},
-        isOn: true,
+        isOn: false,
       };
     },
     computed: {
@@ -54,6 +54,7 @@
     },
     watch: {
       isOn() {
+        console.log('this.isOn', this.isOn);
         this.timer.clearInterval();
         if (this.isOn) {
           this.timer.setInterval(this.tick, '', this.intervalString);
@@ -65,7 +66,7 @@
         this.timer.clearInterval();
         this.intervalString = `${this.interval}m`;
         // todo: run timer server-side?
-        this.timer.setInterval(this.tick, '', this.intervalString);
+        // this.timer.setInterval(this.tick, '', this.intervalString);
       },
       bpmString(input) {
         this.bpm = parseInt(input, 10);
@@ -75,7 +76,7 @@
       this.timer = new Nanotimer;  // eslint-disable-line
       this.intervalString = `${this.interval}m`;
       // todo: run timer server-side?
-      this.timer.setInterval(this.tick, '', this.intervalString);
+      // this.timer.setInterval(this.tick, '', this.intervalString);
       // set up listener, if the clock listens to incoming midi events (or listens to other clocks?)
       // this.$eventBus = eventBus;
       // this.$store.dispatch('retrieveConfig');
