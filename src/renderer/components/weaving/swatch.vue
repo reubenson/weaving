@@ -144,6 +144,7 @@ import eventBus from '../../lib/eventBus';
 import midi from '../../lib/midi';
 import euclidean from '../../lib/euclidean';
 import { mapState } from 'vuex';
+const RESET_TIMEOUT = 10 * 1000; // reset grid if no ticks in 10 seconds
 
 export default {
   name: 'swatch',
@@ -177,6 +178,7 @@ export default {
       chordOptions: Chord.names(),
       chord: 'maj7',
       generator: '', // ['', 'lfo']
+      resetTimer: setTimeout(() => {}, 0),
     };
   },
   computed: {
@@ -237,6 +239,12 @@ export default {
       console.log('tick');
       console.log('source', source);
       this.advance();
+
+      clearTimeout(this.resetTimer);
+
+      this.resetTimer = setTimeout(() => {
+        this.handleClockOff();
+      }, RESET_TIMEOUT);
     },
     handleUpdateLength() {
       // if (type === 'woof') {
