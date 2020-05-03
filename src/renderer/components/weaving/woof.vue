@@ -3,7 +3,7 @@
     <div class="woof-notes"
       :style="{
         gridTemplateColumns: 'repeat(' + (columnsLength) + ', 1fr)',
-        width: (50 * width) + 'px'
+        width: (50 * length) + 'px'
         }">
 
       <ui-select
@@ -61,7 +61,7 @@ export default {
 
       if (this.mode === 'stack') {
         if (this.type === 'warp') {
-          return scale.noteSet(this.scale, tonic, this.rangeMin, range) || [];
+          return (scale.noteSet(this.scale, tonic, this.rangeMin, range) || []).map(num => `${num}`);
         } else {
           // chord mode
           const intervals = Chord.intervals(this.chord);
@@ -70,7 +70,7 @@ export default {
           console.log('semitones', semitones);
   
           console.log('intervals', intervals);
-          return semitones;
+          return semitones.map(num => `${num}`);
         }
 
         return;
@@ -81,11 +81,9 @@ export default {
         console.log('range', range);
         console.log('tonic', tonic);
         console.log('single', scale.noteSet(this.scale, tonic, this.rangeMin, range) );
-        return scale.noteSet(this.scale, tonic, this.rangeMin, range) || [];
+        return (scale.noteSet(this.scale, tonic, this.rangeMin, range) || [])
+          .map(num => `${num}`);
       }
-
-      console.log('here?');
-      
     },
     // intervalOptions() {
     //   return Chord.intervals(this.chord).map(interval => Chord.semitones(interval));
@@ -129,11 +127,19 @@ export default {
       }
 
       _.times(this.length, i => {
+        // get random note
         const value = _.random(0, this.noteOptions.length - 1);
+
+      // const note = baseNote + semitones[chordIndex % semitones.length];
+      // console.log('note', note);
+        // const value = this.noteOptions[i % (this.noteOptions.length - 1)];
+        // console.log('value', value);
+        // console.log('index', index);
         
         // console.log('index', index);
-        console.log('this.noteOptions', this.noteOptions);
+        // console.log('this.noteOptions', this.noteOptions);
         Vue.set(this.notes, i, '' + this.noteOptions[value]);
+        // Vue.set(this.notes, i, '' + note);
 
         // console.log('this.noteOptions', this.noteOptions);
         // if (this.type === 'weft') {
@@ -153,7 +159,12 @@ export default {
     },
     updateLength(val) {
       this.$emit('update-length', { type: this.type, length: val} );
-    }
+    },
+    updateNoteAtIndex(value, index) {
+      const note = scale.determineNote(this.noteOptions.map(x => parseInt(x)), value);
+
+      this.handleInput(index, note);
+    },
   },
   watch: {
     active() {

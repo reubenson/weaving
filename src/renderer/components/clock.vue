@@ -54,7 +54,6 @@
     },
     watch: {
       isOn() {
-        console.log('this.isOn', this.isOn);
         this.timer.clearInterval();
         if (this.isOn) {
           this.timer.setInterval(this.tick, '', this.intervalString);

@@ -30,8 +30,30 @@ function noteSet(scaleName, tonic, octave, range) {
   return noteSet;
 }
 
+/**
+ * Quantize to nearest note in noteSet based on value
+ * TODO: should be a logarthmic scale instead of linear?
+ * @param {Array} noteSet
+ * @param {Number} value [0-1]
+ */
+function determineNote(noteSet, value) {
+  const firstNote = noteSet[0];
+  const range = _.last(noteSet) - firstNote;
+  const target = firstNote + value * range;
+  const note = noteSet.reduce((acc, val) => {
+    return Math.abs(val - target) < Math.abs(acc - target)
+      ? val : acc;
+  }, firstNote);
+
+  console.log('noteSet', noteSet);
+  console.log('target', target);
+  console.log('note', note);
+  return note;
+}
+
 export default {
   names: Scale.names(),
   tonics,
   noteSet,
+  determineNote,
 };

@@ -234,10 +234,16 @@ export default {
     handleRandomize() {
       this.$refs.warp.initNotes();
     },
-    handleTick(source) {
+    handleTick(source, value) {
       // could differentiate behavior based on source
-      console.log('tick');
-      console.log('source', source);
+
+      this.index++;
+
+      if (source === 'external') {
+        const warpIndex = this.index % this.width; // make computed value
+        this.$refs.warp.updateNoteAtIndex(value, warpIndex);
+      }
+
       this.advance();
 
       clearTimeout(this.resetTimer);
@@ -356,9 +362,6 @@ export default {
         return;
       }
 
-      console.log('warpIndex', warpIndex);
-      console.log('weftIndex', weftIndex);
-
       // read from randomize
       noteValue = parseInt(this.$refs.warp.getNote(warpIndex));
       // read from LFO generator
@@ -373,8 +376,8 @@ export default {
         const isActive = this.noteGrid[row][warpIndex];
 
         // apply interval from weft
-        chordInterval = parseInt(this.$refs.weft.getInterval(row)) || 0;
-        noteValue += chordInterval;
+        // chordInterval = parseInt(this.$refs.weft.getInterval(row)) || 0;
+        // noteValue += chordInterval;
 
         if (isActive) {
           this.sendNote(2 * channel, noteValue, 127);
@@ -413,10 +416,7 @@ export default {
 
     },
     advance() {
-      //
-      this.index++;
-
-      if (this.readMode === 'single') {
+        if (this.readMode === 'single') {
         this.advanceSingle();
       } else if (this.readMode === 'stack') {
         this.advanceStack();
@@ -477,7 +477,7 @@ export default {
 
     eventBus.on('tick', () => this.handleTick('internal'));
     eventBus.on('clock-off', this.handleClockOff);
-    eventBus.on('trigger-in', () => this.handleTick('external'));
+    eventBus.on('trigger-in', (data) => this.handleTick('external', data / 127));
   },
   components: {
     Woof,
