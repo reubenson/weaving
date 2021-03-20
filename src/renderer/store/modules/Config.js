@@ -150,12 +150,12 @@ const actions = {
 };
 
 const mutations = {
-  HANDLE_NOTE_ON(data, { noteValue }) {
+  HANDLE_NOTE_ON(data, { noteValue, velocity }) {
     // const noteListener = getNoteListenerByNote(noteValue);
     // const noteModelId = noteListener && noteListener.noteModelId;
     // const noteModel = noteModelId && getNoteModelById(noteModelId);
 
-    eventBus.emit('trigger-in', noteValue);
+    eventBus.emit('trigger-in', {noteValue, velocity});
 
     // NOTE: just listening for clock trigger
     // if (noteListener && velocity >= noteListener.velocityThreshold) {

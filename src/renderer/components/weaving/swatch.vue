@@ -61,7 +61,7 @@
     <ui-select
       label="Scale Selection"
       placeholder="Select a Scale"
-      :options="scaleOptions"
+      :options="chordOptions"
       v-model="scale"
     ></ui-select>
     <ui-select
@@ -154,7 +154,7 @@ export default {
       depth: 4,
       noteLength: 100,
       noteGrid: [],
-      scale: 'major',
+      scale: 'maj7',
       pattern: 'weave',
       // readMode: 'single', // or 'stack'
       readMode: 'stack',
@@ -477,7 +477,7 @@ export default {
 
     eventBus.on('tick', () => this.handleTick('internal'));
     eventBus.on('clock-off', this.handleClockOff);
-    eventBus.on('trigger-in', (data) => this.handleTick('external', data / 127));
+    eventBus.on('trigger-in', ({noteValue, velocity}) => this.handleTick('external', noteValue / 127));
   },
   components: {
     Woof,

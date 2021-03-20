@@ -1,12 +1,22 @@
 /* eslint-disable */
 import { Scale, Note, Transpose } from 'tonal';
+import * as Chord from 'tonal-chord';
 import _ from 'lodash';
 const tonics = ['Ab', 'A', 'Bb', 'B', 'C', 'C#', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'G#'];
 
-function noteSet(scaleName, tonic, octave, range) {
-  const notes = Scale.notes(`${tonic} ${scaleName}`);
+/**
+ * Generate set of notes based on chord name, tonic, and register(s)
+ * @param {string} chordName 
+ * @param {string} tonic 
+ * @param {number} octave 
+ * @param {number} range 
+ */
+function noteSet(chordName, tonic, octave, range) {
+  // const notes = Scale.notes(`${tonic} ${chordName}`);
+  const notes = Chord.notes(`${tonic}${chordName}`);
+
   let noteSet = [];
-  // const notes = Scale(scaleName).map(Transpose('C2'));
+  // const notes = Scale(chordName).map(Transpose('C2'));
 
   range = Math.max(range, 0);
 
@@ -24,7 +34,7 @@ function noteSet(scaleName, tonic, octave, range) {
 
   noteSet = _.flattenDeep(noteSet);
 
-  noteSet.push(noteSet[0] + 12 * range); // include octave above;
+  // noteSet.push(noteSet[0] + 12 * range); // include octave above;
 
 
   return noteSet;
@@ -38,7 +48,8 @@ function noteSet(scaleName, tonic, octave, range) {
  */
 function determineNote(noteSet, value) {
   const firstNote = noteSet[0];
-  const range = _.last(noteSet) - firstNote;
+  // const range = _.last(noteSet) - firstNote;
+  const range = _.max(noteSet) - _.min(noteSet);
   const target = firstNote + value * range;
   const note = noteSet.reduce((acc, val) => {
     return Math.abs(val - target) < Math.abs(acc - target)
@@ -46,7 +57,6 @@ function determineNote(noteSet, value) {
   }, firstNote);
 
   console.log('noteSet', noteSet);
-  console.log('target', target);
   console.log('note', note);
   return note;
 }
