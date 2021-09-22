@@ -1,4 +1,18 @@
 ### TODO
+- woof can have arbitrary number of elements
+- weft no longer triggers notes
+- update grid to allow rows of arbitrary length
+  - each row to be a separate vue component?
+  - each row will listen to different tick events (sent from DAW)
+  - note values will be rendered in grey-scale, with a global option to show the value/name?
+  - in render, each row will have equal width, and individual cells will have variable width
+  - move swatch-level params around pattern and length?
+
+
+
+
+
+
 * Output channel selection
 * Configuration per cell (i.e. note length)
 * Handle multiple swatches

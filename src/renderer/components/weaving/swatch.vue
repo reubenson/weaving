@@ -59,16 +59,24 @@
       :snapToSteps=true
     ></ui-slider>
     <ui-select
-      label="Scale Selection"
-      placeholder="Select a Scale"
+      label="Note Set Selection"
+      placeholder="Select a Chord"
       :options="chordOptions"
       v-model="scale"
     ></ui-select>
     <ui-select
+      label="Filter chord selector by number of notes"
+      v-model="chordSizeFilter"
+      :options="['3','4','5','6','7']"
+      :step="1"
+      :snapToSteps=true
+    ></ui-select>
+    <!-- deprecate chord selection -->
+    <!-- <ui-select
       label="Chord Selection"
       :options="chordOptions"
       v-model="chord"
-    ></ui-select>
+    ></ui-select> -->
     <ui-select
       label="warp length"
       :options="lengthOptions"
@@ -151,7 +159,7 @@ export default {
   data() {
     return {
       width: 16,
-      depth: 4,
+      depth: 2,
       noteLength: 100,
       noteGrid: [],
       scale: 'maj7',
@@ -175,8 +183,9 @@ export default {
       weaveX: 1,
       weaveY: 1,
       noteLengthOptions: _.times(11, i => i * 10),
-      chordOptions: Chord.names(),
-      chord: 'maj7',
+      // chordOptions: Chord.names(),
+      chord: 'Maj7',
+      chordSizeFilter: "4",
       generator: '', // ['', 'lfo']
       resetTimer: setTimeout(() => {}, 0),
     };
@@ -185,6 +194,13 @@ export default {
     swatchGridSize() {
       return (this.width + 1) * (this.depth + 1);
     },
+    chordOptions() {
+      const names = Chord.names();
+
+      return names.filter(name => {
+        return Chord.notes(`C4${name}`).length === +this.chordSizeFilter;
+      });
+    }
   },
   watch: {
     pattern() {
@@ -204,7 +220,7 @@ export default {
     },
     weaveY() {
       this.computeWeave();
-    },
+    }
   },
   methods: {
     computeWeave() {
@@ -302,8 +318,6 @@ export default {
       }
     },
     advanceSingle() {
-      const organHack = false;
-
       // determine warp/weft coordinates
       let warpIndex = this.index % this.width;
       let weftIndex = Math.floor(this.index / this.width) % this.depth;
@@ -311,10 +325,8 @@ export default {
       // determine whether the warp or weft is to be triggered
       let isWarpActive = this.noteGrid[weftIndex][warpIndex];
 
-      // console.log('this.noteGrid[weftIndex][warpIndex]', this.noteGrid[weftIndex][warpIndex]);
-
       // send MIDI note on the active channel
-      if (isWarpActive || organHack) {
+      if (isWarpActive) {
         // get note corresponding to warpIndex
         this.warpActive = true;
         this.weftActive = false;
@@ -324,15 +336,9 @@ export default {
         const noteValue = parseInt(this.$refs.warp.getNextNoteInChord());
         console.log('1: noteValue', noteValue);
         this.sendNote(1, noteValue, 127);
-
-        if (organHack) {
-          this.sendNote(2, noteValue + 7, 127);
-          this.sendNote(3, noteValue - 5, 127);
-          this.sendNote(4, noteValue + 12, 1276)
-        }
       } 
       
-      if (!isWarpActive && !organHack) {
+      if (!isWarpActive) {
         // get note corresponding to weftIndex
         this.warpActive = false;
         this.weftActive = true;
@@ -421,37 +427,6 @@ export default {
       } else if (this.readMode === 'stack') {
         this.advanceStack();
       }
-      // // determine warp/weft coordinates
-      // let warpIndex = this.index % this.width;
-      // let weftIndex = Math.floor(this.index / this.width) % this.depth;
-
-      // // determine whether the warp or weft is to be triggered
-      // let isWarpActive = this.noteGrid[weftIndex][warpIndex];
-
-      // // console.log('this.noteGrid[weftIndex][warpIndex]', this.noteGrid[weftIndex][warpIndex]);
-
-      // // send MIDI note on the active channel
-      // if (isWarpActive) {
-      //   // get note corresponding to warpIndex
-      //   this.warpActive = true;
-      //   this.weftActive = false;
-      //   this.warpIndex = warpIndex;
-      // } 
-      
-      // if (!isWarpActive) {
-      //   // get note corresponding to weftIndex
-      //   this.warpActive = false;
-      //   this.weftActive = true;
-      //   this.weftIndex = weftIndex;
-      // }
-
-      // // midi.noteOn(1, 15, 127);
-      // // setTimeout(() => {
-      // //   midi.noteOff(1, 15, 127);
-      // // }, 200);
-
-      // this.index = this.index % (this.width * this.depth);
-      //
     },
     isActiveGridItem(i) {
       if (this.readMode === 'single') {

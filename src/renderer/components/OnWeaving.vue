@@ -45,7 +45,7 @@
     created() {
       this.$eventBus = eventBus;
       this.$store.dispatch('retrieveConfig');
-      console.log('store.state.Config', store.state.Config);
+      // console.log('store.state.Config', store.state.Config);
 
       // temp init
       // this.clocks = store.state.Weaving.clocks;
@@ -53,7 +53,7 @@
     },
     watch: {
       mainClock() {
-        console.log('this.mainClock', this.mainClock);
+        // console.log('this.mainClock', this.mainClock);
         Vue.set(this, 'clocks', [{
           bpm: this.mainClock,
         }]);

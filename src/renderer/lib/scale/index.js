@@ -56,8 +56,6 @@ function determineNote(noteSet, value) {
       ? val : acc;
   }, firstNote);
 
-  console.log('noteSet', noteSet);
-  console.log('note', note);
   return note;
 }
 

@@ -155,7 +155,7 @@ const mutations = {
     // const noteModelId = noteListener && noteListener.noteModelId;
     // const noteModel = noteModelId && getNoteModelById(noteModelId);
 
-    eventBus.emit('trigger-in', {noteValue, velocity});
+    eventBus.emit('trigger-in', { noteValue, velocity });
 
     // NOTE: just listening for clock trigger
     // if (noteListener && velocity >= noteListener.velocityThreshold) {
@@ -267,7 +267,7 @@ const mutations = {
     spatialModel.name = `${spatialModel.id}`;
 
     Vue.set(state.spatialModels, spatialModel.id, spatialModel);
-    console.log('state', state);
+    // console.log('state', state);
     actions.saveConfig();
   },
   UPDATE_SPATIAL_MODEL(state, data) {
