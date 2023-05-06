@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@element-plus/nuxt'
   ],
-  router: {
-    base: '/weaving/'
+  app: {
+    baseURL: '/weaving/'
   }
 })
