@@ -27,115 +27,117 @@
   </div>
 </template>
 
-<script>
+<script setup>
 /* eslint-disable */
+
 import * as Chord from 'tonal-chord';
 import { Interval } from 'tonal';
 import _ from 'lodash';
 import scale from '../lib/scale';
 import midi from '../lib/midi';
 
-export default {
-  name: 'woof',
-  props: {
-    length: Number,
-    type: String,
-    scale: String,
-    active: Boolean,
-    index: Number,
-    tick: Number,
-    note: Number,
-    rangeMin: Number,
-    rangeMax: Number,
-    chord: String,
-    mode: String,
-  },
-  data() {
-    return {
-      notes: new Array(this.length),
-      channel: 0,
-      activeNote: 0,
-      chordIndex: 0,
+// export default {
+  // name: 'woof',
+  // props: {
+const props = defineProps({
+  length: Number,
+  type: String,
+  scale: String,
+  active: Boolean,
+  index: Number,
+  tick: Number,
+  note: Number,
+  rangeMin: Number,
+  rangeMax: Number,
+  chord: String,
+  mode: String,
+})
+  // },
+  // data() {
+    // return {
+let notes = ref(new Array(props.length)),
+      channel = ref(0),
+      activeNote = ref(0),
+      chordIndex = ref(0);
       // chordOptions: Chord.names()
-    };
-  },
-  computed: {
-    noteOptions() {
+  //   };
+  // },
+  // computed: {
+const noteOptions = computed({
+  get: () => {
       const tonic = 'C';
-      const range = Math.max(this.rangeMax - this.rangeMin, 0);
+      const range = Math.max(props.rangeMax - props.rangeMin, 0);
 
-      if (this.mode === 'stack') {
-        if (this.type === 'warp') {
-          return (scale.noteSet(this.scale, tonic, this.rangeMin, range) || []).map(num => `${num}`);
+      if (props.mode === 'stack') {
+        if (props.type === 'warp') {
+          return (scale.noteSet(props.scale, tonic, props.rangeMin, range) || []).map(num => `${num}`);
         } else {
           // chord mode
-          const intervals = Chord.intervals(this.chord);
+          const intervals = Chord.intervals(props.chord);
           const semitones = intervals.map(interval => Interval.semitones(interval));
   
-          console.log('semitones', semitones);
-  
-          console.log('intervals', intervals);
           return semitones.map(num => `${num}`);
         }
 
         return;
       }
 
-      if (this.mode === 'single') {
+      if (props.mode === 'single') {
         console.log('scale', scale);
         console.log('range', range);
         console.log('tonic', tonic);
-        console.log('single', scale.noteSet(this.scale, tonic, this.rangeMin, range) );
-        return (scale.noteSet(this.scale, tonic, this.rangeMin, range) || [])
+        console.log('single', scale.noteSet(props.scale, tonic, props.rangeMin, range) );
+        return (scale.noteSet(props.scale, tonic, props.rangeMin, range) || [])
           .map(num => `${num}`);
       }
-    },
+    }
+  });
     // intervalOptions() {
     //   return Chord.intervals(this.chord).map(interval => Chord.semitones(interval));
     // },
-    columnsLength() {
-      return this.type === 'warp' ? this.length: 1;
-    },
-  },
-  methods: {
-    getNextNoteInChord() {
-      const intervals = Chord.intervals(this.chord);
+const columnsLength = computed({
+  get: () => {
+      return props.type === 'warp' ? props.length: 1;
+    }
+  });
+  // },
+  // methods: {
+function getNextNoteInChord() {
+      const intervals = Chord.intervals(props.chord);
       const semitones = intervals.map(interval => Interval.semitones(interval));
-      const baseNote = parseInt(this.noteOptions[0]);
+      const baseNote = parseInt(noteOptions.value[0]);
 
       console.log('baseNote', baseNote);
 
-      const note = baseNote + semitones[this.chordIndex % semitones.length];
+      const note = baseNote + semitones[chordIndex % semitones.length];
 
       console.log('note', note);
 
-      this.chordIndex += 1;
+      chordIndex += 1;
 
       return note;
-    },
-    getInterval(index) {
+    }
+function getInterval(index) {
 
-      return this.type === 'weft' ? this.notes[index] : 0;
-    },
-    initNotes() {
+      return props.type === 'weft' ? notes[index] : 0;
+    }
+function initNotes() {
       // Vue.set(this, 'notes', []);
-      this.notes = [];
+      notes = [];
 
-      if (this.mode === 'stack' && this.type === 'weft') {
-        _.times (this.length, i => {
-          const value = this.noteOptions[i % this.noteOptions.length];
-          console.log('value', value);
+      if (props.mode === 'stack' && props.type === 'weft') {
+        _.times (props.length, i => {
+          const value = noteOptions.value[i % noteOptions.value.length];
 
-          // Vue.set(this.notes, i, '' + value);
-          this.notes[i] = value;
+          notes[i] = value;
         });
 
         return;
       }
 
-      _.times(this.length, i => {
+      _.times(props.length, i => {
         // get random note
-        const value = _.random(0, this.noteOptions.length - 1);
+        const value = _.random(0, noteOptions.value.length - 1);
 
       // const note = baseNote + semitones[chordIndex % semitones.length];
       // console.log('note', note);
@@ -146,7 +148,7 @@ export default {
         // console.log('index', index);
         // console.log('this.noteOptions', this.noteOptions);
         // Vue.set(this.notes, i, '' + this.noteOptions[value]);
-        this.notes[i] = this.noteOptions[value];
+        notes[i] = noteOptions.value[value];
         // Vue.set(this.notes, i, '' + note);
 
         // console.log('this.noteOptions', this.noteOptions);
@@ -155,28 +157,28 @@ export default {
         // }
         // return this.noteOptions[index];
       });
-    },
-    getNote(index) {
-      return this.notes[index];
-    },
-    getBaseNote() {
-      return this.notes[0];
-    },
-    handleInput(i, val) {
+    }
+function getNote(index) {
+      return notes[index];
+    }
+function getBaseNote() {
+      return notes[0];
+    }
+function handleInput(i, val) {
       // Vue.set(this.notes, i, '' + val);
-      this.notes[i] = val;
-    },
-    updateLength(val) {
+      notes[i] = val;
+    }
+function updateLength(val) {
       this.$bus.$emit('update-length', { type: this.type, length: val} );
-    },
-    updateNoteAtIndex(value, index) {
-      const note = scale.determineNote(this.noteOptions.map(x => parseInt(x)), value);
+    }
+function updateNoteAtIndex(value, index) {
+      const note = scale.determineNote(noteOptions.value.map(x => parseInt(x)), value);
 
-      this.handleInput(index, note);
-    },
-  },
-  watch: {
-    active() {
+      handleInput(index, note);
+    }
+  // },
+  // watch: {
+  // active() {
       // console.log('this.active', this.active);
       // if (this.active) {
       //   // trigger note-on
@@ -191,18 +193,18 @@ export default {
       //   console.log('note off');
       //   //  midi.noteOff(2, this.activeNote, 127);
       // }
-    },
-    scale() {
-      this.initNotes();
+    // },
+watch(props.scale, () => {
+      initNotes();
       // this.handleScaleChange();
-    },
-    chord() {
-      this.initNotes();
-    },
-    index() {
+    });
+watch(props.chord, () => {
+      initNotes();
+    });
+watch(props.index, () => {
       // console.log('this.index', this.index);
-    },
-    tick() {
+    });
+watch(props.tick, () => {
       // not flexible enough
       return;
       const channel = this.index;
@@ -239,24 +241,25 @@ export default {
         console.log('note off');
          midi.noteOff(this.channel, this.activeNote, 127);
       }
-    },
-    length() {
-      this.initNotes();
-      console.log('this.length', this.length);
-    },
-    rangeMin() {
-      this.initNotes();
-    },
-    rangeMax() {
-      this.initNotes();
-    }
-  },
-  mounted() {
+    });
+watch(props.length, () => {
+      initNotes();
+      console.log('props.length', props.length);
+    });
+watch(props.rangeMin, () => {
+      initNotes();
+    });
+watch(props.rangeMax, () => {
+      initNotes();
+    });
+  // },
+onMounted(() => {
 
     // Vue.set(this.notes, 0, '' + this.noteOptions[0]);
     // this.notes[0] = this.noteOptions[0];
 
-    this.initNotes();
+    initNotes();
+    console.log('notes', notes);
     // _.times(this.length, i => {
     //   // console.log('note', note);
     //   const value = _.random(0, this.noteOptions.length - 1);
@@ -268,17 +271,26 @@ export default {
     // Vue.set(this.notes, 0, 100)
     // this.notes = _.times(this.length, ()=>({val: ''}));
 
-    if (this.type === 'warp') {
-      this.channel = 1;
+    if (props.type === 'warp') {
+      props.channel = 1;
     } else {
-      this.channel = 2;
+      props.channel = 2;
     }
-    console.log('this.channel', this.channel);
-  },
-  components: {
+    console.log('props.channel', props.channel);
+  });
+  // components: {
     // UiSelect,
-  }
-};
+//   }
+// };
+
+// probably a better way to set this up
+defineExpose({
+  initNotes,
+  updateNoteAtIndex,
+  getNextNoteInChord,
+  getNote,
+  test: () => {}
+});
 </script>
 
 <style lang="scss">

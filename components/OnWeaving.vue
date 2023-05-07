@@ -2,58 +2,33 @@
   <div id="wrapper">
     <top-nav></top-nav>
     <main>
-      <midi-drivers></midi-drivers>
+      <el-switch 
+        v-model="useWebAudio"
+        active-text="Use Web Audio to Play"
+        inactive-text="Use External MIDI to Play"
+      ></el-switch>
+      <midi-drivers v-if="!useWebAudio"></midi-drivers>
       <clock></clock>
-      <!-- </div> -->
-      <!-- <h4>Clock</h4> -->
-      <!-- <el-slider
-        label="clock"
-        :min="100"
-        :max="2000"
-        :step="25"
-        v-model="mainClock"
-      ></el-slider> -->
       <swatch></swatch>
     </main>
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref, computed } from 'vue';
   import MidiDrivers from './MidiDrivers';
   import TopNav from './TopNav';
   import Swatch from './Swatch';
   import Clock from './Clock';
+  import { useStore } from '@/store/main';
+  import { storeToRefs } from 'pinia';
 
-  export default {
-    name: 'Weaving Music',
-    components: {
-      MidiDrivers, TopNav, Swatch, Clock,
-    },
-    data() {
-      return {
-        // clocks: [],
-        // mainClock: 250,
-      };
-    },
-    created() {
-      // this.$eventBus = eventBus;
-      // this.$store.dispatch('retrieveConfig');
-      // console.log('store.state.Config', store.state.Config);
+  const store = useStore();
+  const { useWebAudio } = storeToRefs(store);
 
-      // temp init
-      // this.clocks = store.state.Weaving.clocks;
-      // this.clocks = [{ bpm: this.mainClock }];
-    },
-    watch: {
-      // mainClock() {
-        // console.log('this.mainClock', this.mainClock);
-        // Vue.set(this, 'clocks', [{
-        //   bpm: this.mainClock,
-        // }]);
-      //   this.clocks = [{bpm: this.mainClock}];
-      // },
-    },
-  };
+  onMounted(() => {
+    store.initializeWebAudioSynth();
+  });
 </script>
 
 <style>

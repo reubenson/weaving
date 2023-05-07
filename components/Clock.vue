@@ -12,67 +12,71 @@
         v-model="bpm"
       ></el-slider>
     <el-switch
-      active-text="start / stop"
+      active-text="start"
+      inactive-text="stop"
       v-model="isOn"
     ></el-switch>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
+
 // clock does not need to know what is connected to it
 // anything that needs a clock will listen to emitter?
+const { $event } = useNuxtApp();
 
-  export default {
-    name: 'timer',
-    data() {
-      return {
-        bpm: 250,
-        timer: null,
-        isOn: false,
-      };
-    },
-    computed: {
-      interval() {
-        const bpmInt = parseInt(this.bpm, 10);
+let bpm = ref(250),
+  timer = null,
+  isOn = ref(false);
+    //   };
+    // },
+    // computed: {
+const interval = computed({
+  get: () => {
+    const bpmInt = parseInt(bpm.value, 10);
 
-        return 60 * (1000 / bpmInt);
-      },
-      intervalString() {
-        return '' + this.interval;
-      }
-    },
-    components: {},
-    methods: {
-      handleTimer() {
-        // todo: https://incolumitas.com/2021/12/18/on-high-precision-javascript-timers/
-        clearInterval(this.timer);
-        if (this.isOn) {
-          this.timer = setInterval(this.tick, this.intervalString);;
-        }
-      },
-      tick() {
-        // eventBus.emit('tick', 'clock.id');
-        this.$bus.$emit('tick', 'clock.id');
-      },
-    },
-    watch: {
-      isOn() {
-        this.handleTimer();
-        if (this.isOn) {
-          // this.timer = setInterval(this.tick, this.intervalString);
-        } else {
-          // eventBus.emit('clock-off');
-          this.$bus.$emit('clock-off');
-        }
-      },
-      bpm() {
-        this.handleTimer();
-      },
-      bpmString(input) {
-        this.bpm = parseInt(input, 10);
-      },
-    }
-  };
+    return 60 * (1000 / bpmInt);
+  }
+});
+const intervalString = computed({
+  get: () => {
+    return '' + interval.value;
+  }
+});
+
+function handleTimer() {
+  // todo: https://incolumitas.com/2021/12/18/on-high-precision-javascript-timers/
+  clearInterval(timer);
+  if (isOn.value) {
+    timer = setInterval(tick, intervalString.value);
+  }
+}
+
+function tick() {
+  // eventBus.emit('tick', 'clock.id');
+  $event('tick', 'clock.id');
+}
+    // },
+    // watch: {
+watch(isOn, val => {
+  handleTimer();
+  if (val) {
+    // this.timer = setInterval(this.tick, this.intervalString);
+  } else {
+    clearInterval(timer);
+    // eventBus.emit('clock-off');
+    $event('clock-off');
+  }
+});
+watch(bpm, () => {
+  handleTimer();
+});
+// watch(bpmString, (input) => {
+//         bpm = parseInt(input, 10);
+//       });
+  //   }
+  // };
 </script>
 
 <style>

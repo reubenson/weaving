@@ -14,5 +14,6 @@ export default defineNuxtConfig({
   ],
   app: {
     baseURL: '/weaving/'
-  }
+  },
+  plugins: ['~/plugins/mitt.client.js']
 })

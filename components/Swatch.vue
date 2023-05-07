@@ -84,7 +84,7 @@
           <el-select
             label="Note Set Selection"
             placeholder="Select a Chord"
-            v-model="scale"
+            v-model="noteScale"
           >
           <el-option
             v-for="item in chordOptions"
@@ -138,7 +138,7 @@
       <woof
         ref="warp"
         :length=width
-        :scale=scale
+        :scale=noteScale
         :mode=readMode
         type="warp"
         :active="warpActive"
@@ -152,7 +152,7 @@
       <woof
         ref="weft"
         :length=depth
-        :scale=scale
+        :scale=noteScale
         :mode=readMode
         type="weft"
         :active="weftActive"
@@ -188,154 +188,164 @@
   </section>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, ref } from 'vue';
+
 /* eslint-disable */
 import _ from 'lodash';
-// import { UiSelect, UiSlider, UiButton } from 'keen-ui';
 import * as Chord from 'tonal-chord';
 import Woof from './woof';
 // import patterns from '../../../services/weaving/patterns';
 import scale from '../lib/scale';
-// import eventBus from '../lib/eventBus';
 import midi from '../lib/midi';
 import euclidean from '../lib/euclidean';
 const RESET_TIMEOUT = 10 * 1000; // reset grid if no ticks in 10 seconds
+import audio from '../lib/audio';
+import { useStore } from '@/store/main';
+import { storeToRefs } from 'pinia';
 
-export default {
-  name: 'swatch',
-  data() {
-    return {
-      width: 16,
-      depth: 2,
-      noteLength: 100,
-      noteGrid: [],
-      scale: 'maj7',
-      pattern: 'weave',
+const store = useStore();
+const { useWebAudio, webAudioSynth } = storeToRefs(store);
+
+const warp = ref();
+const weft = ref();
+
+let width = ref(16);
+let depth = ref(2);
+let noteLength = ref(100);
+let noteGrid = ref([]);
+let noteScale = ref('maj7');
+let pattern = ref('weave');
       // readMode: 'single', // or 'stack'
-      readMode: 'stack',
-      scaleOptions: scale.names,
-      patternOptions: ['weave', 'euclidean'],
-      timer: {},
-      index: -1,
-      warpActive: false,
-      warpIndex: -1,
-      weftActive: false,
-      weftIndex: -1,
-      lengthOptions: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
-      warpNote: 0,
-      weftNote: 0,
-      euclideanCount: 1,
-      rangeMin: 2,
-      rangeMax: 4,
-      weaveX: 1,
-      weaveY: 1,
-      noteLengthOptions: _.times(11, i => i * 10),
+let readMode = ref('stack'),
+      scaleOptions = ref(scale.names),
+      patternOptions = ref(['weave', 'euclidean']),
+      timer = ref({}),
+      index = ref(-1),
+      warpActive = ref(false),
+      warpIndex = ref(-1),
+      weftActive = ref(false),
+      weftIndex = ref(-1),
+      lengthOptions = ref([2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]),
+      warpNote = ref(0),
+      weftNote = ref(0),
+      euclideanCount = ref(1),
+      rangeMin = ref(2),
+      rangeMax = ref(4),
+      weaveX = ref(1),
+      weaveY = ref(1),
+      noteLengthOptions = ref(_.times(11, i => i * 10)),
       // chordOptions: Chord.names(),
-      chord: 'Maj7',
-      chordSizeFilter: "4",
-      generator: '', // ['', 'lfo']
-      resetTimer: setTimeout(() => {}, 0),
-    };
-  },
-  computed: {
-    swatchGridSize() {
-      return (this.width + 1) * (this.depth + 1);
-    },
-    chordOptions() {
-      const names = Chord.names();
+      chord = ref('Maj7'),
+      chordSizeFilter = ref("4"),
+      generator = ref(''), // ['', 'lfo']
+      resetTimer = setTimeout(() => {}, 0);
+let gridItems = ref([]);
 
-      return names.filter(name => {
-        return Chord.notes(`C4${name}`).length === +this.chordSizeFilter;
-      });
+const { $event, $listen } = useNuxtApp();
+
+const swatchGridSize = computed({
+  get: () => {
+    return (width + 1) * (depth + 1);
+  }
+});
+
+const chordOptions = computed({
+  get: () => {
+    const names = Chord.names();
+
+    return names.filter(name => {
+      return Chord.notes(`C4${name}`).length === + chordSizeFilter;
+    });
+  }
+});
+
+  // watch: {    
+watch(pattern, () => {
+      handlePatternChange();
+    });
+watch(euclideanCount, () => {
+      handlePatternChange();
+    });
+watch(width, () => {
+      handleUpdateLength();
+    });
+watch(depth, () => {
+      handleUpdateLength();
+    });
+watch(weaveX, () => {
+      computeWeave();
+    });
+watch(weaveY, () => {
+      computeWeave();
+    });
+
+  // },
+  // methods: {
+function computeWeave() {
+  const pattern = [weaveX.value, weaveY.value],
+    length = pattern.reduce((acc, item) => acc += item);
+  
+  noteGrid = [];
+  _.times(depth.value, (i) => {
+    const row = [];
+
+    
+    _.times(width.value, (j) => {
+      row.push( ( (i + width.value - j) % length) < pattern[0] ? true : false );
+    });
+
+    noteGrid.push(row);
+  });
+
+  // expand grid to include labels
+  gridItems = _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
+}
+function handleRandomize() {
+      // this.$refs.warp.initNotes();
+      warp.initNotes();
     }
-  },
-  watch: {
-    pattern() {
-      this.handlePatternChange();
-    },
-    euclideanCount() {
-      this.handlePatternChange();
-    },
-    width() {
-      this.handleUpdateLength();
-    },
-    depth() {
-      this.handleUpdateLength();
-    },
-    weaveX() {
-      this.computeWeave();
-    },
-    weaveY() {
-      this.computeWeave();
-    }
-  },
-  methods: {
-    computeWeave() {
-      // const pattern = patterns[this.pattern],
-      const pattern = [this.weaveX, this.weaveY],
-        length = pattern.reduce((acc, item) => acc += item);
-      
-      this.noteGrid = [];
+function handleTick(source, value) {
+  // console.log('value', value);
+  // could differentiate behavior based on source
 
-      _.times(this.depth, (i) => {
-        const row = [];
+  index.value++;
 
-        _.times(this.width, (j) => {
-          row.push( ( (i + this.width - j) % length) < pattern[0] ? true : false );
-        });
+  if (source === 'external') {
+    const warpIndex = index.value % width.value; // make computed value
+    // this.$refs.warp.updateNoteAtIndex(value, warpIndex);
+    warp.updateNoteAtIndex(value, warpIndex);
+    console.log('value', value);
+  }
 
-        this.noteGrid.push(row);
-        // Vue.set(this, 'noteGrid', this.noteGrid);
-        this.noteGrid = this.noteGrid;
-      });
+  advance();
 
-      console.log('this.noteGrid', this.noteGrid);
+  clearTimeout(resetTimer);
 
-      // expand grid to include labels
-      // this.gridItems = 
-      this.gridItems = _.reduce(this.noteGrid, (acc, item) => _.concat(acc, item), []);
-    },
-    handleRandomize() {
-      this.$refs.warp.initNotes();
-    },
-    handleTick(source, value) {
-      // could differentiate behavior based on source
-
-      this.index++;
-
-      if (source === 'external') {
-        const warpIndex = this.index % this.width; // make computed value
-        this.$refs.warp.updateNoteAtIndex(value, warpIndex);
-      }
-
-      this.advance();
-
-      clearTimeout(this.resetTimer);
-
-      this.resetTimer = setTimeout(() => {
-        this.handleClockOff();
-      }, RESET_TIMEOUT);
-    },
-    handleUpdateLength() {
+  resetTimer = setTimeout(() => {
+    handleClockOff();
+  }, RESET_TIMEOUT);
+}
+function handleUpdateLength() {
       // if (type === 'woof') {
       //   this.width = length;
       // } else {
       //   this.height = length;
       // }
 
-      this.computeWeave();
-      this.index = 0;
-    },
-    handlePatternChange() {
-      if (this.pattern === 'euclidean') {
-        return this.handleEuclidean();
+      computeWeave();
+      index = 0;
+    }
+function handlePatternChange() {
+      if (pattern === 'euclidean') {
+        return handleEuclidean();
       }
 
-      this.computeWeave();
-    },
-    handleEuclidean() {
-      let pattern = euclidean.generateEuclideanSequence(this.width, this.euclideanCount);
-      const shiftPattern = (pattern, x) => {
+      computeWeave();
+    }
+function handleEuclidean() {
+      let pattern = euclidean.generateEuclideanSequence(width, euclideanCount);
+      let shiftPattern = (pattern, x) => {
         let shift = _.clone(pattern);
 
         return shift.map((val, i) => {
@@ -344,62 +354,67 @@ export default {
         });
       };
       
-      this.noteGrid = [];
-      _.times(this.depth, (i) => {
+      noteGrid = [];
+      _.times(depth, (i) => {
         const shift = shiftPattern(pattern, i);
-        this.noteGrid.push(shift);
+        noteGrid.push(shift);
       });
 
       // expand grid to include labels
       // this.gridItems = 
-      this.gridItems = _.reduce(this.noteGrid, (acc, item) => _.concat(acc, item), []);
-    },
-    sendNote(channel, note, velocity) {
+      gridItems = _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
+    }
+function sendNote(channel, note, velocity) {
+      // send note to web audio synth OR midi
+      audio.playNote(channel, note, useWebAudio.value && webAudioSynth.value );
+      return;
       channel = 1;
       midi.noteOn(channel, note, velocity);
       console.log('channel', channel);
       console.log('note', note);
 
-      if (this.noteLength) {
+      if (noteLength) {
         // only send noteOff if noteLength > 0
         setTimeout(() => {
           midi.noteOff(channel, note, velocity);
-        }, this.noteLength);
+        }, noteLength);
       }
-    },
-    advanceSingle() {
+    }
+function advanceSingle() {
       // determine warp/weft coordinates
-      let warpIndex = this.index % this.width;
-      let weftIndex = Math.floor(this.index / this.width) % this.depth;
+      let warpIndex = index % width;
+      let weftIndex = Math.floor(index / width) % depth;
 
       // determine whether the warp or weft is to be triggered
-      let isWarpActive = this.noteGrid[weftIndex][warpIndex];
+      let isWarpActive = noteGrid[weftIndex][warpIndex];
 
       // send MIDI note on the active channel
       if (isWarpActive) {
         // get note corresponding to warpIndex
-        this.warpActive = true;
-        this.weftActive = false;
-        this.warpIndex = warpIndex;
+        warpActive = true;
+        weftActive = false;
+        warpIndex = warpIndex;
 
         // const noteValue = parseInt(this.$refs.warp.getNote(warpIndex));
-        const noteValue = parseInt(this.$refs.warp.getNextNoteInChord());
+        // const noteValue = parseInt(this.$refs.warp.getNextNoteInChord());
+        const noteValue = parseInt(warp.getNextNoteInChord());
         console.log('1: noteValue', noteValue);
-        this.sendNote(1, noteValue, 127);
+        sendNote(1, noteValue, 127);
       } 
       
       if (!isWarpActive) {
         // get note corresponding to weftIndex
-        this.warpActive = false;
-        this.weftActive = true;
-        this.weftIndex = weftIndex;
+        warpActive = false;
+        weftActive = true;
+        weftIndex = weftIndex;
 
         // const noteValue = parseInt(this.$refs.weft.getNote(weftIndex));
-        const noteValue = parseInt(this.$refs.weft.getNextNoteInChord());
+        // const noteValue = parseInt(this.$refs.weft.getNextNoteInChord());
+        const noteValue = parseInt(weft.getNextNoteInChord());
         console.log('2: noteValue', noteValue);
         // temp comment out
-        this.sendNote(2, noteValue, 127);
-        this.sendNote(4, noteValue -5, 127);
+        sendNote(2, noteValue, 127);
+        sendNote(4, noteValue -5, 127);
       }
 
       // midi.noteOn(1, 15, 127);
@@ -407,115 +422,115 @@ export default {
       //   midi.noteOff(1, 15, 127);
       // }, 200);
 
-      this.index = this.index % (this.width * this.depth);
-    },
-    advanceStack() {
-      let noteValue, chordInterval;
-      // determine warp/weft coordinates
-      let warpIndex = this.index % this.width;
-      let weftIndex = Math.floor(this.index / this.width) % this.depth;
-      if (!this.$refs.warp) {
-        console.log('warp not found');
-        return;
-      }
+      index = index % (width * depth);
+    }
+function advanceStack() {
+  let noteValue, chordInterval;
+  // determine warp/weft coordinates
+  let warpIndex = index.value % width.value;
+  let weftIndex = Math.floor(index.value / width.value) % depth.value;
 
-      // read from randomize
-      noteValue = parseInt(this.$refs.warp.getNote(warpIndex));
-      // read from LFO generator
-      // noteValue = 
+  // if (!this.$refs.warp) {
+  if (!warp) {
+    console.log('warp not found');
+    return;
+  }
 
-      // apply interval from weft
+  // read from randomize
+  // noteValue = parseInt(this.$refs.warp.getNote(warpIndex));
+  noteValue = parseInt(warp.value.getNote(warpIndex));
+  console.log('noteValue', noteValue);
+  // read from LFO generator
+  // noteValue = 
 
-      const rows = this.depth;
+  // apply interval from weft
 
-      _.times(rows, row => {
-        const channel = row + 1;
-        const isActive = this.noteGrid[row][warpIndex];
+  const rows = depth.value;
 
-        // apply interval from weft
-        // chordInterval = parseInt(this.$refs.weft.getInterval(row)) || 0;
-        // noteValue += chordInterval;
+  _.times(rows, row => {
+    const channel = row + 1;
+    const isActive = noteGrid[row][warpIndex];
 
-        if (isActive) {
-          this.sendNote(2 * channel, noteValue, 127);
-        } else {
-          this.sendNote(2 * channel + 1, noteValue, 127);
-        }
+    // apply interval from weft
+    // chordInterval = parseInt(this.$refs.weft.getInterval(row)) || 0;
+    // noteValue += chordInterval;
 
-      });
+    if (isActive) {
+      sendNote(row, noteValue, 127);
+      // forget why this factor of 2 for MIDI
+      // sendNote(2 * channel, noteValue, 127);
+    } else {
+      // sendNote(channel, noteValue, 127);
+      // sendNote(2 * channel + 1, noteValue, 127);
+    }
 
-      // send downbeat to channel 1
-      if (warpIndex === 0) {
-        const middleC = 60;
-        this.sendNote(1, 60, 127);
-      }
+  });
 
-      return;
+  // send downbeat to channel 1
+  if (warpIndex === 0) {
+    const middleC = 60;
+    sendNote(1, 60, 127);
+  }
 
-      // advance warpIndex with index
-      this.warpIndex = this.index;
-      this.weftIndex = 0; // temp
+  return;
 
-      this.warpActive = false;
-      console.log('this.weftIndex', this.weftIndex);
-      console.log('this.warpIndex', this.warpIndex);
-      this.weftActive = this.noteGrid[this.weftIndex][this.warpIndex];
-      console.log('this.weftActive', this.weftActive);
-      this.index =  this.index % this.width;
-      this.weftIndex = this.index;
+  // advance warpIndex with index
+  warpIndex = index;
+  weftIndex = 0; // temp
 
-      // console.log('this.$refs.hi', this.$refs.hi);
-      this.weftNote = this.$refs.warp.getNote(this.index);
-      this.warpNote = this.weftNote; // temp
+  warpActive = false;
+  console.log('weftIndex', weftIndex);
+  console.log('warpIndex', warpIndex);
+  weftActive = noteGrid[weftIndex][warpIndex];
+  console.log('weftActive', weftActive);
+  index =  index % width;
+  weftIndex = index;
 
-      console.log('this.weftNote', this.weftNote);
+  // console.log('this.$refs.hi', this.$refs.hi);
+  weftNote = $refs.warp.getNote(index);
+  warpNote = weftNote; // temp
 
+  console.log('weftNote', weftNote);
+}
 
-    },
-    advance() {
-        if (this.readMode === 'single') {
-        this.advanceSingle();
-      } else if (this.readMode === 'stack') {
-        this.advanceStack();
-      }
-    },
-    isActiveGridItem(i) {
-      if (this.readMode === 'single') {
-        return this.index === i;
-      } else if (this.readMode === 'stack') {
-        return (this.index % this.width) === (i % this.width);
+function advance() {
+  if (readMode.value === 'single') {
+    advanceSingle();
+  } else if (readMode.value === 'stack') {
+    advanceStack();
+  }
+}
+function isActiveGridItem(i) {
+      if (readMode.value === 'single') {
+        return index.value === i;
+      } else if (readMode.value === 'stack') {
+        return (index.value % width.value) === (i % width.value);
       }
 
       return false;
-    },
-    handleClockOff() {
+    }
+function handleClockOff() {
       // reset
-      this.index = -1;
-      this.warpActive = false;
-      this.warpIndex = -1;
-      this.weftActive = false;
-      this.weftIndex = -1;
-    },
-  },
-  created() {
-    this.computeWeave();
-    console.log('this.noteGrid', this.noteGrid);
+      index = -1;
+      warpActive = false;
+      warpIndex = -1;
+      weftActive = false;
+      weftIndex = -1;
+    }
+  // }
+// created() {
+    computeWeave();
 
     // eventBus.on('tick', () => this.handleTick('internal'));
     // eventBus.on('clock-off', this.handleClockOff);
     // eventBus.on('trigger-in', ({noteValue, velocity}) => this.handleTick('external', noteValue / 127));
     
-  },
-  mounted() {
-    this.$bus.$on('tick', () => this.handleTick('internal'));
-    this.$bus.$on('clock-off', this.handleClockOff);
-    this.$bus.$on('trigger-in', ({noteValue, velocity}) => this.handleTick('external', noteValue / 127));
-  },
-  components: {
-    Woof,
-    // UiSelect, UiSlider, UiButton,
-  },
-};
+  // },
+  onMounted(() => {
+    $listen('tick', () => handleTick('internal'));
+    $listen('clock-off', handleClockOff);
+    $listen('trigger-in', ({noteValue, velocity}) => handleTick('external', noteValue / 127));
+  });
 </script>
 
 <style lang="scss">
