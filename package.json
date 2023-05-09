@@ -7,7 +7,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "push-dir --dir=.output/public --branch=gh-pages --cleanup"
+    "deploy": "touch .output/public/.nojekyll && push-dir --dir=.output/public --branch=gh-pages --cleanup"
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.4",
