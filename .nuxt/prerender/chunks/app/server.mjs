@@ -7356,7 +7356,7 @@ class webAudio {
 const useStore = defineStore("main", {
   state: () => {
     return {
-      bpm: 200,
+      bpm: 400,
       count: 0,
       showConfigurationEdit: true,
       useWebAudio: true,
