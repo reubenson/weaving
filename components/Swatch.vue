@@ -1,7 +1,7 @@
 <template>
   <section class="swatch">
     <div class="swatch-settings">
-      <client-only>
+      <!-- <client-only>
         <p>Note Trigger Length</p>
         <el-select
           v-model="noteLength"
@@ -13,12 +13,12 @@
             :value="item"
           />
         </el-select>
-      </client-only>
+      </client-only> -->
       <div>
         <h2>Weave settings</h2>
         <header>Warp Length</header>
         <client-only>
-          <el-select v-model="width">
+          <el-select v-model="store.swatchWidth">
             <el-option
               v-for="item in lengthOptions"
               :key="item"
@@ -27,7 +27,7 @@
             />
           </el-select>
           <header>Warp Length</header>
-          <el-select v-model="depth">
+          <el-select v-model="store.swatchDepth">
             <el-option
               v-for="item in lengthOptions"
               :key="item"
@@ -72,7 +72,7 @@
         <el-slider
           v-model="euclideanCount"
           :min="1"
-          :max="width"
+          :max="store.swatchWidth"
           :step="1"
         ></el-slider>
       </div>
@@ -101,7 +101,7 @@
             v-model="chordSizeFilter"
           >
           <el-option
-            v-for="item in ['3','4','5','6','7']"
+            v-for="item in [3, 4, 5, 6, 7]"
             :key="item"
             :label="item"
             :value="item"
@@ -110,18 +110,18 @@
         </client-only>
         <header>Octave Range</header>
         <el-slider
-          :min="-1"
-          :max="5"
+          :min="0"
+          :max="8"
           :step="1"
           show-stops
-          v-model="rangeMin"
+          v-model="store.rangeMin"
         ></el-slider>
         <el-slider
-          :min="-1"
-          :max="5"
+          :min="0"
+          :max="8"
           :step="1"
           show-stops
-          v-model="rangeMax"
+          v-model="store.rangeMax"
         ></el-slider>
         <el-button
           @click="handleRandomize"
@@ -137,7 +137,7 @@
     <div class="swatch-display">
       <woof
         ref="warp"
-        :length=width
+        :length=store.swatchWidth
         :scale=noteScale
         :mode=readMode
         type="warp"
@@ -145,13 +145,13 @@
         :index="warpIndex"
         :tick="index"
         :note="warpNote"
-        :rangeMin="rangeMin"
-        :rangeMax="rangeMax"
+        :rangeMin="store.rangeMin"
+        :rangeMax="store.rangeMax"
         :chord="chord"
       ></woof>
       <woof
         ref="weft"
-        :length=depth
+        :length=store.swatchDepth
         :scale=noteScale
         :mode=readMode
         type="weft"
@@ -159,21 +159,22 @@
         :index="weftIndex"
         :tick="index"
         :note="weftNote"
-        :rangeMin="rangeMin"
-        :rangeMax="rangeMax"
+        :rangeMin="store.rangeMin"
+        :rangeMax="store.rangeMax"
         :chord="chord"
       ></woof>
       <div class="swatch-grid" 
         :style="{
-          gridTemplateColumns: 'repeat(' + (width) + ', 1fr)',
-          width: (50 * width) + 'px'
+          gridTemplateColumns: 'repeat(' + (store.swatchWidth) + ', 1fr)',
+          width: (50 * store.swatchWidth) + 'px'
           }"
         >
         <div 
           class="swatch-grid-note"
           v-for="(item, i) in gridItems"
-          :class="{top: item, active: isActiveGridItem(i)}"
-          :key="i">
+          :class="{hide: !item, active: isActiveGridItem(i)}"
+          :style="{'background-color': warpNoteColors[i % store.swatchWidth]}"
+          :key="`${gridItemsKey}_${i}`">
         </div>
         <!-- <div v-for="n in width + 1" class="swatch-grid-label"></div> -->
         <!-- <div class="swatch-grid-row"> -->
@@ -193,6 +194,7 @@ import { computed, onMounted, ref } from 'vue';
 
 /* eslint-disable */
 import _ from 'lodash';
+// import colormap from 'colormap';
 import * as Chord from 'tonal-chord';
 import Woof from './woof';
 // import patterns from '../../../services/weaving/patterns';
@@ -205,48 +207,60 @@ import { useStore } from '@/store/main';
 import { storeToRefs } from 'pinia';
 
 const store = useStore();
-const { useWebAudio, webAudioSynth } = storeToRefs(store);
+const { useWebAudio, webAudioSynth, gridItems, gridItemsKey, warpNoteColors } = storeToRefs(store);
 
 const warp = ref();
 const weft = ref();
 
-let width = ref(16);
-let depth = ref(2);
+// let width = ref(16);
+// let depth = ref();
 let noteLength = ref(100);
-let noteGrid = ref([]);
+// let noteGrid = ref([]);
 let noteScale = ref('maj7');
-let pattern = ref('weave');
+let pattern = ref('euclidean');
       // readMode: 'single', // or 'stack'
 let readMode = ref('stack'),
-      scaleOptions = ref(scale.names),
-      patternOptions = ref(['weave', 'euclidean']),
-      timer = ref({}),
-      index = ref(-1),
-      warpActive = ref(false),
-      warpIndex = ref(-1),
-      weftActive = ref(false),
-      weftIndex = ref(-1),
-      lengthOptions = ref([2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]),
-      warpNote = ref(0),
-      weftNote = ref(0),
-      euclideanCount = ref(1),
-      rangeMin = ref(2),
-      rangeMax = ref(4),
-      weaveX = ref(1),
-      weaveY = ref(1),
-      noteLengthOptions = ref(_.times(11, i => i * 10)),
-      // chordOptions: Chord.names(),
-      chord = ref('Maj7'),
-      chordSizeFilter = ref("4"),
-      generator = ref(''), // ['', 'lfo']
-      resetTimer = setTimeout(() => {}, 0);
-let gridItems = ref([]);
+  scaleOptions = ref(scale.names),
+  patternOptions = ref(['weave', 'euclidean']),
+  timer = ref({}),
+  index = ref(-1),
+  warpActive = ref(false),
+  warpIndex = ref(-1),
+  weftActive = ref(false),
+  weftIndex = ref(-1),
+  lengthOptions = ref([2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]),
+  warpNote = ref(0),
+  weftNote = ref(0),
+  euclideanCount = ref(1),
+  weaveX = ref(1),
+  weaveY = ref(1),
+  // noteLengthOptions = ref(_.times(11, i => i * 10)),
+  // chordOptions: Chord.names(),
+  chord = ref('Maj7'),
+  chordSizeFilter = ref(4),
+  generator = ref(''), // ['', 'lfo']
+  resetTimer = setTimeout(() => {}, 0),
+  warpNotes = ref([]);
 
-const { $event, $listen } = useNuxtApp();
+const { $listen } = useNuxtApp();
+
+// const gridItems_x = computed({
+//   get: () => {
+//     const allItems = _.reduce(noteGrid, (acc, item) => _.concat(acc, item))
+//       .map(item => {
+//         return {
+//           status: item
+//         }
+//       }),
+//       allNotes = 
+//     // gridItems = _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
+
+//   }
+// });
 
 const swatchGridSize = computed({
   get: () => {
-    return (width + 1) * (depth + 1);
+    return (store.swatchWidth + 1) * (store.swatchDepth + 1);
   }
 });
 
@@ -255,22 +269,22 @@ const chordOptions = computed({
     const names = Chord.names();
 
     return names.filter(name => {
-      return Chord.notes(`C4${name}`).length === + chordSizeFilter;
+      return Chord.notes(`C4${name}`).length === chordSizeFilter.value;
     });
   }
 });
 
   // watch: {    
 watch(pattern, () => {
-      handlePatternChange();
-    });
+  handlePatternChange();
+});
 watch(euclideanCount, () => {
-      handlePatternChange();
-    });
-watch(width, () => {
+  handlePatternChange();
+});
+watch(store.swatchWidth, () => {
       handleUpdateLength();
     });
-watch(depth, () => {
+watch(store.swatchDepth, () => {
       handleUpdateLength();
     });
 watch(weaveX, () => {
@@ -280,31 +294,33 @@ watch(weaveY, () => {
       computeWeave();
     });
 
-  // },
-  // methods: {
 function computeWeave() {
   const pattern = [weaveX.value, weaveY.value],
     length = pattern.reduce((acc, item) => acc += item);
   
-  noteGrid = [];
-  _.times(depth.value, (i) => {
+  store.noteGrid = [];
+  _.times(store.swatchDepth, (i) => {
     const row = [];
 
     
-    _.times(width.value, (j) => {
-      row.push( ( (i + width.value - j) % length) < pattern[0] ? true : false );
+    _.times(store.swatchWidth, (j) => {
+      row.push( ( (i + store.swatchWidth - j) % length) < pattern[0] ? true : false );
     });
 
-    noteGrid.push(row);
+    store.noteGrid.push(row);
+
+    console.log('store.noteGrid', store.noteGrid);
   });
 
   // expand grid to include labels
-  gridItems = _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
+  // data.gridItems = _.reduce(store.noteGrid, (acc, item) => _.concat(acc, item), []);
+  // console.log('data.gridItems', data.gridItems);
 }
+
 function handleRandomize() {
-      // this.$refs.warp.initNotes();
-      warp.initNotes();
-    }
+  warp.value.initNotes();
+}
+
 function handleTick(source, value) {
   // console.log('value', value);
   // could differentiate behavior based on source
@@ -312,7 +328,7 @@ function handleTick(source, value) {
   index.value++;
 
   if (source === 'external') {
-    const warpIndex = index.value % width.value; // make computed value
+    const warpIndex = index.value % store.swatchWidth; // make computed value
     // this.$refs.warp.updateNoteAtIndex(value, warpIndex);
     warp.updateNoteAtIndex(value, warpIndex);
     console.log('value', value);
@@ -334,39 +350,45 @@ function handleUpdateLength() {
       // }
 
       computeWeave();
-      index = 0;
+      index.value = 0;
     }
 function handlePatternChange() {
-      if (pattern === 'euclidean') {
-        return handleEuclidean();
-      }
+  if (pattern.value === 'euclidean') {
+    return handleEuclidean();
+  }
 
-      computeWeave();
-    }
+  computeWeave();
+}
 function handleEuclidean() {
-      let pattern = euclidean.generateEuclideanSequence(width, euclideanCount);
-      let shiftPattern = (pattern, x) => {
-        let shift = _.clone(pattern);
+  let pattern = euclidean.generateEuclideanSequence(store.swatchWidth, euclideanCount.value);
 
-        return shift.map((val, i) => {
-          const index = (i + pattern.length - x) % pattern.length;
-          return pattern[index];
-        });
-      };
-      
-      noteGrid = [];
-      _.times(depth, (i) => {
-        const shift = shiftPattern(pattern, i);
-        noteGrid.push(shift);
-      });
+  console.log('pattern', pattern);
+  let shiftPattern = (pattern, x) => {
+    let shift = _.clone(pattern);
 
-      // expand grid to include labels
-      // this.gridItems = 
-      gridItems = _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
-    }
+    return shift.map((val, i) => {
+      const index = (i + pattern.length - x) % pattern.length;
+      return pattern[index];
+    });
+  };
+  
+  store.noteGrid = [];
+  _.times(store.swatchDepth, (i) => {
+    const shift = shiftPattern(pattern, i);
+
+    console.log('shift', shift);
+    store.noteGrid.push(shift);
+  });
+
+  console.log('store.noteGrid', store.noteGrid);
+
+  // expand grid to include labels
+  // this.gridItems = 
+  // data.gridItems = _.reduce(store.noteGrid, (acc, item) => _.concat(acc, item), []);
+}
 function sendNote(channel, note, velocity) {
       // send note to web audio synth OR midi
-      audio.playNote(channel, note, useWebAudio.value && webAudioSynth.value );
+      audio.playNote(channel, note, store.noteLength, useWebAudio.value && webAudioSynth.value );
       return;
       channel = 1;
       midi.noteOn(channel, note, velocity);
@@ -382,11 +404,11 @@ function sendNote(channel, note, velocity) {
     }
 function advanceSingle() {
       // determine warp/weft coordinates
-      let warpIndex = index % width;
-      let weftIndex = Math.floor(index / width) % depth;
+      let warpIndex = index.value % store.swatchWidth;
+      let weftIndex = Math.floor(index.value / store.swatchWidth) % store.swatchDepth;
 
       // determine whether the warp or weft is to be triggered
-      let isWarpActive = noteGrid[weftIndex][warpIndex];
+      let isWarpActive = store.noteGrid[weftIndex][warpIndex];
 
       // send MIDI note on the active channel
       if (isWarpActive) {
@@ -422,13 +444,13 @@ function advanceSingle() {
       //   midi.noteOff(1, 15, 127);
       // }, 200);
 
-      index = index % (width * depth);
+      index.value = index.value % (store.swatchWidth * store.swatchDepth);
     }
 function advanceStack() {
   let noteValue, chordInterval;
   // determine warp/weft coordinates
-  let warpIndex = index.value % width.value;
-  let weftIndex = Math.floor(index.value / width.value) % depth.value;
+  let warpIndex = index.value % store.swatchWidth;
+  let weftIndex = Math.floor(index.value / store.swatchWidth) % store.swatchDepth;
 
   // if (!this.$refs.warp) {
   if (!warp) {
@@ -439,17 +461,16 @@ function advanceStack() {
   // read from randomize
   // noteValue = parseInt(this.$refs.warp.getNote(warpIndex));
   noteValue = parseInt(warp.value.getNote(warpIndex));
-  console.log('noteValue', noteValue);
   // read from LFO generator
   // noteValue = 
 
   // apply interval from weft
 
-  const rows = depth.value;
+  const rows = store.swatchDepth;
 
   _.times(rows, row => {
     const channel = row + 1;
-    const isActive = noteGrid[row][warpIndex];
+    const isActive = store.noteGrid[row][warpIndex];
 
     // apply interval from weft
     // chordInterval = parseInt(this.$refs.weft.getInterval(row)) || 0;
@@ -467,10 +488,11 @@ function advanceStack() {
   });
 
   // send downbeat to channel 1
-  if (warpIndex === 0) {
-    const middleC = 60;
-    sendNote(1, 60, 127);
-  }
+  // to do : reimplement midi
+  // if (warpIndex === 0) {
+  //   const middleC = 60;
+  //   sendNote(1, 60, 127);
+  // }
 
   return;
 
@@ -504,20 +526,20 @@ function isActiveGridItem(i) {
       if (readMode.value === 'single') {
         return index.value === i;
       } else if (readMode.value === 'stack') {
-        return (index.value % width.value) === (i % width.value);
+        return (index.value % store.swatchWidth) === (i % store.swatchWidth);
       }
 
       return false;
     }
 function handleClockOff() {
-      // reset
-      index = -1;
-      warpActive = false;
-      warpIndex = -1;
-      weftActive = false;
-      weftIndex = -1;
-    }
-  // }
+  // reset
+  index.value = -1;
+  warpActive = false;
+  warpIndex = -1;
+  weftActive = false;
+  weftIndex = -1;
+}
+
 // created() {
     computeWeave();
 
@@ -530,6 +552,7 @@ function handleClockOff() {
     $listen('tick', () => handleTick('internal'));
     $listen('clock-off', handleClockOff);
     $listen('trigger-in', ({noteValue, velocity}) => handleTick('external', noteValue / 127));
+    // $listen('notes-set', handleWoofNotesSet)
   });
 </script>
 
@@ -569,6 +592,10 @@ function handleClockOff() {
 
     &.top {
       background-color: black;
+    }
+
+    &.hide {
+      opacity: 0;
     }
 
     &.active {

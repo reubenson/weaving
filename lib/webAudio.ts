@@ -15,36 +15,41 @@ export class webAudio {
 
     this.voices = _.times(numberOfVoices, () => {
       return {
+        ctx: audioContext,
         oscillatorNode: audioContext.createOscillator(),
-        gainNode: audioContext.createGain()
+        gainNode: audioContext.createGain(),
+        panNode: audioContext.createStereoPanner()
       }
     });
 
-    this.voices.forEach(voice => {
-      voice.gainNode.value = 0;
+    this.voices.forEach((voice, i) => {
+      voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
-      voice.gainNode.connect(audioContext.destination);
+      voice.gainNode.connect(voice.panNode);
+      voice.panNode.connect(audioContext.destination);
 
       voice.oscillatorNode.type = type;
+      voice.panNode.pan.setValueAtTime(-1 + i * (2 / (numberOfVoices - 1)), 0);
     });
   }
   
-  public playNote(voiceIndex: number, note: number) {
+  public playNote(voiceIndex: number, note: number, noteLength: number) {
     const voice = this.voices[voiceIndex];
     const frequency = mtof(note);
-    const attack = 10; // ms
-    const decay = 50; // ms
-    console.log('voiceInded', voiceIndex);
+    // const attack = 220; // ms
+    // const decay = 300; // ms
+    const attack = noteLength * 0.55;
+    const decay = noteLength - attack;
+    const currentTime = voice.ctx?.currentTime;
     
     if (!voice.hasStarted) {
       voice.oscillatorNode.start();
       voice.hasStarted = true;
     }
 
-    voice?.oscillatorNode?.frequency?.setValueAtTime(frequency, 0);
-
+    voice?.oscillatorNode?.frequency?.setValueAtTime(frequency, currentTime);
     // set up simple envelope VCA
-    voice.gainNode.gain.linearRampToValueAtTime(0.6, Date.now() + attack);
-    voice.gainNode.gain.linearRampToValueAtTime(0, Date.now() + attack + decay);
+    voice.gainNode.gain.linearRampToValueAtTime(0.3, currentTime + attack/1000.);
+    voice.gainNode.gain.linearRampToValueAtTime(0, currentTime + attack/1000. + decay/1000.);
   }
 }

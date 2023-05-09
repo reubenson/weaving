@@ -5,15 +5,12 @@
         gridTemplateColumns: 'repeat(' + (columnsLength) + ', 1fr)',
         width: (50 * length) + 'px'
         }">
-
       <client-only>
         <el-select
-          v-for="(note, i) in notes"
+          v-for="(note, i) in data.notes"
           class="woof-notes-select"
-          label=""
-          placeholder=""
           :key="i"
-          v-model="notes[i]"
+          v-model="data.notes[i]"
         >
           <el-option
             v-for="item in noteOptions"
@@ -35,6 +32,10 @@ import { Interval } from 'tonal';
 import _ from 'lodash';
 import scale from '../lib/scale';
 import midi from '../lib/midi';
+import { useStore } from '~/store/main';
+
+const { $event } = useNuxtApp();
+const store = useStore();
 
 // export default {
   // name: 'woof',
@@ -55,10 +56,14 @@ const props = defineProps({
   // },
   // data() {
     // return {
-let notes = ref(new Array(props.length)),
-      channel = ref(0),
-      activeNote = ref(0),
-      chordIndex = ref(0);
+// let notes = ref(new Array(props.length)),
+//   channel = ref(0),
+//   activeNote = ref(0),
+let chordIndex = ref(0);
+
+const data = reactive({
+  notes: []
+});
       // chordOptions: Chord.names()
   //   };
   // },
@@ -119,55 +124,64 @@ function getNextNoteInChord() {
     }
 function getInterval(index) {
 
-      return props.type === 'weft' ? notes[index] : 0;
+      return props.type === 'weft' ? data.notes[index] : 0;
     }
 function initNotes() {
-      // Vue.set(this, 'notes', []);
-      notes = [];
+  data.notes = [];
 
-      if (props.mode === 'stack' && props.type === 'weft') {
-        _.times (props.length, i => {
-          const value = noteOptions.value[i % noteOptions.value.length];
+  if (props.mode === 'stack' && props.type === 'weft') {
+    _.times (props.length, i => {
+      const value = noteOptions.value[i % noteOptions.value.length];
 
-          notes[i] = value;
-        });
+      data.notes[i] = value;
+    });
 
-        return;
-      }
+    return;
+  }
 
-      _.times(props.length, i => {
-        // get random note
-        const value = _.random(0, noteOptions.value.length - 1);
+  _.times(props.length, i => {
+    // get random note
+    const value = _.random(0, noteOptions.value.length - 1);
 
-      // const note = baseNote + semitones[chordIndex % semitones.length];
-      // console.log('note', note);
-        // const value = this.noteOptions[i % (this.noteOptions.length - 1)];
-        // console.log('value', value);
-        // console.log('index', index);
-        
-        // console.log('index', index);
-        // console.log('this.noteOptions', this.noteOptions);
-        // Vue.set(this.notes, i, '' + this.noteOptions[value]);
-        notes[i] = noteOptions.value[value];
-        // Vue.set(this.notes, i, '' + note);
+  // const note = baseNote + semitones[chordIndex % semitones.length];
+  // console.log('note', note);
+    // const value = this.noteOptions[i % (this.noteOptions.length - 1)];
+    // console.log('value', value);
+    // console.log('index', index);
+    
+    // console.log('index', index);
+    // console.log('this.noteOptions', this.noteOptions);
+    // Vue.set(this.notes, i, '' + this.noteOptions[value]);
+    data.notes[i] = noteOptions.value[value];
+    // Vue.set(this.notes, i, '' + note);
 
-        // console.log('this.noteOptions', this.noteOptions);
-        // if (this.type === 'weft') {
-        //   this.intervals = Chord.intervals(this.chord).map(interval => Chord.semitones(interval));
-        // }
-        // return this.noteOptions[index];
-      });
-    }
+    // console.log('this.noteOptions', this.noteOptions);
+    // if (this.type === 'weft') {
+    //   this.intervals = Chord.intervals(this.chord).map(interval => Chord.semitones(interval));
+    // }
+    // return this.noteOptions[index];
+  });
+
+  // $event('notes-set', data.notes);
+  store.updateGridItemsKey();
+  if (props.type === 'warp') {
+    store.warpNotes = data.notes;
+  }
+}
 function getNote(index) {
-      return notes[index];
-    }
+  return data.notes[index];
+}
+
+function getNotes() {
+  return data.notes;
+}
+
 function getBaseNote() {
-      return notes[0];
+      return data.notes[0];
     }
 function handleInput(i, val) {
-      // Vue.set(this.notes, i, '' + val);
-      notes[i] = val;
-    }
+  data.notes[i] = val;
+}
 function updateLength(val) {
       this.$bus.$emit('update-length', { type: this.type, length: val} );
     }
@@ -194,13 +208,14 @@ function updateNoteAtIndex(value, index) {
       //   //  midi.noteOff(2, this.activeNote, 127);
       // }
     // },
-watch(props.scale, () => {
-      initNotes();
-      // this.handleScaleChange();
-    });
-watch(props.chord, () => {
-      initNotes();
-    });
+watch(() => props.scale, (xx) => {
+  initNotes();
+  // this.handleScaleChange();
+});
+watch(() => props.chord, (val) => {
+  console.log('vall', val);
+  initNotes();
+});
 watch(props.index, () => {
       // console.log('this.index', this.index);
     });
@@ -242,16 +257,16 @@ watch(props.tick, () => {
          midi.noteOff(this.channel, this.activeNote, 127);
       }
     });
-watch(props.length, () => {
-      initNotes();
-      console.log('props.length', props.length);
-    });
-watch(props.rangeMin, () => {
-      initNotes();
-    });
-watch(props.rangeMax, () => {
-      initNotes();
-    });
+watch(() => props.length, () => {
+  initNotes();
+  console.log('props.length', props.length);
+});
+watch(() => props.rangeMin, () => {
+  initNotes();
+});
+watch(() => props.rangeMax, () => {
+  initNotes();
+});
   // },
 onMounted(() => {
 
@@ -259,7 +274,6 @@ onMounted(() => {
     // this.notes[0] = this.noteOptions[0];
 
     initNotes();
-    console.log('notes', notes);
     // _.times(this.length, i => {
     //   // console.log('note', note);
     //   const value = _.random(0, this.noteOptions.length - 1);
@@ -271,25 +285,22 @@ onMounted(() => {
     // Vue.set(this.notes, 0, 100)
     // this.notes = _.times(this.length, ()=>({val: ''}));
 
-    if (props.type === 'warp') {
-      props.channel = 1;
-    } else {
-      props.channel = 2;
-    }
-    console.log('props.channel', props.channel);
+    // probably not needed below?
+    // if (props.type === 'warp') {
+    //   props.channel = 1;
+    // } else {
+    //   props.channel = 2;
+    // }
+    // console.log('props.channel', props.channel);
   });
-  // components: {
-    // UiSelect,
-//   }
-// };
 
 // probably a better way to set this up
 defineExpose({
   initNotes,
   updateNoteAtIndex,
   getNextNoteInChord,
-  getNote,
-  test: () => {}
+  getNotes,
+  getNote
 });
 </script>
 

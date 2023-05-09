@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.9",
+    "colormap": "^2.3.2",
+    "d3-scale-chromatic": "^3.0.0",
     "mitt": "^3.0.0",
     "mtof": "^1.0.2",
     "nanotimer": "^0.3.15",

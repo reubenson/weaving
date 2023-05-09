@@ -13,6 +13,7 @@ import { setupDevtoolsPlugin } from 'file:///Users/reubenson/Projects/weaving/no
 import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs, ssrRenderStyle, ssrRenderList, ssrRenderClass, ssrRenderAttr, ssrIncludeBooleanAttr, ssrInterpolate } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/server-renderer/index.mjs';
 import { isNil, fromPairs, isUndefined as isUndefined$1, debounce, get } from 'file:///Users/reubenson/Projects/weaving/node_modules/lodash-unified/import.js';
 import _ from 'file:///Users/reubenson/Projects/weaving/node_modules/lodash/lodash.js';
+import colormap from 'file:///Users/reubenson/Projects/weaving/node_modules/colormap/index.js';
 import mtof from 'file:///Users/reubenson/Projects/weaving/node_modules/mtof/index.js';
 import { placements, createPopper } from 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dist/index.mjs';
 import { TinyColor } from 'file:///Users/reubenson/Projects/weaving/node_modules/@ctrl/tinycolor/dist/public_api.js';
@@ -5558,7 +5559,7 @@ const REPEAT_DELAY = 600;
 const vRepeatClick = {
   beforeMount(el, binding) {
     const value = binding.value;
-    const { interval = REPEAT_INTERVAL, delay = REPEAT_DELAY } = isFunction(value) ? {} : value;
+    const { interval: interval2 = REPEAT_INTERVAL, delay = REPEAT_DELAY } = isFunction(value) ? {} : value;
     let intervalId;
     let delayId;
     const handler = () => isFunction(value) ? value() : value.handler();
@@ -5583,7 +5584,7 @@ const vRepeatClick = {
       delayId = setTimeout(() => {
         intervalId = setInterval(() => {
           handler();
-        }, interval);
+        }, interval2);
       }, delay);
     });
   }
@@ -7321,46 +7322,85 @@ class webAudio {
     this.hasStarted = false;
     this.voices = _.times(numberOfVoices, () => {
       return {
+        ctx: audioContext,
         oscillatorNode: audioContext.createOscillator(),
-        gainNode: audioContext.createGain()
+        gainNode: audioContext.createGain(),
+        panNode: audioContext.createStereoPanner()
       };
     });
-    this.voices.forEach((voice) => {
-      voice.gainNode.value = 0;
+    this.voices.forEach((voice, i) => {
+      voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
-      voice.gainNode.connect(audioContext.destination);
+      voice.gainNode.connect(voice.panNode);
+      voice.panNode.connect(audioContext.destination);
       voice.oscillatorNode.type = type;
+      voice.panNode.pan.setValueAtTime(-1 + i * (2 / (numberOfVoices - 1)), 0);
     });
   }
-  playNote(voiceIndex, note) {
-    var _a, _b;
+  playNote(voiceIndex, note, noteLength) {
+    var _a, _b, _c;
     const voice = this.voices[voiceIndex];
     const frequency = mtof(note);
-    const attack = 10;
-    const decay = 50;
-    console.log("voiceInded", voiceIndex);
+    const attack = noteLength * 0.55;
+    const decay = noteLength - attack;
+    const currentTime = (_a = voice.ctx) == null ? void 0 : _a.currentTime;
     if (!voice.hasStarted) {
       voice.oscillatorNode.start();
       voice.hasStarted = true;
     }
-    (_b = (_a = voice == null ? void 0 : voice.oscillatorNode) == null ? void 0 : _a.frequency) == null ? void 0 : _b.setValueAtTime(frequency, 0);
-    voice.gainNode.gain.linearRampToValueAtTime(0.6, Date.now() + attack);
-    voice.gainNode.gain.linearRampToValueAtTime(0, Date.now() + attack + decay);
+    (_c = (_b = voice == null ? void 0 : voice.oscillatorNode) == null ? void 0 : _b.frequency) == null ? void 0 : _c.setValueAtTime(frequency, currentTime);
+    voice.gainNode.gain.linearRampToValueAtTime(0.3, currentTime + attack / 1e3);
+    voice.gainNode.gain.linearRampToValueAtTime(0, currentTime + attack / 1e3 + decay / 1e3);
   }
 }
 const useStore = defineStore("main", {
   state: () => {
     return {
+      bpm: 200,
       count: 0,
       showConfigurationEdit: true,
       useWebAudio: true,
-      numberOfVoices: 2,
-      webAudioSynth: null
+      swatchWidth: 16,
+      swatchDepth: 2,
+      webAudioSynth: null,
+      rangeMin: 4,
+      rangeMax: 6,
+      warpNotes: [],
+      noteGrid: [],
+      gridItemsKey: Date.now()
     };
+  },
+  getters: {
+    bpmInterval: (state) => {
+      const bpmInt = parseInt(state.bpm, 10);
+      return 60 * (1e3 / bpmInt);
+    },
+    noteLength: (state) => state.bpmInterval * 0.95,
+    gridItems: (state) => {
+      const { noteGrid } = state;
+      return _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
+    },
+    warpNoteColors: (state) => {
+      const length = (state.rangeMax - state.rangeMin) * 12 + 1;
+      const colors = colormap({
+        colormap: "jet",
+        nshades: length,
+        format: "hex",
+        alpha: 1
+      });
+      return state.warpNotes.map((item) => {
+        const colorIndex = item - 12 - state.rangeMin * 12;
+        return colors[colorIndex];
+      });
+    },
+    numberOfVoices: (state) => state.swatchDepth
   },
   // could also be defined as
   // state: () => ({ count: 0 })
   actions: {
+    updateGridItemsKey() {
+      this.gridItemsKey = Date.now();
+    },
     increment() {
       this.count++;
     },
@@ -7375,7 +7415,6 @@ const useStore = defineStore("main", {
     },
     initializeWebAudioSynth() {
       this.webAudioSynth = new webAudio(this.numberOfVoices);
-      console.log("this.webAudioSynth", this.webAudioSynth);
     }
   }
 });
@@ -7481,10 +7520,12 @@ const _sfc_main$5 = {
   },
   setup(__props, { expose }) {
     const props = __props;
-    let notes = ref(new Array(props.length));
-    ref(0);
-    ref(0);
+    useNuxtApp();
+    const store2 = useStore();
     let chordIndex = ref(0);
+    const data = reactive({
+      notes: []
+    });
     const noteOptions = computed({
       get: () => {
         const tonic = "C";
@@ -7494,7 +7535,7 @@ const _sfc_main$5 = {
             return (scale.noteSet(props.scale, tonic, props.rangeMin, range) || []).map((num) => `${num}`);
           } else {
             const intervals = Chord.intervals(props.chord);
-            const semitones = intervals.map((interval) => Interval.semitones(interval));
+            const semitones = intervals.map((interval2) => Interval.semitones(interval2));
             return semitones.map((num) => `${num}`);
           }
         }
@@ -7514,7 +7555,7 @@ const _sfc_main$5 = {
     });
     function getNextNoteInChord() {
       const intervals = Chord.intervals(props.chord);
-      const semitones = intervals.map((interval) => Interval.semitones(interval));
+      const semitones = intervals.map((interval2) => Interval.semitones(interval2));
       const baseNote = parseInt(noteOptions.value[0]);
       console.log("baseNote", baseNote);
       const note = baseNote + semitones[chordIndex % semitones.length];
@@ -7523,33 +7564,41 @@ const _sfc_main$5 = {
       return note;
     }
     function initNotes() {
-      notes = [];
+      data.notes = [];
       if (props.mode === "stack" && props.type === "weft") {
         _.times(props.length, (i) => {
           const value = noteOptions.value[i % noteOptions.value.length];
-          notes[i] = value;
+          data.notes[i] = value;
         });
         return;
       }
       _.times(props.length, (i) => {
         const value = _.random(0, noteOptions.value.length - 1);
-        notes[i] = noteOptions.value[value];
+        data.notes[i] = noteOptions.value[value];
       });
+      store2.updateGridItemsKey();
+      if (props.type === "warp") {
+        store2.warpNotes = data.notes;
+      }
     }
     function getNote(index) {
-      return notes[index];
+      return data.notes[index];
+    }
+    function getNotes() {
+      return data.notes;
     }
     function handleInput(i, val) {
-      notes[i] = val;
+      data.notes[i] = val;
     }
     function updateNoteAtIndex(value, index) {
       const note = scale.determineNote(noteOptions.value.map((x) => parseInt(x)), value);
       handleInput(index, note);
     }
-    watch(props.scale, () => {
+    watch(() => props.scale, (xx) => {
       initNotes();
     });
-    watch(props.chord, () => {
+    watch(() => props.chord, (val) => {
+      console.log("vall", val);
       initNotes();
     });
     watch(props.index, () => {
@@ -7557,33 +7606,25 @@ const _sfc_main$5 = {
     watch(props.tick, () => {
       return;
     });
-    watch(props.length, () => {
+    watch(() => props.length, () => {
       initNotes();
       console.log("props.length", props.length);
     });
-    watch(props.rangeMin, () => {
+    watch(() => props.rangeMin, () => {
       initNotes();
     });
-    watch(props.rangeMax, () => {
+    watch(() => props.rangeMax, () => {
       initNotes();
     });
     onMounted(() => {
       initNotes();
-      console.log("notes", notes);
-      if (props.type === "warp") {
-        props.channel = 1;
-      } else {
-        props.channel = 2;
-      }
-      console.log("props.channel", props.channel);
     });
     expose({
       initNotes,
       updateNoteAtIndex,
       getNextNoteInChord,
-      getNote,
-      test: () => {
-      }
+      getNotes,
+      getNote
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_client_only = __nuxt_component_0$1;
@@ -7622,6 +7663,8 @@ function buildString(level, arr, count, remainder) {
   }
 }
 function generateEuclideanSequence(numSlots, numPulses) {
+  console.log("numSlots", numSlots);
+  console.log("numPulses", numPulses);
   let divisor = numSlots - numPulses;
   const remainder = [numPulses];
   const count = new Array();
@@ -7641,10 +7684,9 @@ const euclidean = {
   generateEuclideanSequence,
   buildString
 };
-function playNote(channel, note, webSynth) {
+function playNote(channel, note, noteLength, webSynth) {
   if (webSynth) {
-    console.log("note", note);
-    webSynth.playNote(channel, note);
+    webSynth.playNote(channel, note, noteLength);
   }
 }
 const audio = {
@@ -7656,39 +7698,34 @@ const _sfc_main$4 = {
   setup(__props) {
     const RESET_TIMEOUT = 10 * 1e3;
     const store2 = useStore();
-    const { useWebAudio, webAudioSynth } = storeToRefs(store2);
+    const { useWebAudio, webAudioSynth, gridItems, gridItemsKey, warpNoteColors } = storeToRefs(store2);
     const warp = ref();
     const weft = ref();
-    let width = ref(16);
-    let depth = ref(2);
     ref(100);
-    let noteGrid = ref([]);
     let noteScale = ref("maj7");
-    let pattern = ref("weave");
+    let pattern = ref("euclidean");
     let readMode = ref("stack");
     ref(scale.names);
     ref(["weave", "euclidean"]);
     ref({});
     let index = ref(-1), warpActive = ref(false), warpIndex = ref(-1), weftActive = ref(false), weftIndex = ref(-1);
     ref([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
-    let warpNote = ref(0), weftNote = ref(0), euclideanCount = ref(1), rangeMin = ref(2), rangeMax = ref(4), weaveX = ref(1), weaveY = ref(1);
-    ref(_.times(11, (i) => i * 10));
-    let chord = ref("Maj7"), chordSizeFilter = ref("4");
+    let warpNote = ref(0), weftNote = ref(0), euclideanCount = ref(1), weaveX = ref(1), weaveY = ref(1), chord = ref("Maj7"), chordSizeFilter = ref(4);
     ref("");
     let resetTimer = setTimeout(() => {
     }, 0);
-    let gridItems = ref([]);
-    const { $event, $listen } = useNuxtApp();
+    ref([]);
+    const { $listen } = useNuxtApp();
     computed({
       get: () => {
-        return (width + 1) * (depth + 1);
+        return (store2.swatchWidth + 1) * (store2.swatchDepth + 1);
       }
     });
     computed({
       get: () => {
         const names = Chord.names();
         return names.filter((name) => {
-          return Chord.notes(`C4${name}`).length === +chordSizeFilter;
+          return Chord.notes(`C4${name}`).length === chordSizeFilter.value;
         });
       }
     });
@@ -7698,10 +7735,10 @@ const _sfc_main$4 = {
     watch(euclideanCount, () => {
       handlePatternChange();
     });
-    watch(width, () => {
+    watch(store2.swatchWidth, () => {
       handleUpdateLength();
     });
-    watch(depth, () => {
+    watch(store2.swatchDepth, () => {
       handleUpdateLength();
     });
     watch(weaveX, () => {
@@ -7712,23 +7749,23 @@ const _sfc_main$4 = {
     });
     function computeWeave() {
       const pattern2 = [weaveX.value, weaveY.value], length = pattern2.reduce((acc, item) => acc += item);
-      noteGrid = [];
-      _.times(depth.value, (i) => {
+      store2.noteGrid = [];
+      _.times(store2.swatchDepth, (i) => {
         const row = [];
-        _.times(width.value, (j) => {
-          row.push((i + width.value - j) % length < pattern2[0] ? true : false);
+        _.times(store2.swatchWidth, (j) => {
+          row.push((i + store2.swatchWidth - j) % length < pattern2[0] ? true : false);
         });
-        noteGrid.push(row);
+        store2.noteGrid.push(row);
+        console.log("store.noteGrid", store2.noteGrid);
       });
-      gridItems = _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
     }
     function handleRandomize() {
-      warp.initNotes();
+      warp.value.initNotes();
     }
     function handleTick(source, value) {
       index.value++;
       if (source === "external") {
-        const warpIndex2 = index.value % width.value;
+        const warpIndex2 = index.value % store2.swatchWidth;
         warp.updateNoteAtIndex(value, warpIndex2);
         console.log("value", value);
       }
@@ -7740,16 +7777,17 @@ const _sfc_main$4 = {
     }
     function handleUpdateLength() {
       computeWeave();
-      index = 0;
+      index.value = 0;
     }
     function handlePatternChange() {
-      if (pattern === "euclidean") {
+      if (pattern.value === "euclidean") {
         return handleEuclidean();
       }
       computeWeave();
     }
     function handleEuclidean() {
-      let pattern2 = euclidean.generateEuclideanSequence(width, euclideanCount);
+      let pattern2 = euclidean.generateEuclideanSequence(store2.swatchWidth, euclideanCount.value);
+      console.log("pattern", pattern2);
       let shiftPattern = (pattern3, x) => {
         let shift = _.clone(pattern3);
         return shift.map((val, i) => {
@@ -7757,21 +7795,22 @@ const _sfc_main$4 = {
           return pattern3[index2];
         });
       };
-      noteGrid = [];
-      _.times(depth, (i) => {
+      store2.noteGrid = [];
+      _.times(store2.swatchDepth, (i) => {
         const shift = shiftPattern(pattern2, i);
-        noteGrid.push(shift);
+        console.log("shift", shift);
+        store2.noteGrid.push(shift);
       });
-      gridItems = _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
+      console.log("store.noteGrid", store2.noteGrid);
     }
     function sendNote(channel, note, velocity) {
-      audio.playNote(channel, note, useWebAudio.value && webAudioSynth.value);
+      audio.playNote(channel, note, store2.noteLength, useWebAudio.value && webAudioSynth.value);
       return;
     }
     function advanceSingle() {
-      let warpIndex2 = index % width;
-      let weftIndex2 = Math.floor(index / width) % depth;
-      let isWarpActive = noteGrid[weftIndex2][warpIndex2];
+      let warpIndex2 = index.value % store2.swatchWidth;
+      let weftIndex2 = Math.floor(index.value / store2.swatchWidth) % store2.swatchDepth;
+      let isWarpActive = store2.noteGrid[weftIndex2][warpIndex2];
       if (isWarpActive) {
         warpActive = true;
         weftActive = false;
@@ -7789,28 +7828,24 @@ const _sfc_main$4 = {
         sendNote(2, noteValue);
         sendNote(4, noteValue - 5);
       }
-      index = index % (width * depth);
+      index.value = index.value % (store2.swatchWidth * store2.swatchDepth);
     }
     function advanceStack() {
       let noteValue;
-      let warpIndex2 = index.value % width.value;
-      Math.floor(index.value / width.value) % depth.value;
+      let warpIndex2 = index.value % store2.swatchWidth;
+      Math.floor(index.value / store2.swatchWidth) % store2.swatchDepth;
       if (!warp) {
         console.log("warp not found");
         return;
       }
       noteValue = parseInt(warp.value.getNote(warpIndex2));
-      console.log("noteValue", noteValue);
-      const rows = depth.value;
+      const rows = store2.swatchDepth;
       _.times(rows, (row) => {
-        const isActive = noteGrid[row][warpIndex2];
+        const isActive = store2.noteGrid[row][warpIndex2];
         if (isActive) {
           sendNote(row, noteValue);
         }
       });
-      if (warpIndex2 === 0) {
-        sendNote(1, 60);
-      }
       return;
     }
     function advance() {
@@ -7824,12 +7859,12 @@ const _sfc_main$4 = {
       if (readMode.value === "single") {
         return index.value === i;
       } else if (readMode.value === "stack") {
-        return index.value % width.value === i % width.value;
+        return index.value % store2.swatchWidth === i % store2.swatchWidth;
       }
       return false;
     }
     function handleClockOff() {
-      index = -1;
+      index.value = -1;
       warpActive = false;
       warpIndex = -1;
       weftActive = false;
@@ -7845,16 +7880,14 @@ const _sfc_main$4 = {
       const _component_client_only = __nuxt_component_0$1;
       const _component_el_slider = ElSlider;
       const _component_el_button = ElButton;
-      _push(`<section${ssrRenderAttrs(mergeProps({ class: "swatch" }, _attrs))}><div class="swatch-settings">`);
-      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
-      _push(`<div><h2>Weave settings</h2><header>Warp Length</header>`);
+      _push(`<section${ssrRenderAttrs(mergeProps({ class: "swatch" }, _attrs))}><div class="swatch-settings"><div><h2>Weave settings</h2><header>Warp Length</header>`);
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       if (unref(pattern) === "weave") {
         _push(`<div><header>Weave X</header>`);
         _push(ssrRenderComponent(_component_el_slider, {
           modelValue: unref(weaveX),
-          "onUpdate:modelValue": ($event2) => isRef(weaveX) ? weaveX.value = $event2 : weaveX = $event2,
+          "onUpdate:modelValue": ($event) => isRef(weaveX) ? weaveX.value = $event : weaveX = $event,
           min: 1,
           max: 8,
           step: 1
@@ -7863,7 +7896,7 @@ const _sfc_main$4 = {
         if (unref(pattern) === "weave") {
           _push(ssrRenderComponent(_component_el_slider, {
             modelValue: unref(weaveY),
-            "onUpdate:modelValue": ($event2) => isRef(weaveY) ? weaveY.value = $event2 : weaveY = $event2,
+            "onUpdate:modelValue": ($event) => isRef(weaveY) ? weaveY.value = $event : weaveY = $event,
             min: 1,
             max: 8,
             step: 1
@@ -7882,9 +7915,9 @@ const _sfc_main$4 = {
       }
       _push(ssrRenderComponent(_component_el_slider, {
         modelValue: unref(euclideanCount),
-        "onUpdate:modelValue": ($event2) => isRef(euclideanCount) ? euclideanCount.value = $event2 : euclideanCount = $event2,
+        "onUpdate:modelValue": ($event) => isRef(euclideanCount) ? euclideanCount.value = $event : euclideanCount = $event,
         min: 1,
-        max: unref(width),
+        max: unref(store2).swatchWidth,
         step: 1
       }, null, _parent));
       _push(`</div><div><header>Music Settings</header><h3>Musical Scale</h3>`);
@@ -7892,20 +7925,20 @@ const _sfc_main$4 = {
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       _push(`<header>Octave Range</header>`);
       _push(ssrRenderComponent(_component_el_slider, {
-        min: -1,
-        max: 5,
+        min: 0,
+        max: 8,
         step: 1,
         "show-stops": "",
-        modelValue: unref(rangeMin),
-        "onUpdate:modelValue": ($event2) => isRef(rangeMin) ? rangeMin.value = $event2 : rangeMin = $event2
+        modelValue: unref(store2).rangeMin,
+        "onUpdate:modelValue": ($event) => unref(store2).rangeMin = $event
       }, null, _parent));
       _push(ssrRenderComponent(_component_el_slider, {
-        min: -1,
-        max: 5,
+        min: 0,
+        max: 8,
         step: 1,
         "show-stops": "",
-        modelValue: unref(rangeMax),
-        "onUpdate:modelValue": ($event2) => isRef(rangeMax) ? rangeMax.value = $event2 : rangeMax = $event2
+        modelValue: unref(store2).rangeMax,
+        "onUpdate:modelValue": ($event) => unref(store2).rangeMax = $event
       }, null, _parent));
       _push(ssrRenderComponent(_component_el_button, { onClick: handleRandomize }, {
         default: withCtx((_2, _push2, _parent2, _scopeId) => {
@@ -7923,7 +7956,7 @@ const _sfc_main$4 = {
       _push(ssrRenderComponent(unref(_sfc_main$5), {
         ref_key: "warp",
         ref: warp,
-        length: unref(width),
+        length: unref(store2).swatchWidth,
         scale: unref(noteScale),
         mode: unref(readMode),
         type: "warp",
@@ -7931,14 +7964,14 @@ const _sfc_main$4 = {
         index: unref(warpIndex),
         tick: unref(index),
         note: unref(warpNote),
-        rangeMin: unref(rangeMin),
-        rangeMax: unref(rangeMax),
+        rangeMin: unref(store2).rangeMin,
+        rangeMax: unref(store2).rangeMax,
         chord: unref(chord)
       }, null, _parent));
       _push(ssrRenderComponent(unref(_sfc_main$5), {
         ref_key: "weft",
         ref: weft,
-        length: unref(depth),
+        length: unref(store2).swatchDepth,
         scale: unref(noteScale),
         mode: unref(readMode),
         type: "weft",
@@ -7946,16 +7979,16 @@ const _sfc_main$4 = {
         index: unref(weftIndex),
         tick: unref(index),
         note: unref(weftNote),
-        rangeMin: unref(rangeMin),
-        rangeMax: unref(rangeMax),
+        rangeMin: unref(store2).rangeMin,
+        rangeMax: unref(store2).rangeMax,
         chord: unref(chord)
       }, null, _parent));
       _push(`<div class="swatch-grid" style="${ssrRenderStyle({
-        gridTemplateColumns: "repeat(" + unref(width) + ", 1fr)",
-        width: 50 * unref(width) + "px"
+        gridTemplateColumns: "repeat(" + unref(store2).swatchWidth + ", 1fr)",
+        width: 50 * unref(store2).swatchWidth + "px"
       })}"><!--[-->`);
       ssrRenderList(unref(gridItems), (item, i) => {
-        _push(`<div class="${ssrRenderClass([{ top: item, active: isActiveGridItem(i) }, "swatch-grid-note"])}"></div>`);
+        _push(`<div class="${ssrRenderClass([{ hide: !item, active: isActiveGridItem(i) }, "swatch-grid-note"])}" style="${ssrRenderStyle({ "background-color": unref(warpNoteColors)[i % unref(store2).swatchWidth] })}"></div>`);
       });
       _push(`<!--]--></div></div></section>`);
     };
@@ -7972,14 +8005,10 @@ const _sfc_main$3 = {
   __ssrInlineRender: true,
   setup(__props) {
     const { $event } = useNuxtApp();
-    let bpm = ref(250), timer = null, isOn = ref(false);
-    const interval = computed({
-      get: () => {
-        const bpmInt = parseInt(bpm.value, 10);
-        return 60 * (1e3 / bpmInt);
-      }
-    });
-    const intervalString = computed({
+    const store2 = useStore();
+    const { bpm, bpmInterval } = storeToRefs(store2);
+    let timer = null, isOn = ref(false);
+    computed({
       get: () => {
         return "" + interval.value;
       }
@@ -7987,7 +8016,8 @@ const _sfc_main$3 = {
     function handleTimer() {
       clearInterval(timer);
       if (isOn.value) {
-        timer = setInterval(tick, intervalString.value);
+        console.log("bpmInterval.value", bpmInterval.value);
+        timer = setInterval(tick, bpmInterval.value);
       }
     }
     function tick() {
@@ -8011,8 +8041,8 @@ const _sfc_main$3 = {
       const _component_el_switch = ElSwitch;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "clock" }, _attrs))}><h4>Clock</h4>`);
       _push(ssrRenderComponent(_component_el_input, {
-        modelValue: unref(bpm),
-        "onUpdate:modelValue": ($event2) => isRef(bpm) ? bpm.value = $event2 : bpm = $event2,
+        modelValue: unref(store2).bpm,
+        "onUpdate:modelValue": ($event2) => unref(store2).bpm = $event2,
         placeholder: "BPM"
       }, {
         prepend: withCtx((_2, _push2, _parent2, _scopeId) => {
@@ -8031,8 +8061,8 @@ const _sfc_main$3 = {
         min: 50,
         max: 1e3,
         step: 10,
-        modelValue: unref(bpm),
-        "onUpdate:modelValue": ($event2) => isRef(bpm) ? bpm.value = $event2 : bpm = $event2
+        modelValue: unref(store2).bpm,
+        "onUpdate:modelValue": ($event2) => unref(store2).bpm = $event2
       }, null, _parent));
       _push(ssrRenderComponent(_component_el_switch, {
         "active-text": "start",
@@ -8103,8 +8133,8 @@ const _sfc_main = {
   __name: "nuxt-root",
   __ssrInlineRender: true,
   setup(__props) {
-    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-component-f93e14a4.mjs').then((r) => r.default || r));
-    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-b68b3acd.mjs').then((r) => r.default || r));
+    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-component-2c35b684.mjs').then((r) => r.default || r));
+    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-cd3c6483.mjs').then((r) => r.default || r));
     const nuxtApp = useNuxtApp();
     nuxtApp.deferHydration();
     nuxtApp.ssrContext.url;
