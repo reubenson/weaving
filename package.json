@@ -6,20 +6,21 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy": "push-dir --dir=.output/public --branch=gh-pages --cleanup"
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.4",
     "@types/node": "^18",
     "element-plus": "^2.3.4",
     "nuxt": "^3.4.3",
+    "push-dir": "^0.4.1",
     "sass": "^1.62.1",
     "sass-loader": "^13.2.2"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.9",
     "colormap": "^2.3.2",
-    "d3-scale-chromatic": "^3.0.0",
     "mitt": "^3.0.0",
     "mtof": "^1.0.2",
     "nanotimer": "^0.3.15",
