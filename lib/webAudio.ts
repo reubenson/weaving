@@ -35,12 +35,16 @@ export class webAudio {
   
   public playNote(voiceIndex: number, note: number, noteLength: number) {
     const voice = this.voices[voiceIndex];
-    const frequency = mtof(note);
+    console.log('voiceIndex', voiceIndex);
+    console.log('this.voices', this.voices);
+    let frequency = mtof(note);
     // const attack = 220; // ms
     // const decay = 300; // ms
     const attack = noteLength * 0.55;
     const decay = noteLength - attack;
     const currentTime = voice.ctx?.currentTime;
+
+    frequency *= -1 + Math.floor(voiceIndex / 2);
     
     if (!voice.hasStarted) {
       voice.oscillatorNode.start();

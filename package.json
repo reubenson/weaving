@@ -4,10 +4,10 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate && touch .output/public/.nojekyll",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "touch .output/public/.nojekyll && push-dir --dir=.output/public --branch=gh-pages --cleanup"
+    "deploy": "push-dir --dir=.output/public --branch=gh-pages --cleanup"
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.4",

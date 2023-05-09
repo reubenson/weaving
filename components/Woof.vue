@@ -33,9 +33,13 @@ import _ from 'lodash';
 import scale from '../lib/scale';
 import midi from '../lib/midi';
 import { useStore } from '~/store/main';
+import { useMusicStore } from '~/store/music-settings';
+import { storeToRefs } from 'pinia';
 
 const { $event } = useNuxtApp();
 const store = useStore();
+const musicStore = useMusicStore();
+const { noteScale, rangeMin, rangeMax } = storeToRefs(musicStore);
 
 // export default {
   // name: 'woof',
@@ -43,13 +47,13 @@ const store = useStore();
 const props = defineProps({
   length: Number,
   type: String,
-  scale: String,
+  // scale: String,
   active: Boolean,
   index: Number,
   tick: Number,
   note: Number,
-  rangeMin: Number,
-  rangeMax: Number,
+  // rangeMin: Number,
+  // rangeMax: Number,
   chord: String,
   mode: String,
 })
@@ -71,11 +75,11 @@ const data = reactive({
 const noteOptions = computed({
   get: () => {
       const tonic = 'C';
-      const range = Math.max(props.rangeMax - props.rangeMin, 0);
+      const range = Math.max(rangeMax.value - rangeMin.value, 0);
 
       if (props.mode === 'stack') {
         if (props.type === 'warp') {
-          return (scale.noteSet(props.scale, tonic, props.rangeMin, range) || []).map(num => `${num}`);
+          return (scale.noteSet(noteScale.value, tonic, rangeMin.value, range) || []).map(num => `${num}`);
         } else {
           // chord mode
           const intervals = Chord.intervals(props.chord);
@@ -91,8 +95,8 @@ const noteOptions = computed({
         console.log('scale', scale);
         console.log('range', range);
         console.log('tonic', tonic);
-        console.log('single', scale.noteSet(props.scale, tonic, props.rangeMin, range) );
-        return (scale.noteSet(props.scale, tonic, props.rangeMin, range) || [])
+        console.log('single', scale.noteSet(noteScale.value, tonic, rangeMin.value, range) );
+        return (scale.noteSet(noteScale.value, tonic, rangeMin.value, range) || [])
           .map(num => `${num}`);
       }
     }
@@ -208,7 +212,7 @@ function updateNoteAtIndex(value, index) {
       //   //  midi.noteOff(2, this.activeNote, 127);
       // }
     // },
-watch(() => props.scale, (xx) => {
+watch(() => noteScale.value, (xx) => {
   initNotes();
   // this.handleScaleChange();
 });
@@ -261,10 +265,10 @@ watch(() => props.length, () => {
   initNotes();
   console.log('props.length', props.length);
 });
-watch(() => props.rangeMin, () => {
+watch(() => rangeMin.value, () => {
   initNotes();
 });
-watch(() => props.rangeMax, () => {
+watch(() => rangeMax.value, () => {
   initNotes();
 });
   // },
@@ -307,6 +311,7 @@ defineExpose({
 <style lang="scss">
   .woof {
     position: absolute;
+    display: none;
 
     &-notes {
       display: grid;

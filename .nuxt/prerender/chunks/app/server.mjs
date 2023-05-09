@@ -1,22 +1,21 @@
-import { watch, reactive, version, ref, defineComponent, computed, openBlock, createElementBlock, mergeProps, unref, renderSlot, useAttrs as useAttrs$1, useSlots, shallowRef, nextTick, toRef, withDirectives, createCommentVNode, Fragment, normalizeClass, createElementVNode, createBlock, withCtx, resolveDynamicComponent, withModifiers, createVNode, toDisplayString, normalizeStyle, vShow, provide, inject, Teleport, Transition, readonly, onUpdated, withKeys, toRefs, renderList, getCurrentInstance, watchEffect, warn, onUnmounted, cloneVNode, Text, Comment, h, useSSRContext, createApp, isRef, markRaw, effectScope, isReactive, toRaw, onErrorCaptured, onServerPrefetch, getCurrentScope, onScopeDispose, isReadonly, defineAsyncComponent, onMounted, createTextVNode } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/index.mjs';
+import { watch, reactive, version, ref, defineComponent, computed, openBlock, createElementBlock, mergeProps, unref, renderSlot, useAttrs as useAttrs$1, useSlots, shallowRef, nextTick, toRef, withDirectives, createCommentVNode, Fragment, normalizeClass, createElementVNode, createBlock, withCtx, resolveDynamicComponent, withModifiers, createVNode, toDisplayString, normalizeStyle, vShow, provide, onUpdated, inject, Teleport, Transition, readonly, withKeys, toRefs, renderList, getCurrentInstance, watchEffect, warn, onUnmounted, cloneVNode, Text, Comment, triggerRef, toRaw, h, useSSRContext, createApp, isRef, markRaw, effectScope, isReactive, resolveComponent, resolveDirective, vModelText, createSlots, onErrorCaptured, onServerPrefetch, getCurrentScope, onScopeDispose, isReadonly, defineAsyncComponent, createTextVNode, onMounted } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/index.mjs';
 import { $fetch } from 'file:///Users/reubenson/Projects/weaving/node_modules/ofetch/dist/node.mjs';
 import { createHooks } from 'file:///Users/reubenson/Projects/weaving/node_modules/hookable/dist/index.mjs';
 import { getContext } from 'file:///Users/reubenson/Projects/weaving/node_modules/unctx/dist/index.mjs';
 import { renderSSRHead } from 'file:///Users/reubenson/Projects/weaving/node_modules/@unhead/ssr/dist/index.mjs';
 import { getActiveHead, createServerHead as createServerHead$1 } from 'file:///Users/reubenson/Projects/weaving/node_modules/unhead/dist/index.mjs';
 import { defineHeadPlugin } from 'file:///Users/reubenson/Projects/weaving/node_modules/@unhead/shared/dist/index.mjs';
-import { hasProtocol, parseURL, joinURL, isEqual, stringifyParsedURL, stringifyQuery, parseQuery } from 'file:///Users/reubenson/Projects/weaving/node_modules/ufo/dist/index.mjs';
+import { hasProtocol, parseURL, joinURL, isEqual as isEqual$1, stringifyParsedURL, stringifyQuery, parseQuery } from 'file:///Users/reubenson/Projects/weaving/node_modules/ufo/dist/index.mjs';
 import { createError as createError$1, sanitizeStatusCode } from 'file:///Users/reubenson/Projects/weaving/node_modules/h3/dist/index.mjs';
-import { useResizeObserver, isClient, onClickOutside, tryOnScopeDispose, unrefElement } from 'file:///Users/reubenson/Projects/weaving/node_modules/@vueuse/core/index.mjs';
-import { NOOP, isString, isObject as isObject$1, hasOwn, isFunction, isPromise as isPromise$1, isArray } from 'file:///Users/reubenson/Projects/weaving/node_modules/@vue/shared/index.js';
+import { useResizeObserver, useEventListener, isClient, isIOS, onClickOutside, tryOnScopeDispose, unrefElement } from 'file:///Users/reubenson/Projects/weaving/node_modules/@vueuse/core/index.mjs';
+import { NOOP, isString, isObject as isObject$1, hasOwn, isFunction, toRawType, isPromise as isPromise$1, isArray } from 'file:///Users/reubenson/Projects/weaving/node_modules/@vue/shared/index.js';
 import { setupDevtoolsPlugin } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue-devtools-stub/dist/index.mjs';
-import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs, ssrRenderStyle, ssrRenderList, ssrRenderClass, ssrRenderAttr, ssrIncludeBooleanAttr, ssrInterpolate } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/server-renderer/index.mjs';
-import { isNil, fromPairs, isUndefined as isUndefined$1, debounce, get } from 'file:///Users/reubenson/Projects/weaving/node_modules/lodash-unified/import.js';
+import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderSuspense, ssrRenderVNode, ssrRenderStyle, ssrRenderList, ssrRenderClass, ssrRenderSlot } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/server-renderer/index.mjs';
+import { placements, createPopper } from 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dist/index.mjs';
+import { isNil, fromPairs, isUndefined as isUndefined$1, isEqual, get, debounce } from 'file:///Users/reubenson/Projects/weaving/node_modules/lodash-unified/import.js';
 import _ from 'file:///Users/reubenson/Projects/weaving/node_modules/lodash/lodash.js';
 import colormap from 'file:///Users/reubenson/Projects/weaving/node_modules/colormap/index.js';
 import mtof from 'file:///Users/reubenson/Projects/weaving/node_modules/mtof/index.js';
-import { placements, createPopper } from 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dist/index.mjs';
-import { TinyColor } from 'file:///Users/reubenson/Projects/weaving/node_modules/@ctrl/tinycolor/dist/public_api.js';
 import * as Chord from 'file:///Users/reubenson/Projects/weaving/node_modules/tonal-chord/build/es5.js';
 import { Scale, Note, Interval } from 'file:///Users/reubenson/Projects/weaving/node_modules/tonal/dist/index.js';
 import { a as useRuntimeConfig$1 } from '../nitro/nitro-prerenderer.mjs';
@@ -2228,7 +2227,7 @@ const router_CaKIoANnI2 = /* @__PURE__ */ defineNuxtPlugin({
         delete nuxtApp._processingMiddleware;
       });
       await router.replace(initialURL);
-      if (!isEqual(route.fullPath, initialURL)) {
+      if (!isEqual$1(route.fullPath, initialURL)) {
         await callWithNuxt(nuxtApp, navigateTo, [route.fullPath]);
       }
     });
@@ -2270,12 +2269,18 @@ const isFirefox = () => isClient && /firefox/i.test(window.navigator.userAgent);
 const isUndefined = (val) => val === void 0;
 const isBoolean = (val) => typeof val === "boolean";
 const isNumber = (val) => typeof val === "number";
+const isElement = (e) => {
+  if (typeof Element === "undefined")
+    return false;
+  return e instanceof Element;
+};
 const isStringNumber = (val) => {
   if (!isString(val)) {
     return false;
   }
   return !Number.isNaN(Number(val));
 };
+const escapeStringRegexp = (string = "") => string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
 class ElementPlusError extends Error {
   constructor(m) {
     super(m);
@@ -2301,6 +2306,29 @@ function addUnit(value, defaultUnit = "px") {
     return value;
   }
   debugWarn(SCOPE, "binding value must be a string or number");
+}
+function scrollIntoView(container, selected) {
+  if (!isClient)
+    return;
+  if (!selected) {
+    container.scrollTop = 0;
+    return;
+  }
+  const offsetParents = [];
+  let pointer = selected.offsetParent;
+  while (pointer !== null && container !== pointer && container.contains(pointer)) {
+    offsetParents.push(pointer);
+    pointer = pointer.offsetParent;
+  }
+  const top = selected.offsetTop + offsetParents.reduce((prev, curr) => prev + curr.offsetTop, 0);
+  const bottom = top + selected.offsetHeight;
+  const viewRectTop = container.scrollTop;
+  const viewRectBottom = viewRectTop + container.clientHeight;
+  if (top < viewRectTop) {
+    container.scrollTop = top;
+  } else if (bottom > viewRectBottom) {
+    container.scrollTop = bottom - container.clientHeight;
+  }
 }
 /*! Element Plus Icons Vue v2.1.0 */
 var export_helper_default = (sfc, props) => {
@@ -2417,6 +2445,28 @@ function _sfc_render51(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("svg", _hoisted_151, _hoisted_416);
 }
 var circle_close_default = /* @__PURE__ */ export_helper_default(circle_close_vue_vue_type_script_lang_default, [["render", _sfc_render51], ["__file", "circle-close.vue"]]);
+var close_vue_vue_type_script_lang_default = {
+  name: "Close"
+};
+var _hoisted_156 = {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 1024 1024"
+}, _hoisted_256 = /* @__PURE__ */ createElementVNode(
+  "path",
+  {
+    fill: "currentColor",
+    d: "M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"
+  },
+  null,
+  -1
+  /* HOISTED */
+), _hoisted_355 = [
+  _hoisted_256
+];
+function _sfc_render56(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("svg", _hoisted_156, _hoisted_355);
+}
+var close_default = /* @__PURE__ */ export_helper_default(close_vue_vue_type_script_lang_default, [["render", _sfc_render56], ["__file", "close.vue"]]);
 var hide_vue_vue_type_script_lang_default = {
   name: "Hide"
 };
@@ -2624,6 +2674,14 @@ const UPDATE_MODEL_EVENT = "update:modelValue";
 const CHANGE_EVENT = "change";
 const INPUT_EVENT = "input";
 const componentSizes = ["", "default", "small", "large"];
+const componentSizeMap = {
+  large: 40,
+  default: 32,
+  small: 24
+};
+const getComponentSize = (size) => {
+  return componentSizeMap[size || "default"];
+};
 const isValidComponentSize = (val) => ["", ...componentSizes].includes(val);
 const isKorean = (text) => /([\uAC00-\uD7AF\u3130-\u318F])+/gi.test(text);
 const mutable = (val) => val;
@@ -2654,6 +2712,14 @@ For more detail, please visit: ${ref2}
   }, {
     immediate: true
   });
+};
+const useFocus = (el) => {
+  return {
+    focus: () => {
+      var _a, _b;
+      (_b = (_a = el.value) == null ? void 0 : _a.focus) == null ? void 0 : _b.call(_a);
+    }
+  };
 };
 var English = {
   name: "en",
@@ -3315,19 +3381,6 @@ const useGlobalSize = () => {
     return unref(injectedSize.size) || "";
   });
 };
-const configProviderContextKey = Symbol();
-const globalConfig = ref();
-function useGlobalConfig(key, defaultValue = void 0) {
-  const config2 = getCurrentInstance() ? inject(configProviderContextKey, globalConfig) : globalConfig;
-  if (key) {
-    return computed(() => {
-      var _a, _b;
-      return (_b = (_a = config2.value) == null ? void 0 : _a[key]) != null ? _b : defaultValue;
-    });
-  } else {
-    return config2;
-  }
-}
 var _export_sfc$1 = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -3347,7 +3400,7 @@ const __default__$e = /* @__PURE__ */ defineComponent({
   name: "ElIcon",
   inheritAttrs: false
 });
-const _sfc_main$n = /* @__PURE__ */ defineComponent({
+const _sfc_main$u = /* @__PURE__ */ defineComponent({
   ...__default__$e,
   props: iconProps,
   setup(__props) {
@@ -3372,17 +3425,17 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Icon = /* @__PURE__ */ _export_sfc$1(_sfc_main$n, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/icon/src/icon.vue"]]);
+var Icon = /* @__PURE__ */ _export_sfc$1(_sfc_main$u, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/icon/src/icon.vue"]]);
 const ElIcon = withInstall(Icon);
 const formContextKey = Symbol("formContextKey");
 const formItemContextKey = Symbol("formItemContextKey");
 const useFormSize = (fallback, ignore = {}) => {
   const emptyRef = ref(void 0);
   const size = ignore.prop ? emptyRef : useProp("size");
-  const globalConfig2 = ignore.global ? emptyRef : useGlobalSize();
+  const globalConfig = ignore.global ? emptyRef : useGlobalSize();
   const form = ignore.form ? { size: void 0 } : inject(formContextKey, void 0);
   const formItem = ignore.formItem ? { size: void 0 } : inject(formItemContextKey, void 0);
-  return computed(() => size.value || unref(fallback) || (formItem == null ? void 0 : formItem.size) || (form == null ? void 0 : form.size) || globalConfig2.value || "");
+  return computed(() => size.value || unref(fallback) || (formItem == null ? void 0 : formItem.size) || (form == null ? void 0 : form.size) || globalConfig.value || "");
 };
 const useFormDisabled = (fallback) => {
   const disabled = useProp("disabled");
@@ -3596,14 +3649,14 @@ const inputEmits = {
   compositionupdate: (evt) => evt instanceof CompositionEvent,
   compositionend: (evt) => evt instanceof CompositionEvent
 };
-const _hoisted_1$5 = ["role"];
-const _hoisted_2$4 = ["id", "type", "disabled", "formatter", "parser", "readonly", "autocomplete", "tabindex", "aria-label", "placeholder", "form"];
-const _hoisted_3$1 = ["id", "tabindex", "disabled", "readonly", "autocomplete", "aria-label", "placeholder", "form"];
+const _hoisted_1$6 = ["role"];
+const _hoisted_2$5 = ["id", "type", "disabled", "formatter", "parser", "readonly", "autocomplete", "tabindex", "aria-label", "placeholder", "form"];
+const _hoisted_3$2 = ["id", "tabindex", "disabled", "readonly", "autocomplete", "aria-label", "placeholder", "form"];
 const __default__$d = /* @__PURE__ */ defineComponent({
   name: "ElInput",
   inheritAttrs: false
 });
-const _sfc_main$m = /* @__PURE__ */ defineComponent({
+const _sfc_main$t = /* @__PURE__ */ defineComponent({
   ...__default__$d,
   props: inputProps,
   emits: inputEmits,
@@ -3914,7 +3967,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
               onBlur: handleBlur,
               onChange: handleChange,
               onKeydown: handleKeydown
-            }), null, 16, _hoisted_2$4),
+            }), null, 16, _hoisted_2$5),
             createCommentVNode(" suffix slot "),
             unref(suffixVisible) ? (openBlock(), createElementBlock("span", {
               key: 1,
@@ -4012,21 +4065,437 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
             onBlur: handleBlur,
             onChange: handleChange,
             onKeydown: handleKeydown
-          }), null, 16, _hoisted_3$1),
+          }), null, 16, _hoisted_3$2),
           unref(isWordLimitVisible) ? (openBlock(), createElementBlock("span", {
             key: 0,
             style: normalizeStyle(countStyle.value),
             class: normalizeClass(unref(nsInput).e("count"))
           }, toDisplayString(unref(textLength)) + " / " + toDisplayString(unref(attrs).maxlength), 7)) : createCommentVNode("v-if", true)
         ], 64))
-      ], 16, _hoisted_1$5)), [
+      ], 16, _hoisted_1$6)), [
         [vShow, _ctx.type !== "hidden"]
       ]);
     };
   }
 });
-var Input = /* @__PURE__ */ _export_sfc$1(_sfc_main$m, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input/src/input.vue"]]);
+var Input = /* @__PURE__ */ _export_sfc$1(_sfc_main$t, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input/src/input.vue"]]);
 const ElInput = withInstall(Input);
+const GAP = 4;
+const BAR_MAP = {
+  vertical: {
+    offset: "offsetHeight",
+    scroll: "scrollTop",
+    scrollSize: "scrollHeight",
+    size: "height",
+    key: "vertical",
+    axis: "Y",
+    client: "clientY",
+    direction: "top"
+  },
+  horizontal: {
+    offset: "offsetWidth",
+    scroll: "scrollLeft",
+    scrollSize: "scrollWidth",
+    size: "width",
+    key: "horizontal",
+    axis: "X",
+    client: "clientX",
+    direction: "left"
+  }
+};
+const renderThumbStyle = ({
+  move,
+  size,
+  bar
+}) => ({
+  [bar.size]: size,
+  transform: `translate${bar.axis}(${move}%)`
+});
+const scrollbarContextKey = Symbol("scrollbarContextKey");
+const thumbProps = buildProps({
+  vertical: Boolean,
+  size: String,
+  move: Number,
+  ratio: {
+    type: Number,
+    required: true
+  },
+  always: Boolean
+});
+const COMPONENT_NAME$3 = "Thumb";
+const _sfc_main$s = /* @__PURE__ */ defineComponent({
+  __name: "thumb",
+  props: thumbProps,
+  setup(__props) {
+    const props = __props;
+    const scrollbar = inject(scrollbarContextKey);
+    const ns = useNamespace("scrollbar");
+    if (!scrollbar)
+      throwError(COMPONENT_NAME$3, "can not inject scrollbar context");
+    const instance = ref();
+    const thumb = ref();
+    const thumbState = ref({});
+    const visible = ref(false);
+    let cursorDown = false;
+    let cursorLeave = false;
+    let originalOnSelectStart = isClient ? document.onselectstart : null;
+    const bar = computed(() => BAR_MAP[props.vertical ? "vertical" : "horizontal"]);
+    const thumbStyle = computed(() => renderThumbStyle({
+      size: props.size,
+      move: props.move,
+      bar: bar.value
+    }));
+    const offsetRatio = computed(() => instance.value[bar.value.offset] ** 2 / scrollbar.wrapElement[bar.value.scrollSize] / props.ratio / thumb.value[bar.value.offset]);
+    const clickThumbHandler = (e) => {
+      var _a;
+      e.stopPropagation();
+      if (e.ctrlKey || [1, 2].includes(e.button))
+        return;
+      (_a = window.getSelection()) == null ? void 0 : _a.removeAllRanges();
+      startDrag(e);
+      const el = e.currentTarget;
+      if (!el)
+        return;
+      thumbState.value[bar.value.axis] = el[bar.value.offset] - (e[bar.value.client] - el.getBoundingClientRect()[bar.value.direction]);
+    };
+    const clickTrackHandler = (e) => {
+      if (!thumb.value || !instance.value || !scrollbar.wrapElement)
+        return;
+      const offset = Math.abs(e.target.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]);
+      const thumbHalf = thumb.value[bar.value.offset] / 2;
+      const thumbPositionPercentage = (offset - thumbHalf) * 100 * offsetRatio.value / instance.value[bar.value.offset];
+      scrollbar.wrapElement[bar.value.scroll] = thumbPositionPercentage * scrollbar.wrapElement[bar.value.scrollSize] / 100;
+    };
+    const startDrag = (e) => {
+      e.stopImmediatePropagation();
+      cursorDown = true;
+      document.addEventListener("mousemove", mouseMoveDocumentHandler);
+      document.addEventListener("mouseup", mouseUpDocumentHandler);
+      originalOnSelectStart = document.onselectstart;
+      document.onselectstart = () => false;
+    };
+    const mouseMoveDocumentHandler = (e) => {
+      if (!instance.value || !thumb.value)
+        return;
+      if (cursorDown === false)
+        return;
+      const prevPage = thumbState.value[bar.value.axis];
+      if (!prevPage)
+        return;
+      const offset = (instance.value.getBoundingClientRect()[bar.value.direction] - e[bar.value.client]) * -1;
+      const thumbClickPosition = thumb.value[bar.value.offset] - prevPage;
+      const thumbPositionPercentage = (offset - thumbClickPosition) * 100 * offsetRatio.value / instance.value[bar.value.offset];
+      scrollbar.wrapElement[bar.value.scroll] = thumbPositionPercentage * scrollbar.wrapElement[bar.value.scrollSize] / 100;
+    };
+    const mouseUpDocumentHandler = () => {
+      cursorDown = false;
+      thumbState.value[bar.value.axis] = 0;
+      document.removeEventListener("mousemove", mouseMoveDocumentHandler);
+      document.removeEventListener("mouseup", mouseUpDocumentHandler);
+      restoreOnselectstart();
+      if (cursorLeave)
+        visible.value = false;
+    };
+    const mouseMoveScrollbarHandler = () => {
+      cursorLeave = false;
+      visible.value = !!props.size;
+    };
+    const mouseLeaveScrollbarHandler = () => {
+      cursorLeave = true;
+      visible.value = cursorDown;
+    };
+    const restoreOnselectstart = () => {
+      if (document.onselectstart !== originalOnSelectStart)
+        document.onselectstart = originalOnSelectStart;
+    };
+    useEventListener(toRef(scrollbar, "scrollbarElement"), "mousemove", mouseMoveScrollbarHandler);
+    useEventListener(toRef(scrollbar, "scrollbarElement"), "mouseleave", mouseLeaveScrollbarHandler);
+    return (_ctx, _cache) => {
+      return openBlock(), createBlock(Transition, {
+        name: unref(ns).b("fade"),
+        persisted: ""
+      }, {
+        default: withCtx(() => [
+          withDirectives(createElementVNode("div", {
+            ref_key: "instance",
+            ref: instance,
+            class: normalizeClass([unref(ns).e("bar"), unref(ns).is(unref(bar).key)]),
+            onMousedown: clickTrackHandler
+          }, [
+            createElementVNode("div", {
+              ref_key: "thumb",
+              ref: thumb,
+              class: normalizeClass(unref(ns).e("thumb")),
+              style: normalizeStyle(unref(thumbStyle)),
+              onMousedown: clickThumbHandler
+            }, null, 38)
+          ], 34), [
+            [vShow, _ctx.always || visible.value]
+          ])
+        ]),
+        _: 1
+      }, 8, ["name"]);
+    };
+  }
+});
+var Thumb = /* @__PURE__ */ _export_sfc$1(_sfc_main$s, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/thumb.vue"]]);
+const barProps = buildProps({
+  always: {
+    type: Boolean,
+    default: true
+  },
+  width: String,
+  height: String,
+  ratioX: {
+    type: Number,
+    default: 1
+  },
+  ratioY: {
+    type: Number,
+    default: 1
+  }
+});
+const _sfc_main$r = /* @__PURE__ */ defineComponent({
+  __name: "bar",
+  props: barProps,
+  setup(__props, { expose }) {
+    const props = __props;
+    const moveX = ref(0);
+    const moveY = ref(0);
+    const handleScroll = (wrap) => {
+      if (wrap) {
+        const offsetHeight = wrap.offsetHeight - GAP;
+        const offsetWidth = wrap.offsetWidth - GAP;
+        moveY.value = wrap.scrollTop * 100 / offsetHeight * props.ratioY;
+        moveX.value = wrap.scrollLeft * 100 / offsetWidth * props.ratioX;
+      }
+    };
+    expose({
+      handleScroll
+    });
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock(Fragment, null, [
+        createVNode(Thumb, {
+          move: moveX.value,
+          ratio: _ctx.ratioX,
+          size: _ctx.width,
+          always: _ctx.always
+        }, null, 8, ["move", "ratio", "size", "always"]),
+        createVNode(Thumb, {
+          move: moveY.value,
+          ratio: _ctx.ratioY,
+          size: _ctx.height,
+          vertical: "",
+          always: _ctx.always
+        }, null, 8, ["move", "ratio", "size", "always"])
+      ], 64);
+    };
+  }
+});
+var Bar = /* @__PURE__ */ _export_sfc$1(_sfc_main$r, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/bar.vue"]]);
+const scrollbarProps = buildProps({
+  height: {
+    type: [String, Number],
+    default: ""
+  },
+  maxHeight: {
+    type: [String, Number],
+    default: ""
+  },
+  native: {
+    type: Boolean,
+    default: false
+  },
+  wrapStyle: {
+    type: definePropType([String, Object, Array]),
+    default: ""
+  },
+  wrapClass: {
+    type: [String, Array],
+    default: ""
+  },
+  viewClass: {
+    type: [String, Array],
+    default: ""
+  },
+  viewStyle: {
+    type: [String, Array, Object],
+    default: ""
+  },
+  noresize: Boolean,
+  tag: {
+    type: String,
+    default: "div"
+  },
+  always: Boolean,
+  minSize: {
+    type: Number,
+    default: 20
+  }
+});
+const scrollbarEmits = {
+  scroll: ({
+    scrollTop,
+    scrollLeft
+  }) => [scrollTop, scrollLeft].every(isNumber)
+};
+const COMPONENT_NAME$2 = "ElScrollbar";
+const __default__$c = /* @__PURE__ */ defineComponent({
+  name: COMPONENT_NAME$2
+});
+const _sfc_main$q = /* @__PURE__ */ defineComponent({
+  ...__default__$c,
+  props: scrollbarProps,
+  emits: scrollbarEmits,
+  setup(__props, { expose, emit }) {
+    const props = __props;
+    const ns = useNamespace("scrollbar");
+    let stopResizeObserver = void 0;
+    let stopResizeListener = void 0;
+    const scrollbarRef = ref();
+    const wrapRef = ref();
+    const resizeRef = ref();
+    const sizeWidth = ref("0");
+    const sizeHeight = ref("0");
+    const barRef = ref();
+    const ratioY = ref(1);
+    const ratioX = ref(1);
+    const style = computed(() => {
+      const style2 = {};
+      if (props.height)
+        style2.height = addUnit(props.height);
+      if (props.maxHeight)
+        style2.maxHeight = addUnit(props.maxHeight);
+      return [props.wrapStyle, style2];
+    });
+    const wrapKls = computed(() => {
+      return [
+        props.wrapClass,
+        ns.e("wrap"),
+        { [ns.em("wrap", "hidden-default")]: !props.native }
+      ];
+    });
+    const resizeKls = computed(() => {
+      return [ns.e("view"), props.viewClass];
+    });
+    const handleScroll = () => {
+      var _a;
+      if (wrapRef.value) {
+        (_a = barRef.value) == null ? void 0 : _a.handleScroll(wrapRef.value);
+        emit("scroll", {
+          scrollTop: wrapRef.value.scrollTop,
+          scrollLeft: wrapRef.value.scrollLeft
+        });
+      }
+    };
+    function scrollTo(arg1, arg2) {
+      if (isObject$1(arg1)) {
+        wrapRef.value.scrollTo(arg1);
+      } else if (isNumber(arg1) && isNumber(arg2)) {
+        wrapRef.value.scrollTo(arg1, arg2);
+      }
+    }
+    const setScrollTop = (value) => {
+      if (!isNumber(value)) {
+        debugWarn(COMPONENT_NAME$2, "value must be a number");
+        return;
+      }
+      wrapRef.value.scrollTop = value;
+    };
+    const setScrollLeft = (value) => {
+      if (!isNumber(value)) {
+        debugWarn(COMPONENT_NAME$2, "value must be a number");
+        return;
+      }
+      wrapRef.value.scrollLeft = value;
+    };
+    const update = () => {
+      if (!wrapRef.value)
+        return;
+      const offsetHeight = wrapRef.value.offsetHeight - GAP;
+      const offsetWidth = wrapRef.value.offsetWidth - GAP;
+      const originalHeight = offsetHeight ** 2 / wrapRef.value.scrollHeight;
+      const originalWidth = offsetWidth ** 2 / wrapRef.value.scrollWidth;
+      const height = Math.max(originalHeight, props.minSize);
+      const width = Math.max(originalWidth, props.minSize);
+      ratioY.value = originalHeight / (offsetHeight - originalHeight) / (height / (offsetHeight - height));
+      ratioX.value = originalWidth / (offsetWidth - originalWidth) / (width / (offsetWidth - width));
+      sizeHeight.value = height + GAP < offsetHeight ? `${height}px` : "";
+      sizeWidth.value = width + GAP < offsetWidth ? `${width}px` : "";
+    };
+    watch(() => props.noresize, (noresize) => {
+      if (noresize) {
+        stopResizeObserver == null ? void 0 : stopResizeObserver();
+        stopResizeListener == null ? void 0 : stopResizeListener();
+      } else {
+        ({ stop: stopResizeObserver } = useResizeObserver(resizeRef, update));
+        stopResizeListener = useEventListener("resize", update);
+      }
+    }, { immediate: true });
+    watch(() => [props.maxHeight, props.height], () => {
+      if (!props.native)
+        nextTick(() => {
+          var _a;
+          update();
+          if (wrapRef.value) {
+            (_a = barRef.value) == null ? void 0 : _a.handleScroll(wrapRef.value);
+          }
+        });
+    });
+    provide(scrollbarContextKey, reactive({
+      scrollbarElement: scrollbarRef,
+      wrapElement: wrapRef
+    }));
+    onUpdated(() => update());
+    expose({
+      wrapRef,
+      update,
+      scrollTo,
+      setScrollTop,
+      setScrollLeft,
+      handleScroll
+    });
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        ref_key: "scrollbarRef",
+        ref: scrollbarRef,
+        class: normalizeClass(unref(ns).b())
+      }, [
+        createElementVNode("div", {
+          ref_key: "wrapRef",
+          ref: wrapRef,
+          class: normalizeClass(unref(wrapKls)),
+          style: normalizeStyle(unref(style)),
+          onScroll: handleScroll
+        }, [
+          (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
+            ref_key: "resizeRef",
+            ref: resizeRef,
+            class: normalizeClass(unref(resizeKls)),
+            style: normalizeStyle(_ctx.viewStyle)
+          }, {
+            default: withCtx(() => [
+              renderSlot(_ctx.$slots, "default")
+            ]),
+            _: 3
+          }, 8, ["class", "style"]))
+        ], 38),
+        !_ctx.native ? (openBlock(), createBlock(Bar, {
+          key: 0,
+          ref_key: "barRef",
+          ref: barRef,
+          height: sizeHeight.value,
+          width: sizeWidth.value,
+          always: _ctx.always,
+          "ratio-x": ratioX.value,
+          "ratio-y": ratioY.value
+        }, null, 8, ["height", "width", "always", "ratio-x", "ratio-y"])) : createCommentVNode("v-if", true)
+      ], 2);
+    };
+  }
+});
+var Scrollbar = /* @__PURE__ */ _export_sfc$1(_sfc_main$q, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/scrollbar.vue"]]);
+const ElScrollbar = withInstall(Scrollbar);
 const POPPER_INJECTION_KEY = Symbol("popper");
 const POPPER_CONTENT_INJECTION_KEY = Symbol("popperContent");
 const roleTypes = [
@@ -4046,22 +4515,22 @@ const popperProps = buildProps({
     default: "tooltip"
   }
 });
-const __default__$c = /* @__PURE__ */ defineComponent({
+const __default__$b = /* @__PURE__ */ defineComponent({
   name: "ElPopper",
   inheritAttrs: false
 });
-const _sfc_main$l = /* @__PURE__ */ defineComponent({
-  ...__default__$c,
+const _sfc_main$p = /* @__PURE__ */ defineComponent({
+  ...__default__$b,
   props: popperProps,
   setup(__props, { expose }) {
     const props = __props;
-    const triggerRef = ref();
+    const triggerRef2 = ref();
     const popperInstanceRef = ref();
     const contentRef = ref();
     const referenceRef = ref();
     const role = computed(() => props.role);
     const popperProvides = {
-      triggerRef,
+      triggerRef: triggerRef2,
       popperInstanceRef,
       contentRef,
       referenceRef,
@@ -4074,19 +4543,19 @@ const _sfc_main$l = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Popper = /* @__PURE__ */ _export_sfc$1(_sfc_main$l, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/popper.vue"]]);
+var Popper = /* @__PURE__ */ _export_sfc$1(_sfc_main$p, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/popper.vue"]]);
 const popperArrowProps = buildProps({
   arrowOffset: {
     type: Number,
     default: 5
   }
 });
-const __default__$b = /* @__PURE__ */ defineComponent({
+const __default__$a = /* @__PURE__ */ defineComponent({
   name: "ElPopperArrow",
   inheritAttrs: false
 });
-const _sfc_main$k = /* @__PURE__ */ defineComponent({
-  ...__default__$b,
+const _sfc_main$o = /* @__PURE__ */ defineComponent({
+  ...__default__$a,
   props: popperArrowProps,
   setup(__props, { expose }) {
     const props = __props;
@@ -4109,7 +4578,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperArrow = /* @__PURE__ */ _export_sfc$1(_sfc_main$k, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/arrow.vue"]]);
+var ElPopperArrow = /* @__PURE__ */ _export_sfc$1(_sfc_main$o, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/arrow.vue"]]);
 const NAME = "ElOnlyChild";
 const OnlyChild = /* @__PURE__ */ defineComponent({
   name: NAME,
@@ -4195,17 +4664,17 @@ const popperTriggerProps = buildProps({
   id: String,
   open: Boolean
 });
-const __default__$a = /* @__PURE__ */ defineComponent({
+const __default__$9 = /* @__PURE__ */ defineComponent({
   name: "ElPopperTrigger",
   inheritAttrs: false
 });
-const _sfc_main$j = /* @__PURE__ */ defineComponent({
-  ...__default__$a,
+const _sfc_main$n = /* @__PURE__ */ defineComponent({
+  ...__default__$9,
   props: popperTriggerProps,
   setup(__props, { expose }) {
     const props = __props;
-    const { role, triggerRef } = inject(POPPER_INJECTION_KEY, void 0);
-    useForwardRef(triggerRef);
+    const { role, triggerRef: triggerRef2 } = inject(POPPER_INJECTION_KEY, void 0);
+    useForwardRef(triggerRef2);
     const ariaControls = computed(() => {
       return ariaHaspopup.value ? props.id : void 0;
     });
@@ -4225,7 +4694,7 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
       return ariaHaspopup.value ? `${props.open}` : void 0;
     });
     expose({
-      triggerRef
+      triggerRef: triggerRef2
     });
     return (_ctx, _cache) => {
       return !_ctx.virtualTriggering ? (openBlock(), createBlock(unref(OnlyChild), mergeProps({ key: 0 }, _ctx.$attrs, {
@@ -4242,7 +4711,7 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$j, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/trigger.vue"]]);
+var ElPopperTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$n, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/trigger.vue"]]);
 const FOCUSOUT_PREVENTED = "focus-trap.focusout-prevented";
 const FOCUSOUT_PREVENTED_OPTS = {
   cancelable: true,
@@ -4318,7 +4787,7 @@ const createFocusOutPreventedEvent = (detail) => {
     detail
   });
 };
-const _sfc_main$i = /* @__PURE__ */ defineComponent({
+const _sfc_main$m = /* @__PURE__ */ defineComponent({
   name: "ElFocusTrap",
   inheritAttrs: false,
   props: {
@@ -4460,10 +4929,10 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
     };
   }
 });
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   return renderSlot(_ctx.$slots, "default", { handleKeydown: _ctx.onKeydown });
 }
-var ElFocusTrap = /* @__PURE__ */ _export_sfc$1(_sfc_main$i, [["render", _sfc_render], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/focus-trap/src/focus-trap.vue"]]);
+var ElFocusTrap = /* @__PURE__ */ _export_sfc$1(_sfc_main$m, [["render", _sfc_render$4], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/focus-trap/src/focus-trap.vue"]]);
 const POSITIONING_STRATEGIES = ["fixed", "absolute"];
 const popperCoreConfigProps = buildProps({
   boundariesPadding: {
@@ -4612,7 +5081,7 @@ function deriveExtraModifiers(options, modifiers) {
 }
 const DEFAULT_ARROW_OFFSET = 0;
 const usePopperContent = (props) => {
-  const { popperInstanceRef, contentRef, triggerRef, role } = inject(POPPER_INJECTION_KEY, void 0);
+  const { popperInstanceRef, contentRef, triggerRef: triggerRef2, role } = inject(POPPER_INJECTION_KEY, void 0);
   const arrowRef = ref();
   const arrowOffset = ref();
   const eventListenerModifier = computed(() => {
@@ -4645,7 +5114,7 @@ const usePopperContent = (props) => {
       ])
     };
   });
-  const computedReference = computed(() => unwrapMeasurableEl(props.referenceEl) || unref(triggerRef));
+  const computedReference = computed(() => unwrapMeasurableEl(props.referenceEl) || unref(triggerRef2));
   const { attributes, state, styles, update, forceUpdate, instanceRef } = usePopper(computedReference, contentRef, options);
   watch(instanceRef, (instance) => popperInstanceRef.value = instance);
   return {
@@ -4740,11 +5209,11 @@ const usePopperContentFocusTrap = (props, emit) => {
     onReleaseRequested
   };
 };
-const __default__$9 = /* @__PURE__ */ defineComponent({
+const __default__$8 = /* @__PURE__ */ defineComponent({
   name: "ElPopperContent"
 });
-const _sfc_main$h = /* @__PURE__ */ defineComponent({
-  ...__default__$9,
+const _sfc_main$l = /* @__PURE__ */ defineComponent({
+  ...__default__$8,
   props: popperContentProps,
   emits: popperContentEmits,
   setup(__props, { expose, emit }) {
@@ -4826,7 +5295,7 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$h, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/content.vue"]]);
+var ElPopperContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$l, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/content.vue"]]);
 const ElPopper = withInstall(Popper);
 const TOOLTIP_INJECTION_KEY = Symbol("elTooltip");
 const useTooltipContentProps = buildProps({
@@ -4904,17 +5373,17 @@ const whenTrigger = (trigger, type, handler) => {
     isTriggerType(unref(trigger), type) && handler(e);
   };
 };
-const __default__$8 = /* @__PURE__ */ defineComponent({
+const __default__$7 = /* @__PURE__ */ defineComponent({
   name: "ElTooltipTrigger"
 });
-const _sfc_main$g = /* @__PURE__ */ defineComponent({
-  ...__default__$8,
+const _sfc_main$k = /* @__PURE__ */ defineComponent({
+  ...__default__$7,
   props: useTooltipTriggerProps,
   setup(__props, { expose }) {
     const props = __props;
     const ns = useNamespace("tooltip");
     const { controlled, id, open, onOpen, onClose, onToggle } = inject(TOOLTIP_INJECTION_KEY, void 0);
-    const triggerRef = ref(null);
+    const triggerRef2 = ref(null);
     const stopWhenControlledOrDisabled = () => {
       if (unref(controlled) || props.disabled) {
         return true;
@@ -4942,7 +5411,7 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
       }
     });
     expose({
-      triggerRef
+      triggerRef: triggerRef2
     });
     return (_ctx, _cache) => {
       return openBlock(), createBlock(unref(ElPopperTrigger), {
@@ -4967,13 +5436,13 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElTooltipTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/trigger.vue"]]);
-const __default__$7 = /* @__PURE__ */ defineComponent({
+var ElTooltipTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$k, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/trigger.vue"]]);
+const __default__$6 = /* @__PURE__ */ defineComponent({
   name: "ElTooltipContent",
   inheritAttrs: false
 });
-const _sfc_main$f = /* @__PURE__ */ defineComponent({
-  ...__default__$7,
+const _sfc_main$j = /* @__PURE__ */ defineComponent({
+  ...__default__$6,
   props: useTooltipContentProps,
   setup(__props, { expose }) {
     const props = __props;
@@ -5128,14 +5597,14 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElTooltipContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/content.vue"]]);
-const _hoisted_1$4 = ["innerHTML"];
-const _hoisted_2$3 = { key: 1 };
-const __default__$6 = /* @__PURE__ */ defineComponent({
+var ElTooltipContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$j, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/content.vue"]]);
+const _hoisted_1$5 = ["innerHTML"];
+const _hoisted_2$4 = { key: 1 };
+const __default__$5 = /* @__PURE__ */ defineComponent({
   name: "ElTooltip"
 });
-const _sfc_main$e = /* @__PURE__ */ defineComponent({
-  ...__default__$6,
+const _sfc_main$i = /* @__PURE__ */ defineComponent({
+  ...__default__$5,
   props: useTooltipProps,
   emits: tooltipEmits,
   setup(__props, { expose, emit }) {
@@ -5270,7 +5739,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
                 _ctx.rawContent ? (openBlock(), createElementBlock("span", {
                   key: 0,
                   innerHTML: _ctx.content
-                }, null, 8, _hoisted_1$4)) : (openBlock(), createElementBlock("span", _hoisted_2$3, toDisplayString(_ctx.content), 1))
+                }, null, 8, _hoisted_1$5)) : (openBlock(), createElementBlock("span", _hoisted_2$4, toDisplayString(_ctx.content), 1))
               ]),
               _ctx.showArrow ? (openBlock(), createBlock(unref(ElPopperArrow), {
                 key: 0,
@@ -5285,275 +5754,73 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Tooltip = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/tooltip.vue"]]);
+var Tooltip = /* @__PURE__ */ _export_sfc$1(_sfc_main$i, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/tooltip.vue"]]);
 const ElTooltip = withInstall(Tooltip);
-const buttonGroupContextKey = Symbol("buttonGroupContextKey");
-const useButton = (props, emit) => {
-  useDeprecated({
-    from: "type.text",
-    replacement: "link",
-    version: "3.0.0",
-    scope: "props",
-    ref: "https://element-plus.org/en-US/component/button.html#button-attributes"
-  }, computed(() => props.type === "text"));
-  const buttonGroupContext = inject(buttonGroupContextKey, void 0);
-  const globalConfig2 = useGlobalConfig("button");
-  const { form } = useFormItem();
-  const _size = useFormSize(computed(() => buttonGroupContext == null ? void 0 : buttonGroupContext.size));
-  const _disabled = useFormDisabled();
-  const _ref = ref();
-  const slots = useSlots();
-  const _type = computed(() => props.type || (buttonGroupContext == null ? void 0 : buttonGroupContext.type) || "");
-  const autoInsertSpace = computed(() => {
-    var _a, _b, _c;
-    return (_c = (_b = props.autoInsertSpace) != null ? _b : (_a = globalConfig2.value) == null ? void 0 : _a.autoInsertSpace) != null ? _c : false;
-  });
-  const _props = computed(() => {
-    if (props.tag === "button") {
-      return {
-        ariaDisabled: _disabled.value || props.loading,
-        disabled: _disabled.value || props.loading,
-        autofocus: props.autofocus,
-        type: props.nativeType
-      };
-    }
-    return {};
-  });
-  const shouldAddSpace = computed(() => {
-    var _a;
-    const defaultSlot = (_a = slots.default) == null ? void 0 : _a.call(slots);
-    if (autoInsertSpace.value && (defaultSlot == null ? void 0 : defaultSlot.length) === 1) {
-      const slot = defaultSlot[0];
-      if ((slot == null ? void 0 : slot.type) === Text) {
-        const text = slot.children;
-        return /^\p{Unified_Ideograph}{2}$/u.test(text.trim());
+const nodeList = /* @__PURE__ */ new Map();
+let startClick;
+if (isClient) {
+  document.addEventListener("mousedown", (e) => startClick = e);
+  document.addEventListener("mouseup", (e) => {
+    for (const handlers of nodeList.values()) {
+      for (const { documentHandler } of handlers) {
+        documentHandler(e, startClick);
       }
     }
-    return false;
   });
-  const handleClick = (evt) => {
-    if (props.nativeType === "reset") {
-      form == null ? void 0 : form.resetFields();
-    }
-    emit("click", evt);
-  };
-  return {
-    _disabled,
-    _size,
-    _type,
-    _ref,
-    _props,
-    shouldAddSpace,
-    handleClick
-  };
-};
-const buttonTypes = [
-  "default",
-  "primary",
-  "success",
-  "warning",
-  "info",
-  "danger",
-  "text",
-  ""
-];
-const buttonNativeTypes = ["button", "submit", "reset"];
-const buttonProps = buildProps({
-  size: useSizeProp,
-  disabled: Boolean,
-  type: {
-    type: String,
-    values: buttonTypes,
-    default: ""
-  },
-  icon: {
-    type: iconPropType
-  },
-  nativeType: {
-    type: String,
-    values: buttonNativeTypes,
-    default: "button"
-  },
-  loading: Boolean,
-  loadingIcon: {
-    type: iconPropType,
-    default: () => loading_default
-  },
-  plain: Boolean,
-  text: Boolean,
-  link: Boolean,
-  bg: Boolean,
-  autofocus: Boolean,
-  round: Boolean,
-  circle: Boolean,
-  color: String,
-  dark: Boolean,
-  autoInsertSpace: {
-    type: Boolean,
-    default: void 0
-  },
-  tag: {
-    type: definePropType([String, Object]),
-    default: "button"
+}
+function createDocumentHandler(el, binding) {
+  let excludes = [];
+  if (Array.isArray(binding.arg)) {
+    excludes = binding.arg;
+  } else if (isElement(binding.arg)) {
+    excludes.push(binding.arg);
   }
-});
-const buttonEmits = {
-  click: (evt) => evt instanceof MouseEvent
-};
-function darken(color, amount = 20) {
-  return color.mix("#141414", amount).toString();
-}
-function useButtonCustomStyle(props) {
-  const _disabled = useFormDisabled();
-  const ns = useNamespace("button");
-  return computed(() => {
-    let styles = {};
-    const buttonColor = props.color;
-    if (buttonColor) {
-      const color = new TinyColor(buttonColor);
-      const activeBgColor = props.dark ? color.tint(20).toString() : darken(color, 20);
-      if (props.plain) {
-        styles = ns.cssVarBlock({
-          "bg-color": props.dark ? darken(color, 90) : color.tint(90).toString(),
-          "text-color": buttonColor,
-          "border-color": props.dark ? darken(color, 50) : color.tint(50).toString(),
-          "hover-text-color": `var(${ns.cssVarName("color-white")})`,
-          "hover-bg-color": buttonColor,
-          "hover-border-color": buttonColor,
-          "active-bg-color": activeBgColor,
-          "active-text-color": `var(${ns.cssVarName("color-white")})`,
-          "active-border-color": activeBgColor
-        });
-        if (_disabled.value) {
-          styles[ns.cssVarBlockName("disabled-bg-color")] = props.dark ? darken(color, 90) : color.tint(90).toString();
-          styles[ns.cssVarBlockName("disabled-text-color")] = props.dark ? darken(color, 50) : color.tint(50).toString();
-          styles[ns.cssVarBlockName("disabled-border-color")] = props.dark ? darken(color, 80) : color.tint(80).toString();
-        }
-      } else {
-        const hoverBgColor = props.dark ? darken(color, 30) : color.tint(30).toString();
-        const textColor = color.isDark() ? `var(${ns.cssVarName("color-white")})` : `var(${ns.cssVarName("color-black")})`;
-        styles = ns.cssVarBlock({
-          "bg-color": buttonColor,
-          "text-color": textColor,
-          "border-color": buttonColor,
-          "hover-bg-color": hoverBgColor,
-          "hover-text-color": textColor,
-          "hover-border-color": hoverBgColor,
-          "active-bg-color": activeBgColor,
-          "active-border-color": activeBgColor
-        });
-        if (_disabled.value) {
-          const disabledButtonColor = props.dark ? darken(color, 50) : color.tint(50).toString();
-          styles[ns.cssVarBlockName("disabled-bg-color")] = disabledButtonColor;
-          styles[ns.cssVarBlockName("disabled-text-color")] = props.dark ? "rgba(255, 255, 255, 0.5)" : `var(${ns.cssVarName("color-white")})`;
-          styles[ns.cssVarBlockName("disabled-border-color")] = disabledButtonColor;
-        }
-      }
+  return function(mouseup, mousedown) {
+    const popperRef = binding.instance.popperRef;
+    const mouseUpTarget = mouseup.target;
+    const mouseDownTarget = mousedown == null ? void 0 : mousedown.target;
+    const isBound = !binding || !binding.instance;
+    const isTargetExists = !mouseUpTarget || !mouseDownTarget;
+    const isContainedByEl = el.contains(mouseUpTarget) || el.contains(mouseDownTarget);
+    const isSelf = el === mouseUpTarget;
+    const isTargetExcluded = excludes.length && excludes.some((item) => item == null ? void 0 : item.contains(mouseUpTarget)) || excludes.length && excludes.includes(mouseDownTarget);
+    const isContainedByPopper = popperRef && (popperRef.contains(mouseUpTarget) || popperRef.contains(mouseDownTarget));
+    if (isBound || isTargetExists || isContainedByEl || isSelf || isTargetExcluded || isContainedByPopper) {
+      return;
     }
-    return styles;
-  });
+    binding.value(mouseup, mousedown);
+  };
 }
-const __default__$5 = /* @__PURE__ */ defineComponent({
-  name: "ElButton"
-});
-const _sfc_main$d = /* @__PURE__ */ defineComponent({
-  ...__default__$5,
-  props: buttonProps,
-  emits: buttonEmits,
-  setup(__props, { expose, emit }) {
-    const props = __props;
-    const buttonStyle = useButtonCustomStyle(props);
-    const ns = useNamespace("button");
-    const { _ref, _size, _type, _disabled, _props, shouldAddSpace, handleClick } = useButton(props, emit);
-    expose({
-      ref: _ref,
-      size: _size,
-      type: _type,
-      disabled: _disabled,
-      shouldAddSpace
+const ClickOutside = {
+  beforeMount(el, binding) {
+    if (!nodeList.has(el)) {
+      nodeList.set(el, []);
+    }
+    nodeList.get(el).push({
+      documentHandler: createDocumentHandler(el, binding),
+      bindingFn: binding.value
     });
-    return (_ctx, _cache) => {
-      return openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), mergeProps({
-        ref_key: "_ref",
-        ref: _ref
-      }, unref(_props), {
-        class: [
-          unref(ns).b(),
-          unref(ns).m(unref(_type)),
-          unref(ns).m(unref(_size)),
-          unref(ns).is("disabled", unref(_disabled)),
-          unref(ns).is("loading", _ctx.loading),
-          unref(ns).is("plain", _ctx.plain),
-          unref(ns).is("round", _ctx.round),
-          unref(ns).is("circle", _ctx.circle),
-          unref(ns).is("text", _ctx.text),
-          unref(ns).is("link", _ctx.link),
-          unref(ns).is("has-bg", _ctx.bg)
-        ],
-        style: unref(buttonStyle),
-        onClick: unref(handleClick)
-      }), {
-        default: withCtx(() => [
-          _ctx.loading ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-            _ctx.$slots.loading ? renderSlot(_ctx.$slots, "loading", { key: 0 }) : (openBlock(), createBlock(unref(ElIcon), {
-              key: 1,
-              class: normalizeClass(unref(ns).is("loading"))
-            }, {
-              default: withCtx(() => [
-                (openBlock(), createBlock(resolveDynamicComponent(_ctx.loadingIcon)))
-              ]),
-              _: 1
-            }, 8, ["class"]))
-          ], 64)) : _ctx.icon || _ctx.$slots.icon ? (openBlock(), createBlock(unref(ElIcon), { key: 1 }, {
-            default: withCtx(() => [
-              _ctx.icon ? (openBlock(), createBlock(resolveDynamicComponent(_ctx.icon), { key: 0 })) : renderSlot(_ctx.$slots, "icon", { key: 1 })
-            ]),
-            _: 3
-          })) : createCommentVNode("v-if", true),
-          _ctx.$slots.default ? (openBlock(), createElementBlock("span", {
-            key: 2,
-            class: normalizeClass({ [unref(ns).em("text", "expand")]: unref(shouldAddSpace) })
-          }, [
-            renderSlot(_ctx.$slots, "default")
-          ], 2)) : createCommentVNode("v-if", true)
-        ]),
-        _: 3
-      }, 16, ["class", "style", "onClick"]);
+  },
+  updated(el, binding) {
+    if (!nodeList.has(el)) {
+      nodeList.set(el, []);
+    }
+    const handlers = nodeList.get(el);
+    const oldHandlerIndex = handlers.findIndex((item) => item.bindingFn === binding.oldValue);
+    const newHandler = {
+      documentHandler: createDocumentHandler(el, binding),
+      bindingFn: binding.value
     };
+    if (oldHandlerIndex >= 0) {
+      handlers.splice(oldHandlerIndex, 1, newHandler);
+    } else {
+      handlers.push(newHandler);
+    }
+  },
+  unmounted(el) {
+    nodeList.delete(el);
   }
-});
-var Button = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button.vue"]]);
-const buttonGroupProps = {
-  size: buttonProps.size,
-  type: buttonProps.type
 };
-const __default__$4 = /* @__PURE__ */ defineComponent({
-  name: "ElButtonGroup"
-});
-const _sfc_main$c = /* @__PURE__ */ defineComponent({
-  ...__default__$4,
-  props: buttonGroupProps,
-  setup(__props) {
-    const props = __props;
-    provide(buttonGroupContextKey, reactive({
-      size: toRef(props, "size"),
-      type: toRef(props, "type")
-    }));
-    const ns = useNamespace("button");
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", {
-        class: normalizeClass(`${unref(ns).b("group")}`)
-      }, [
-        renderSlot(_ctx.$slots, "default")
-      ], 2);
-    };
-  }
-});
-var ButtonGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button-group.vue"]]);
-const ElButton = withInstall(Button, {
-  ButtonGroup
-});
-withNoopInstall(ButtonGroup);
 const REPEAT_INTERVAL = 100;
 const REPEAT_DELAY = 600;
 const vRepeatClick = {
@@ -5589,6 +5856,121 @@ const vRepeatClick = {
     });
   }
 };
+const tagProps = buildProps({
+  closable: Boolean,
+  type: {
+    type: String,
+    values: ["success", "info", "warning", "danger", ""],
+    default: ""
+  },
+  hit: Boolean,
+  disableTransitions: Boolean,
+  color: {
+    type: String,
+    default: ""
+  },
+  size: {
+    type: String,
+    values: componentSizes,
+    default: ""
+  },
+  effect: {
+    type: String,
+    values: ["dark", "light", "plain"],
+    default: "light"
+  },
+  round: Boolean
+});
+const tagEmits = {
+  close: (evt) => evt instanceof MouseEvent,
+  click: (evt) => evt instanceof MouseEvent
+};
+const __default__$4 = /* @__PURE__ */ defineComponent({
+  name: "ElTag"
+});
+const _sfc_main$h = /* @__PURE__ */ defineComponent({
+  ...__default__$4,
+  props: tagProps,
+  emits: tagEmits,
+  setup(__props, { emit }) {
+    const props = __props;
+    const tagSize = useFormSize();
+    const ns = useNamespace("tag");
+    const classes = computed(() => {
+      const { type, hit, effect, closable, round } = props;
+      return [
+        ns.b(),
+        ns.is("closable", closable),
+        ns.m(type),
+        ns.m(tagSize.value),
+        ns.m(effect),
+        ns.is("hit", hit),
+        ns.is("round", round)
+      ];
+    });
+    const handleClose = (event) => {
+      emit("close", event);
+    };
+    const handleClick = (event) => {
+      emit("click", event);
+    };
+    return (_ctx, _cache) => {
+      return _ctx.disableTransitions ? (openBlock(), createElementBlock("span", {
+        key: 0,
+        class: normalizeClass(unref(classes)),
+        style: normalizeStyle({ backgroundColor: _ctx.color }),
+        onClick: handleClick
+      }, [
+        createElementVNode("span", {
+          class: normalizeClass(unref(ns).e("content"))
+        }, [
+          renderSlot(_ctx.$slots, "default")
+        ], 2),
+        _ctx.closable ? (openBlock(), createBlock(unref(ElIcon), {
+          key: 0,
+          class: normalizeClass(unref(ns).e("close")),
+          onClick: withModifiers(handleClose, ["stop"])
+        }, {
+          default: withCtx(() => [
+            createVNode(unref(close_default))
+          ]),
+          _: 1
+        }, 8, ["class", "onClick"])) : createCommentVNode("v-if", true)
+      ], 6)) : (openBlock(), createBlock(Transition, {
+        key: 1,
+        name: `${unref(ns).namespace.value}-zoom-in-center`,
+        appear: ""
+      }, {
+        default: withCtx(() => [
+          createElementVNode("span", {
+            class: normalizeClass(unref(classes)),
+            style: normalizeStyle({ backgroundColor: _ctx.color }),
+            onClick: handleClick
+          }, [
+            createElementVNode("span", {
+              class: normalizeClass(unref(ns).e("content"))
+            }, [
+              renderSlot(_ctx.$slots, "default")
+            ], 2),
+            _ctx.closable ? (openBlock(), createBlock(unref(ElIcon), {
+              key: 0,
+              class: normalizeClass(unref(ns).e("close")),
+              onClick: withModifiers(handleClose, ["stop"])
+            }, {
+              default: withCtx(() => [
+                createVNode(unref(close_default))
+              ]),
+              _: 1
+            }, 8, ["class", "onClick"])) : createCommentVNode("v-if", true)
+          ], 6)
+        ]),
+        _: 3
+      }, 8, ["name"]));
+    };
+  }
+});
+var Tag = /* @__PURE__ */ _export_sfc$1(_sfc_main$h, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tag/src/tag.vue"]]);
+const ElTag = withInstall(Tag);
 const inputNumberProps = buildProps({
   id: {
     type: String,
@@ -5644,12 +6026,12 @@ const inputNumberEmits = {
   [INPUT_EVENT]: (val) => isNumber(val) || isNil(val),
   [UPDATE_MODEL_EVENT]: (val) => isNumber(val) || isNil(val)
 };
-const _hoisted_1$3 = ["aria-label", "onKeydown"];
-const _hoisted_2$2 = ["aria-label", "onKeydown"];
+const _hoisted_1$4 = ["aria-label", "onKeydown"];
+const _hoisted_2$3 = ["aria-label", "onKeydown"];
 const __default__$3 = /* @__PURE__ */ defineComponent({
   name: "ElInputNumber"
 });
-const _sfc_main$b = /* @__PURE__ */ defineComponent({
+const _sfc_main$g = /* @__PURE__ */ defineComponent({
   ...__default__$3,
   props: inputNumberProps,
   emits: inputNumberEmits,
@@ -5863,7 +6245,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
             ]),
             _: 1
           })
-        ], 42, _hoisted_1$3)), [
+        ], 42, _hoisted_1$4)), [
           [unref(vRepeatClick), decrease]
         ]) : createCommentVNode("v-if", true),
         _ctx.controls ? withDirectives((openBlock(), createElementBlock("span", {
@@ -5879,7 +6261,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
             ]),
             _: 1
           })
-        ], 42, _hoisted_2$2)), [
+        ], 42, _hoisted_2$3)), [
           [unref(vRepeatClick), increase]
         ]) : createCommentVNode("v-if", true),
         createVNode(unref(ElInput), {
@@ -5913,8 +6295,1689 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var InputNumber = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input-number/src/input-number.vue"]]);
+var InputNumber = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input-number/src/input-number.vue"]]);
 const ElInputNumber = withInstall(InputNumber);
+const selectGroupKey = Symbol("ElSelectGroup");
+const selectKey = Symbol("ElSelect");
+function useOption(props, states) {
+  const select = inject(selectKey);
+  const selectGroup = inject(selectGroupKey, { disabled: false });
+  const isObject2 = computed(() => {
+    return Object.prototype.toString.call(props.value).toLowerCase() === "[object object]";
+  });
+  const itemSelected = computed(() => {
+    if (!select.props.multiple) {
+      return isEqual2(props.value, select.props.modelValue);
+    } else {
+      return contains(select.props.modelValue, props.value);
+    }
+  });
+  const limitReached = computed(() => {
+    if (select.props.multiple) {
+      const modelValue = select.props.modelValue || [];
+      return !itemSelected.value && modelValue.length >= select.props.multipleLimit && select.props.multipleLimit > 0;
+    } else {
+      return false;
+    }
+  });
+  const currentLabel = computed(() => {
+    return props.label || (isObject2.value ? "" : props.value);
+  });
+  const currentValue = computed(() => {
+    return props.value || props.label || "";
+  });
+  const isDisabled = computed(() => {
+    return props.disabled || states.groupDisabled || limitReached.value;
+  });
+  const instance = getCurrentInstance();
+  const contains = (arr = [], target) => {
+    if (!isObject2.value) {
+      return arr && arr.includes(target);
+    } else {
+      const valueKey = select.props.valueKey;
+      return arr && arr.some((item) => {
+        return toRaw(get(item, valueKey)) === get(target, valueKey);
+      });
+    }
+  };
+  const isEqual2 = (a, b) => {
+    if (!isObject2.value) {
+      return a === b;
+    } else {
+      const { valueKey } = select.props;
+      return get(a, valueKey) === get(b, valueKey);
+    }
+  };
+  const hoverItem = () => {
+    if (!props.disabled && !selectGroup.disabled) {
+      select.hoverIndex = select.optionsArray.indexOf(instance.proxy);
+    }
+  };
+  watch(() => currentLabel.value, () => {
+    if (!props.created && !select.props.remote)
+      select.setSelected();
+  });
+  watch(() => props.value, (val, oldVal) => {
+    const { remote, valueKey } = select.props;
+    if (!Object.is(val, oldVal)) {
+      select.onOptionDestroy(oldVal, instance.proxy);
+      select.onOptionCreate(instance.proxy);
+    }
+    if (!props.created && !remote) {
+      if (valueKey && typeof val === "object" && typeof oldVal === "object" && val[valueKey] === oldVal[valueKey]) {
+        return;
+      }
+      select.setSelected();
+    }
+  });
+  watch(() => selectGroup.disabled, () => {
+    states.groupDisabled = selectGroup.disabled;
+  }, { immediate: true });
+  const { queryChange } = toRaw(select);
+  watch(queryChange, (changes) => {
+    const { query } = unref(changes);
+    const regexp = new RegExp(escapeStringRegexp(query), "i");
+    states.visible = regexp.test(currentLabel.value) || props.created;
+    if (!states.visible) {
+      select.filteredOptionsCount--;
+    }
+  }, { immediate: true });
+  return {
+    select,
+    currentLabel,
+    currentValue,
+    itemSelected,
+    isDisabled,
+    hoverItem
+  };
+}
+const _sfc_main$f = /* @__PURE__ */ defineComponent({
+  name: "ElOption",
+  componentName: "ElOption",
+  props: {
+    value: {
+      required: true,
+      type: [String, Number, Boolean, Object]
+    },
+    label: [String, Number],
+    created: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup(props) {
+    const ns = useNamespace("select");
+    const states = reactive({
+      index: -1,
+      groupDisabled: false,
+      visible: true,
+      hitState: false,
+      hover: false
+    });
+    const { currentLabel, itemSelected, isDisabled, select, hoverItem } = useOption(props, states);
+    const { visible, hover } = toRefs(states);
+    const vm = getCurrentInstance().proxy;
+    select.onOptionCreate(vm);
+    function selectOptionClick() {
+      if (props.disabled !== true && states.groupDisabled !== true) {
+        select.handleOptionSelect(vm, true);
+      }
+    }
+    return {
+      ns,
+      currentLabel,
+      itemSelected,
+      isDisabled,
+      select,
+      hoverItem,
+      visible,
+      hover,
+      selectOptionClick,
+      states
+    };
+  }
+});
+function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
+  return withDirectives((openBlock(), createElementBlock("li", {
+    class: normalizeClass([
+      _ctx.ns.be("dropdown", "item"),
+      _ctx.ns.is("disabled", _ctx.isDisabled),
+      {
+        selected: _ctx.itemSelected,
+        hover: _ctx.hover
+      }
+    ]),
+    onMouseenter: _cache[0] || (_cache[0] = (...args) => _ctx.hoverItem && _ctx.hoverItem(...args)),
+    onClick: _cache[1] || (_cache[1] = withModifiers((...args) => _ctx.selectOptionClick && _ctx.selectOptionClick(...args), ["stop"]))
+  }, [
+    renderSlot(_ctx.$slots, "default", {}, () => [
+      createElementVNode("span", null, toDisplayString(_ctx.currentLabel), 1)
+    ])
+  ], 34)), [
+    [vShow, _ctx.visible]
+  ]);
+}
+var Option = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$3], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option.vue"]]);
+const _sfc_main$e = /* @__PURE__ */ defineComponent({
+  name: "ElSelectDropdown",
+  componentName: "ElSelectDropdown",
+  setup() {
+    const select = inject(selectKey);
+    const ns = useNamespace("select");
+    const popperClass = computed(() => select.props.popperClass);
+    const isMultiple = computed(() => select.props.multiple);
+    const isFitInputWidth = computed(() => select.props.fitInputWidth);
+    const minWidth = ref("");
+    return {
+      ns,
+      minWidth,
+      popperClass,
+      isMultiple,
+      isFitInputWidth
+    };
+  }
+});
+function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", {
+    class: normalizeClass([_ctx.ns.b("dropdown"), _ctx.ns.is("multiple", _ctx.isMultiple), _ctx.popperClass]),
+    style: normalizeStyle({ [_ctx.isFitInputWidth ? "width" : "minWidth"]: _ctx.minWidth })
+  }, [
+    renderSlot(_ctx.$slots, "default")
+  ], 6);
+}
+var ElSelectMenu = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$2], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select-dropdown.vue"]]);
+function useSelectStates(props) {
+  const { t } = useLocale();
+  return reactive({
+    options: /* @__PURE__ */ new Map(),
+    cachedOptions: /* @__PURE__ */ new Map(),
+    createdLabel: null,
+    createdSelected: false,
+    selected: props.multiple ? [] : {},
+    inputLength: 20,
+    inputWidth: 0,
+    optionsCount: 0,
+    filteredOptionsCount: 0,
+    visible: false,
+    softFocus: false,
+    selectedLabel: "",
+    hoverIndex: -1,
+    query: "",
+    previousQuery: null,
+    inputHovering: false,
+    cachedPlaceHolder: "",
+    currentPlaceholder: t("el.select.placeholder"),
+    menuVisibleOnFocus: false,
+    isOnComposition: false,
+    isSilentBlur: false,
+    prefixWidth: 11,
+    tagInMultiLine: false,
+    mouseEnter: false
+  });
+}
+const useSelect = (props, states, ctx) => {
+  const { t } = useLocale();
+  const ns = useNamespace("select");
+  useDeprecated({
+    from: "suffixTransition",
+    replacement: "override style scheme",
+    version: "2.3.0",
+    scope: "props",
+    ref: "https://element-plus.org/en-US/component/select.html#select-attributes"
+  }, computed(() => props.suffixTransition === false));
+  const reference = ref(null);
+  const input = ref(null);
+  const iOSInput = ref(null);
+  const tooltipRef = ref(null);
+  const tags = ref(null);
+  const selectWrapper = ref(null);
+  const scrollbar = ref(null);
+  const hoverOption = ref(-1);
+  const queryChange = shallowRef({ query: "" });
+  const groupQueryChange = shallowRef("");
+  const optionList = ref([]);
+  let originClientHeight = 0;
+  const { form, formItem } = useFormItem();
+  const readonly2 = computed(() => !props.filterable || props.multiple || !states.visible);
+  const selectDisabled = computed(() => props.disabled || (form == null ? void 0 : form.disabled));
+  const showClose = computed(() => {
+    const hasValue = props.multiple ? Array.isArray(props.modelValue) && props.modelValue.length > 0 : props.modelValue !== void 0 && props.modelValue !== null && props.modelValue !== "";
+    const criteria = props.clearable && !selectDisabled.value && states.inputHovering && hasValue;
+    return criteria;
+  });
+  const iconComponent = computed(() => props.remote && props.filterable && !props.remoteShowSuffix ? "" : props.suffixIcon);
+  const iconReverse = computed(() => ns.is("reverse", iconComponent.value && states.visible && props.suffixTransition));
+  const debounce$1 = computed(() => props.remote ? 300 : 0);
+  const emptyText = computed(() => {
+    if (props.loading) {
+      return props.loadingText || t("el.select.loading");
+    } else {
+      if (props.remote && states.query === "" && states.options.size === 0)
+        return false;
+      if (props.filterable && states.query && states.options.size > 0 && states.filteredOptionsCount === 0) {
+        return props.noMatchText || t("el.select.noMatch");
+      }
+      if (states.options.size === 0) {
+        return props.noDataText || t("el.select.noData");
+      }
+    }
+    return null;
+  });
+  const optionsArray = computed(() => {
+    const list = Array.from(states.options.values());
+    const newList = [];
+    optionList.value.forEach((item) => {
+      const index = list.findIndex((i) => i.currentLabel === item);
+      if (index > -1) {
+        newList.push(list[index]);
+      }
+    });
+    return newList.length ? newList : list;
+  });
+  const cachedOptionsArray = computed(() => Array.from(states.cachedOptions.values()));
+  const showNewOption = computed(() => {
+    const hasExistingOption = optionsArray.value.filter((option) => {
+      return !option.created;
+    }).some((option) => {
+      return option.currentLabel === states.query;
+    });
+    return props.filterable && props.allowCreate && states.query !== "" && !hasExistingOption;
+  });
+  const selectSize = useFormSize();
+  const collapseTagSize = computed(() => ["small"].includes(selectSize.value) ? "small" : "default");
+  const dropMenuVisible = computed({
+    get() {
+      return states.visible && emptyText.value !== false;
+    },
+    set(val) {
+      states.visible = val;
+    }
+  });
+  watch([() => selectDisabled.value, () => selectSize.value, () => form == null ? void 0 : form.size], () => {
+    nextTick(() => {
+      resetInputHeight();
+    });
+  });
+  watch(() => props.placeholder, (val) => {
+    states.cachedPlaceHolder = states.currentPlaceholder = val;
+  });
+  watch(() => props.modelValue, (val, oldVal) => {
+    if (props.multiple) {
+      resetInputHeight();
+      if (val && val.length > 0 || input.value && states.query !== "") {
+        states.currentPlaceholder = "";
+      } else {
+        states.currentPlaceholder = states.cachedPlaceHolder;
+      }
+      if (props.filterable && !props.reserveKeyword) {
+        states.query = "";
+        handleQueryChange(states.query);
+      }
+    }
+    setSelected();
+    if (props.filterable && !props.multiple) {
+      states.inputLength = 20;
+    }
+    if (!isEqual(val, oldVal) && props.validateEvent) {
+      formItem == null ? void 0 : formItem.validate("change").catch((err) => debugWarn(err));
+    }
+  }, {
+    flush: "post",
+    deep: true
+  });
+  watch(() => states.visible, (val) => {
+    var _a, _b, _c, _d, _e;
+    if (!val) {
+      if (props.filterable) {
+        if (isFunction(props.filterMethod)) {
+          props.filterMethod("");
+        }
+        if (isFunction(props.remoteMethod)) {
+          props.remoteMethod("");
+        }
+      }
+      input.value && input.value.blur();
+      states.query = "";
+      states.previousQuery = null;
+      states.selectedLabel = "";
+      states.inputLength = 20;
+      states.menuVisibleOnFocus = false;
+      resetHoverIndex();
+      nextTick(() => {
+        if (input.value && input.value.value === "" && states.selected.length === 0) {
+          states.currentPlaceholder = states.cachedPlaceHolder;
+        }
+      });
+      if (!props.multiple) {
+        if (states.selected) {
+          if (props.filterable && props.allowCreate && states.createdSelected && states.createdLabel) {
+            states.selectedLabel = states.createdLabel;
+          } else {
+            states.selectedLabel = states.selected.currentLabel;
+          }
+          if (props.filterable)
+            states.query = states.selectedLabel;
+        }
+        if (props.filterable) {
+          states.currentPlaceholder = states.cachedPlaceHolder;
+        }
+      }
+    } else {
+      (_b = (_a = tooltipRef.value) == null ? void 0 : _a.updatePopper) == null ? void 0 : _b.call(_a);
+      if (props.filterable) {
+        states.filteredOptionsCount = states.optionsCount;
+        states.query = props.remote ? "" : states.selectedLabel;
+        (_d = (_c = iOSInput.value) == null ? void 0 : _c.focus) == null ? void 0 : _d.call(_c);
+        if (props.multiple) {
+          (_e = input.value) == null ? void 0 : _e.focus();
+        } else {
+          if (states.selectedLabel) {
+            states.currentPlaceholder = `${states.selectedLabel}`;
+            states.selectedLabel = "";
+          }
+        }
+        handleQueryChange(states.query);
+        if (!props.multiple && !props.remote) {
+          queryChange.value.query = "";
+          triggerRef(queryChange);
+          triggerRef(groupQueryChange);
+        }
+      }
+    }
+    ctx.emit("visible-change", val);
+  });
+  watch(() => states.options.entries(), () => {
+    var _a, _b, _c;
+    if (!isClient)
+      return;
+    (_b = (_a = tooltipRef.value) == null ? void 0 : _a.updatePopper) == null ? void 0 : _b.call(_a);
+    if (props.multiple) {
+      resetInputHeight();
+    }
+    const inputs2 = ((_c = selectWrapper.value) == null ? void 0 : _c.querySelectorAll("input")) || [];
+    if (!Array.from(inputs2).includes(document.activeElement)) {
+      setSelected();
+    }
+    if (props.defaultFirstOption && (props.filterable || props.remote) && states.filteredOptionsCount) {
+      checkDefaultFirstOption();
+    }
+  }, {
+    flush: "post"
+  });
+  watch(() => states.hoverIndex, (val) => {
+    if (isNumber(val) && val > -1) {
+      hoverOption.value = optionsArray.value[val] || {};
+    } else {
+      hoverOption.value = {};
+    }
+    optionsArray.value.forEach((option) => {
+      option.hover = hoverOption.value === option;
+    });
+  });
+  const resetInputHeight = () => {
+    nextTick(() => {
+      var _a, _b;
+      if (!reference.value)
+        return;
+      const input2 = reference.value.$el.querySelector("input");
+      originClientHeight = originClientHeight || (input2.clientHeight > 0 ? input2.clientHeight + 2 : 0);
+      const _tags = tags.value;
+      const gotSize = getComponentSize(selectSize.value || (form == null ? void 0 : form.size));
+      const sizeInMap = selectSize.value || gotSize === originClientHeight || originClientHeight <= 0 ? gotSize : originClientHeight;
+      const isElHidden = input2.offsetParent === null;
+      !isElHidden && (input2.style.height = `${(states.selected.length === 0 ? sizeInMap : Math.max(_tags ? _tags.clientHeight + (_tags.clientHeight > sizeInMap ? 6 : 0) : 0, sizeInMap)) - 2}px`);
+      states.tagInMultiLine = Number.parseFloat(input2.style.height) >= sizeInMap;
+      if (states.visible && emptyText.value !== false) {
+        (_b = (_a = tooltipRef.value) == null ? void 0 : _a.updatePopper) == null ? void 0 : _b.call(_a);
+      }
+    });
+  };
+  const handleQueryChange = async (val) => {
+    if (states.previousQuery === val || states.isOnComposition)
+      return;
+    if (states.previousQuery === null && (isFunction(props.filterMethod) || isFunction(props.remoteMethod))) {
+      states.previousQuery = val;
+      return;
+    }
+    states.previousQuery = val;
+    nextTick(() => {
+      var _a, _b;
+      if (states.visible)
+        (_b = (_a = tooltipRef.value) == null ? void 0 : _a.updatePopper) == null ? void 0 : _b.call(_a);
+    });
+    states.hoverIndex = -1;
+    if (props.multiple && props.filterable) {
+      nextTick(() => {
+        const length = input.value.value.length * 15 + 20;
+        states.inputLength = props.collapseTags ? Math.min(50, length) : length;
+        managePlaceholder();
+        resetInputHeight();
+      });
+    }
+    if (props.remote && isFunction(props.remoteMethod)) {
+      states.hoverIndex = -1;
+      props.remoteMethod(val);
+    } else if (isFunction(props.filterMethod)) {
+      props.filterMethod(val);
+      triggerRef(groupQueryChange);
+    } else {
+      states.filteredOptionsCount = states.optionsCount;
+      queryChange.value.query = val;
+      triggerRef(queryChange);
+      triggerRef(groupQueryChange);
+    }
+    if (props.defaultFirstOption && (props.filterable || props.remote) && states.filteredOptionsCount) {
+      await nextTick();
+      checkDefaultFirstOption();
+    }
+  };
+  const managePlaceholder = () => {
+    if (states.currentPlaceholder !== "") {
+      states.currentPlaceholder = input.value.value ? "" : states.cachedPlaceHolder;
+    }
+  };
+  const checkDefaultFirstOption = () => {
+    const optionsInDropdown = optionsArray.value.filter((n) => n.visible && !n.disabled && !n.states.groupDisabled);
+    const userCreatedOption = optionsInDropdown.find((n) => n.created);
+    const firstOriginOption = optionsInDropdown[0];
+    states.hoverIndex = getValueIndex(optionsArray.value, userCreatedOption || firstOriginOption);
+  };
+  const setSelected = () => {
+    var _a;
+    if (!props.multiple) {
+      const option = getOption(props.modelValue);
+      if ((_a = option.props) == null ? void 0 : _a.created) {
+        states.createdLabel = option.props.value;
+        states.createdSelected = true;
+      } else {
+        states.createdSelected = false;
+      }
+      states.selectedLabel = option.currentLabel;
+      states.selected = option;
+      if (props.filterable)
+        states.query = states.selectedLabel;
+      return;
+    } else {
+      states.selectedLabel = "";
+    }
+    const result = [];
+    if (Array.isArray(props.modelValue)) {
+      props.modelValue.forEach((value) => {
+        result.push(getOption(value));
+      });
+    }
+    states.selected = result;
+    nextTick(() => {
+      resetInputHeight();
+    });
+  };
+  const getOption = (value) => {
+    let option;
+    const isObjectValue = toRawType(value).toLowerCase() === "object";
+    const isNull = toRawType(value).toLowerCase() === "null";
+    const isUndefined2 = toRawType(value).toLowerCase() === "undefined";
+    for (let i = states.cachedOptions.size - 1; i >= 0; i--) {
+      const cachedOption = cachedOptionsArray.value[i];
+      const isEqualValue = isObjectValue ? get(cachedOption.value, props.valueKey) === get(value, props.valueKey) : cachedOption.value === value;
+      if (isEqualValue) {
+        option = {
+          value,
+          currentLabel: cachedOption.currentLabel,
+          isDisabled: cachedOption.isDisabled
+        };
+        break;
+      }
+    }
+    if (option)
+      return option;
+    const label = isObjectValue ? value.label : !isNull && !isUndefined2 ? value : "";
+    const newOption = {
+      value,
+      currentLabel: label
+    };
+    if (props.multiple) {
+      newOption.hitState = false;
+    }
+    return newOption;
+  };
+  const resetHoverIndex = () => {
+    setTimeout(() => {
+      const valueKey = props.valueKey;
+      if (!props.multiple) {
+        states.hoverIndex = optionsArray.value.findIndex((item) => {
+          return getValueKey(item) === getValueKey(states.selected);
+        });
+      } else {
+        if (states.selected.length > 0) {
+          states.hoverIndex = Math.min.apply(null, states.selected.map((selected) => {
+            return optionsArray.value.findIndex((item) => {
+              return get(item, valueKey) === get(selected, valueKey);
+            });
+          }));
+        } else {
+          states.hoverIndex = -1;
+        }
+      }
+    }, 300);
+  };
+  const handleResize = () => {
+    var _a, _b;
+    resetInputWidth();
+    (_b = (_a = tooltipRef.value) == null ? void 0 : _a.updatePopper) == null ? void 0 : _b.call(_a);
+    if (props.multiple)
+      resetInputHeight();
+  };
+  const resetInputWidth = () => {
+    var _a;
+    states.inputWidth = (_a = reference.value) == null ? void 0 : _a.$el.offsetWidth;
+  };
+  const onInputChange = () => {
+    if (props.filterable && states.query !== states.selectedLabel) {
+      states.query = states.selectedLabel;
+      handleQueryChange(states.query);
+    }
+  };
+  const debouncedOnInputChange = debounce(() => {
+    onInputChange();
+  }, debounce$1.value);
+  const debouncedQueryChange = debounce((e) => {
+    handleQueryChange(e.target.value);
+  }, debounce$1.value);
+  const emitChange = (val) => {
+    if (!isEqual(props.modelValue, val)) {
+      ctx.emit(CHANGE_EVENT, val);
+    }
+  };
+  const deletePrevTag = (e) => {
+    if (e.code === EVENT_CODE.delete)
+      return;
+    if (e.target.value.length <= 0 && !toggleLastOptionHitState()) {
+      const value = props.modelValue.slice();
+      value.pop();
+      ctx.emit(UPDATE_MODEL_EVENT, value);
+      emitChange(value);
+    }
+    if (e.target.value.length === 1 && props.modelValue.length === 0) {
+      states.currentPlaceholder = states.cachedPlaceHolder;
+    }
+  };
+  const deleteTag = (event, tag) => {
+    const index = states.selected.indexOf(tag);
+    if (index > -1 && !selectDisabled.value) {
+      const value = props.modelValue.slice();
+      value.splice(index, 1);
+      ctx.emit(UPDATE_MODEL_EVENT, value);
+      emitChange(value);
+      ctx.emit("remove-tag", tag.value);
+    }
+    event.stopPropagation();
+  };
+  const deleteSelected = (event) => {
+    event.stopPropagation();
+    const value = props.multiple ? [] : "";
+    if (!isString(value)) {
+      for (const item of states.selected) {
+        if (item.isDisabled)
+          value.push(item.value);
+      }
+    }
+    ctx.emit(UPDATE_MODEL_EVENT, value);
+    emitChange(value);
+    states.hoverIndex = -1;
+    states.visible = false;
+    ctx.emit("clear");
+  };
+  const handleOptionSelect = (option, byClick) => {
+    var _a;
+    if (props.multiple) {
+      const value = (props.modelValue || []).slice();
+      const optionIndex = getValueIndex(value, option.value);
+      if (optionIndex > -1) {
+        value.splice(optionIndex, 1);
+      } else if (props.multipleLimit <= 0 || value.length < props.multipleLimit) {
+        value.push(option.value);
+      }
+      ctx.emit(UPDATE_MODEL_EVENT, value);
+      emitChange(value);
+      if (option.created) {
+        states.query = "";
+        handleQueryChange("");
+        states.inputLength = 20;
+      }
+      if (props.filterable)
+        (_a = input.value) == null ? void 0 : _a.focus();
+    } else {
+      ctx.emit(UPDATE_MODEL_EVENT, option.value);
+      emitChange(option.value);
+      states.visible = false;
+    }
+    states.isSilentBlur = byClick;
+    setSoftFocus();
+    if (states.visible)
+      return;
+    nextTick(() => {
+      scrollToOption(option);
+    });
+  };
+  const getValueIndex = (arr = [], value) => {
+    if (!isObject$1(value))
+      return arr.indexOf(value);
+    const valueKey = props.valueKey;
+    let index = -1;
+    arr.some((item, i) => {
+      if (toRaw(get(item, valueKey)) === get(value, valueKey)) {
+        index = i;
+        return true;
+      }
+      return false;
+    });
+    return index;
+  };
+  const setSoftFocus = () => {
+    states.softFocus = true;
+    const _input = input.value || reference.value;
+    if (_input) {
+      _input == null ? void 0 : _input.focus();
+    }
+  };
+  const scrollToOption = (option) => {
+    var _a, _b, _c, _d, _e;
+    const targetOption = Array.isArray(option) ? option[0] : option;
+    let target = null;
+    if (targetOption == null ? void 0 : targetOption.value) {
+      const options = optionsArray.value.filter((item) => item.value === targetOption.value);
+      if (options.length > 0) {
+        target = options[0].$el;
+      }
+    }
+    if (tooltipRef.value && target) {
+      const menu = (_d = (_c = (_b = (_a = tooltipRef.value) == null ? void 0 : _a.popperRef) == null ? void 0 : _b.contentRef) == null ? void 0 : _c.querySelector) == null ? void 0 : _d.call(_c, `.${ns.be("dropdown", "wrap")}`);
+      if (menu) {
+        scrollIntoView(menu, target);
+      }
+    }
+    (_e = scrollbar.value) == null ? void 0 : _e.handleScroll();
+  };
+  const onOptionCreate = (vm) => {
+    states.optionsCount++;
+    states.filteredOptionsCount++;
+    states.options.set(vm.value, vm);
+    states.cachedOptions.set(vm.value, vm);
+  };
+  const onOptionDestroy = (key, vm) => {
+    if (states.options.get(key) === vm) {
+      states.optionsCount--;
+      states.filteredOptionsCount--;
+      states.options.delete(key);
+    }
+  };
+  const resetInputState = (e) => {
+    if (e.code !== EVENT_CODE.backspace)
+      toggleLastOptionHitState(false);
+    states.inputLength = input.value.value.length * 15 + 20;
+    resetInputHeight();
+  };
+  const toggleLastOptionHitState = (hit) => {
+    if (!Array.isArray(states.selected))
+      return;
+    const option = states.selected[states.selected.length - 1];
+    if (!option)
+      return;
+    if (hit === true || hit === false) {
+      option.hitState = hit;
+      return hit;
+    }
+    option.hitState = !option.hitState;
+    return option.hitState;
+  };
+  const handleComposition = (event) => {
+    const text = event.target.value;
+    if (event.type === "compositionend") {
+      states.isOnComposition = false;
+      nextTick(() => handleQueryChange(text));
+    } else {
+      const lastCharacter = text[text.length - 1] || "";
+      states.isOnComposition = !isKorean(lastCharacter);
+    }
+  };
+  const handleMenuEnter = () => {
+    nextTick(() => scrollToOption(states.selected));
+  };
+  const handleFocus = (event) => {
+    if (!states.softFocus) {
+      if (props.automaticDropdown || props.filterable) {
+        if (props.filterable && !states.visible) {
+          states.menuVisibleOnFocus = true;
+        }
+        states.visible = true;
+      }
+      ctx.emit("focus", event);
+    } else {
+      states.softFocus = false;
+    }
+  };
+  const blur = () => {
+    var _a, _b, _c;
+    states.visible = false;
+    (_a = reference.value) == null ? void 0 : _a.blur();
+    (_c = (_b = iOSInput.value) == null ? void 0 : _b.blur) == null ? void 0 : _c.call(_b);
+  };
+  const handleBlur = (event) => {
+    nextTick(() => {
+      if (states.isSilentBlur) {
+        states.isSilentBlur = false;
+      } else {
+        ctx.emit("blur", event);
+      }
+    });
+    states.softFocus = false;
+  };
+  const handleClearClick = (event) => {
+    deleteSelected(event);
+  };
+  const handleClose = () => {
+    states.visible = false;
+  };
+  const handleKeydownEscape = (event) => {
+    if (states.visible) {
+      event.preventDefault();
+      event.stopPropagation();
+      states.visible = false;
+    }
+  };
+  const toggleMenu = (e) => {
+    var _a;
+    if (e && !states.mouseEnter) {
+      return;
+    }
+    if (!selectDisabled.value) {
+      if (states.menuVisibleOnFocus) {
+        states.menuVisibleOnFocus = false;
+      } else {
+        if (!tooltipRef.value || !tooltipRef.value.isFocusInsideContent()) {
+          states.visible = !states.visible;
+        }
+      }
+      if (states.visible) {
+        (_a = input.value || reference.value) == null ? void 0 : _a.focus();
+      }
+    }
+  };
+  const selectOption = () => {
+    if (!states.visible) {
+      toggleMenu();
+    } else {
+      if (optionsArray.value[states.hoverIndex]) {
+        handleOptionSelect(optionsArray.value[states.hoverIndex], void 0);
+      }
+    }
+  };
+  const getValueKey = (item) => {
+    return isObject$1(item.value) ? get(item.value, props.valueKey) : item.value;
+  };
+  const optionsAllDisabled = computed(() => optionsArray.value.filter((option) => option.visible).every((option) => option.disabled));
+  const showTagList = computed(() => states.selected.slice(0, props.maxCollapseTags));
+  const collapseTagList = computed(() => states.selected.slice(props.maxCollapseTags));
+  const navigateOptions = (direction) => {
+    if (!states.visible) {
+      states.visible = true;
+      return;
+    }
+    if (states.options.size === 0 || states.filteredOptionsCount === 0)
+      return;
+    if (states.isOnComposition)
+      return;
+    if (!optionsAllDisabled.value) {
+      if (direction === "next") {
+        states.hoverIndex++;
+        if (states.hoverIndex === states.options.size) {
+          states.hoverIndex = 0;
+        }
+      } else if (direction === "prev") {
+        states.hoverIndex--;
+        if (states.hoverIndex < 0) {
+          states.hoverIndex = states.options.size - 1;
+        }
+      }
+      const option = optionsArray.value[states.hoverIndex];
+      if (option.disabled === true || option.states.groupDisabled === true || !option.visible) {
+        navigateOptions(direction);
+      }
+      nextTick(() => scrollToOption(hoverOption.value));
+    }
+  };
+  const handleMouseEnter = () => {
+    states.mouseEnter = true;
+  };
+  const handleMouseLeave = () => {
+    states.mouseEnter = false;
+  };
+  return {
+    optionList,
+    optionsArray,
+    selectSize,
+    handleResize,
+    debouncedOnInputChange,
+    debouncedQueryChange,
+    deletePrevTag,
+    deleteTag,
+    deleteSelected,
+    handleOptionSelect,
+    scrollToOption,
+    readonly: readonly2,
+    resetInputHeight,
+    showClose,
+    iconComponent,
+    iconReverse,
+    showNewOption,
+    collapseTagSize,
+    setSelected,
+    managePlaceholder,
+    selectDisabled,
+    emptyText,
+    toggleLastOptionHitState,
+    resetInputState,
+    handleComposition,
+    onOptionCreate,
+    onOptionDestroy,
+    handleMenuEnter,
+    handleFocus,
+    blur,
+    handleBlur,
+    handleClearClick,
+    handleClose,
+    handleKeydownEscape,
+    toggleMenu,
+    selectOption,
+    getValueKey,
+    navigateOptions,
+    dropMenuVisible,
+    queryChange,
+    groupQueryChange,
+    showTagList,
+    collapseTagList,
+    reference,
+    input,
+    iOSInput,
+    tooltipRef,
+    tags,
+    selectWrapper,
+    scrollbar,
+    handleMouseEnter,
+    handleMouseLeave
+  };
+};
+var ElOptions = /* @__PURE__ */ defineComponent({
+  name: "ElOptions",
+  emits: ["update-options"],
+  setup(_2, { slots, emit }) {
+    let cachedOptions = [];
+    function isSameOptions(a, b) {
+      if (a.length !== b.length)
+        return false;
+      for (const [index] of a.entries()) {
+        if (a[index] != b[index]) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return () => {
+      var _a, _b;
+      const children = (_a = slots.default) == null ? void 0 : _a.call(slots);
+      const filteredOptions = [];
+      function filterOptions(children2) {
+        if (!Array.isArray(children2))
+          return;
+        children2.forEach((item) => {
+          var _a2, _b2, _c, _d;
+          const name = (_a2 = (item == null ? void 0 : item.type) || {}) == null ? void 0 : _a2.name;
+          if (name === "ElOptionGroup") {
+            filterOptions(!isString(item.children) && !Array.isArray(item.children) && isFunction((_b2 = item.children) == null ? void 0 : _b2.default) ? (_c = item.children) == null ? void 0 : _c.default() : item.children);
+          } else if (name === "ElOption") {
+            filteredOptions.push((_d = item.props) == null ? void 0 : _d.label);
+          } else if (Array.isArray(item.children)) {
+            filterOptions(item.children);
+          }
+        });
+      }
+      if (children.length) {
+        filterOptions((_b = children[0]) == null ? void 0 : _b.children);
+      }
+      if (!isSameOptions(filteredOptions, cachedOptions)) {
+        cachedOptions = filteredOptions;
+        emit("update-options", filteredOptions);
+      }
+      return children;
+    };
+  }
+});
+const COMPONENT_NAME$1 = "ElSelect";
+const _sfc_main$d = /* @__PURE__ */ defineComponent({
+  name: COMPONENT_NAME$1,
+  componentName: COMPONENT_NAME$1,
+  components: {
+    ElInput,
+    ElSelectMenu,
+    ElOption: Option,
+    ElOptions,
+    ElTag,
+    ElScrollbar,
+    ElTooltip,
+    ElIcon
+  },
+  directives: { ClickOutside },
+  props: {
+    name: String,
+    id: String,
+    modelValue: {
+      type: [Array, String, Number, Boolean, Object],
+      default: void 0
+    },
+    autocomplete: {
+      type: String,
+      default: "off"
+    },
+    automaticDropdown: Boolean,
+    size: {
+      type: String,
+      validator: isValidComponentSize
+    },
+    effect: {
+      type: String,
+      default: "light"
+    },
+    disabled: Boolean,
+    clearable: Boolean,
+    filterable: Boolean,
+    allowCreate: Boolean,
+    loading: Boolean,
+    popperClass: {
+      type: String,
+      default: ""
+    },
+    popperOptions: {
+      type: Object,
+      default: () => ({})
+    },
+    remote: Boolean,
+    loadingText: String,
+    noMatchText: String,
+    noDataText: String,
+    remoteMethod: Function,
+    filterMethod: Function,
+    multiple: Boolean,
+    multipleLimit: {
+      type: Number,
+      default: 0
+    },
+    placeholder: {
+      type: String
+    },
+    defaultFirstOption: Boolean,
+    reserveKeyword: {
+      type: Boolean,
+      default: true
+    },
+    valueKey: {
+      type: String,
+      default: "value"
+    },
+    collapseTags: Boolean,
+    collapseTagsTooltip: {
+      type: Boolean,
+      default: false
+    },
+    maxCollapseTags: {
+      type: Number,
+      default: 1
+    },
+    teleported: useTooltipContentProps.teleported,
+    persistent: {
+      type: Boolean,
+      default: true
+    },
+    clearIcon: {
+      type: iconPropType,
+      default: circle_close_default
+    },
+    fitInputWidth: {
+      type: Boolean,
+      default: false
+    },
+    suffixIcon: {
+      type: iconPropType,
+      default: arrow_down_default
+    },
+    tagType: { ...tagProps.type, default: "info" },
+    validateEvent: {
+      type: Boolean,
+      default: true
+    },
+    remoteShowSuffix: {
+      type: Boolean,
+      default: false
+    },
+    suffixTransition: {
+      type: Boolean,
+      default: true
+    },
+    placement: {
+      type: String,
+      values: placements,
+      default: "bottom-start"
+    }
+  },
+  emits: [
+    UPDATE_MODEL_EVENT,
+    CHANGE_EVENT,
+    "remove-tag",
+    "clear",
+    "visible-change",
+    "focus",
+    "blur"
+  ],
+  setup(props, ctx) {
+    const nsSelect = useNamespace("select");
+    useNamespace("input");
+    useLocale();
+    const states = useSelectStates(props);
+    const {
+      optionList,
+      optionsArray,
+      selectSize,
+      readonly: readonly2,
+      handleResize,
+      collapseTagSize,
+      debouncedOnInputChange,
+      debouncedQueryChange,
+      deletePrevTag,
+      deleteTag,
+      deleteSelected,
+      handleOptionSelect,
+      scrollToOption,
+      setSelected,
+      resetInputHeight,
+      managePlaceholder,
+      showClose,
+      selectDisabled,
+      iconComponent,
+      iconReverse,
+      showNewOption,
+      emptyText,
+      toggleLastOptionHitState,
+      resetInputState,
+      handleComposition,
+      onOptionCreate,
+      onOptionDestroy,
+      handleMenuEnter,
+      handleFocus,
+      blur,
+      handleBlur,
+      handleClearClick,
+      handleClose,
+      handleKeydownEscape,
+      toggleMenu,
+      selectOption,
+      getValueKey,
+      navigateOptions,
+      dropMenuVisible,
+      reference,
+      input,
+      iOSInput,
+      tooltipRef,
+      tags,
+      selectWrapper,
+      scrollbar,
+      queryChange,
+      groupQueryChange,
+      handleMouseEnter,
+      handleMouseLeave,
+      showTagList,
+      collapseTagList
+    } = useSelect(props, states, ctx);
+    const { focus } = useFocus(reference);
+    const {
+      inputWidth,
+      selected,
+      inputLength,
+      filteredOptionsCount,
+      visible,
+      softFocus,
+      selectedLabel,
+      hoverIndex,
+      query,
+      inputHovering,
+      currentPlaceholder,
+      menuVisibleOnFocus,
+      isOnComposition,
+      isSilentBlur,
+      options,
+      cachedOptions,
+      optionsCount,
+      prefixWidth,
+      tagInMultiLine
+    } = toRefs(states);
+    const wrapperKls = computed(() => {
+      const classList = [nsSelect.b()];
+      const _selectSize = unref(selectSize);
+      if (_selectSize) {
+        classList.push(nsSelect.m(_selectSize));
+      }
+      if (props.disabled) {
+        classList.push(nsSelect.m("disabled"));
+      }
+      return classList;
+    });
+    const selectTagsStyle = computed(() => ({
+      maxWidth: `${unref(inputWidth) - 32}px`,
+      width: "100%"
+    }));
+    const tagTextStyle = computed(() => {
+      const maxWidth = unref(inputWidth) > 123 ? unref(inputWidth) - 123 : unref(inputWidth) - 75;
+      return { maxWidth: `${maxWidth}px` };
+    });
+    provide(selectKey, reactive({
+      props,
+      options,
+      optionsArray,
+      cachedOptions,
+      optionsCount,
+      filteredOptionsCount,
+      hoverIndex,
+      handleOptionSelect,
+      onOptionCreate,
+      onOptionDestroy,
+      selectWrapper,
+      selected,
+      setSelected,
+      queryChange,
+      groupQueryChange
+    }));
+    if (props.multiple && !Array.isArray(props.modelValue)) {
+      ctx.emit(UPDATE_MODEL_EVENT, []);
+    }
+    if (!props.multiple && Array.isArray(props.modelValue)) {
+      ctx.emit(UPDATE_MODEL_EVENT, "");
+    }
+    const popperPaneRef = computed(() => {
+      var _a, _b;
+      return (_b = (_a = tooltipRef.value) == null ? void 0 : _a.popperRef) == null ? void 0 : _b.contentRef;
+    });
+    const onOptionsRendered = (v) => {
+      optionList.value = v;
+    };
+    return {
+      isIOS,
+      onOptionsRendered,
+      tagInMultiLine,
+      prefixWidth,
+      selectSize,
+      readonly: readonly2,
+      handleResize,
+      collapseTagSize,
+      debouncedOnInputChange,
+      debouncedQueryChange,
+      deletePrevTag,
+      deleteTag,
+      deleteSelected,
+      handleOptionSelect,
+      scrollToOption,
+      inputWidth,
+      selected,
+      inputLength,
+      filteredOptionsCount,
+      visible,
+      softFocus,
+      selectedLabel,
+      hoverIndex,
+      query,
+      inputHovering,
+      currentPlaceholder,
+      menuVisibleOnFocus,
+      isOnComposition,
+      isSilentBlur,
+      options,
+      resetInputHeight,
+      managePlaceholder,
+      showClose,
+      selectDisabled,
+      iconComponent,
+      iconReverse,
+      showNewOption,
+      emptyText,
+      toggleLastOptionHitState,
+      resetInputState,
+      handleComposition,
+      handleMenuEnter,
+      handleFocus,
+      blur,
+      handleBlur,
+      handleClearClick,
+      handleClose,
+      handleKeydownEscape,
+      toggleMenu,
+      selectOption,
+      getValueKey,
+      navigateOptions,
+      dropMenuVisible,
+      focus,
+      reference,
+      input,
+      iOSInput,
+      tooltipRef,
+      popperPaneRef,
+      tags,
+      selectWrapper,
+      scrollbar,
+      wrapperKls,
+      selectTagsStyle,
+      nsSelect,
+      tagTextStyle,
+      handleMouseEnter,
+      handleMouseLeave,
+      showTagList,
+      collapseTagList
+    };
+  }
+});
+const _hoisted_1$3 = ["disabled", "autocomplete"];
+const _hoisted_2$2 = ["disabled"];
+const _hoisted_3$1 = { style: { "height": "100%", "display": "flex", "justify-content": "center", "align-items": "center" } };
+function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_el_tag = resolveComponent("el-tag");
+  const _component_el_tooltip = resolveComponent("el-tooltip");
+  const _component_el_icon = resolveComponent("el-icon");
+  const _component_el_input = resolveComponent("el-input");
+  const _component_el_option = resolveComponent("el-option");
+  const _component_el_options = resolveComponent("el-options");
+  const _component_el_scrollbar = resolveComponent("el-scrollbar");
+  const _component_el_select_menu = resolveComponent("el-select-menu");
+  const _directive_click_outside = resolveDirective("click-outside");
+  return withDirectives((openBlock(), createElementBlock("div", {
+    ref: "selectWrapper",
+    class: normalizeClass(_ctx.wrapperKls),
+    onMouseenter: _cache[21] || (_cache[21] = (...args) => _ctx.handleMouseEnter && _ctx.handleMouseEnter(...args)),
+    onMouseleave: _cache[22] || (_cache[22] = (...args) => _ctx.handleMouseLeave && _ctx.handleMouseLeave(...args)),
+    onClick: _cache[23] || (_cache[23] = withModifiers((...args) => _ctx.toggleMenu && _ctx.toggleMenu(...args), ["stop"]))
+  }, [
+    createVNode(_component_el_tooltip, {
+      ref: "tooltipRef",
+      visible: _ctx.dropMenuVisible,
+      placement: _ctx.placement,
+      teleported: _ctx.teleported,
+      "popper-class": [_ctx.nsSelect.e("popper"), _ctx.popperClass],
+      "popper-options": _ctx.popperOptions,
+      "fallback-placements": ["bottom-start", "top-start", "right", "left"],
+      effect: _ctx.effect,
+      pure: "",
+      trigger: "click",
+      transition: `${_ctx.nsSelect.namespace.value}-zoom-in-top`,
+      "stop-popper-mouse-event": false,
+      "gpu-acceleration": false,
+      persistent: _ctx.persistent,
+      onShow: _ctx.handleMenuEnter
+    }, {
+      default: withCtx(() => [
+        createElementVNode("div", {
+          class: "select-trigger",
+          onMouseenter: _cache[19] || (_cache[19] = ($event) => _ctx.inputHovering = true),
+          onMouseleave: _cache[20] || (_cache[20] = ($event) => _ctx.inputHovering = false)
+        }, [
+          _ctx.multiple ? (openBlock(), createElementBlock("div", {
+            key: 0,
+            ref: "tags",
+            class: normalizeClass([
+              _ctx.nsSelect.e("tags"),
+              _ctx.nsSelect.is("disabled", _ctx.selectDisabled)
+            ]),
+            style: normalizeStyle(_ctx.selectTagsStyle)
+          }, [
+            _ctx.collapseTags && _ctx.selected.length ? (openBlock(), createBlock(Transition, {
+              key: 0,
+              onAfterLeave: _ctx.resetInputHeight
+            }, {
+              default: withCtx(() => [
+                createElementVNode("span", {
+                  class: normalizeClass([
+                    _ctx.nsSelect.b("tags-wrapper"),
+                    { "has-prefix": _ctx.prefixWidth && _ctx.selected.length }
+                  ])
+                }, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.showTagList, (item) => {
+                    return openBlock(), createBlock(_component_el_tag, {
+                      key: _ctx.getValueKey(item),
+                      closable: !_ctx.selectDisabled && !item.isDisabled,
+                      size: _ctx.collapseTagSize,
+                      hit: item.hitState,
+                      type: _ctx.tagType,
+                      "disable-transitions": "",
+                      onClose: ($event) => _ctx.deleteTag($event, item)
+                    }, {
+                      default: withCtx(() => [
+                        createElementVNode("span", {
+                          class: normalizeClass(_ctx.nsSelect.e("tags-text")),
+                          style: normalizeStyle(_ctx.tagTextStyle)
+                        }, toDisplayString(item.currentLabel), 7)
+                      ]),
+                      _: 2
+                    }, 1032, ["closable", "size", "hit", "type", "onClose"]);
+                  }), 128)),
+                  _ctx.selected.length > _ctx.maxCollapseTags ? (openBlock(), createBlock(_component_el_tag, {
+                    key: 0,
+                    closable: false,
+                    size: _ctx.collapseTagSize,
+                    type: _ctx.tagType,
+                    "disable-transitions": ""
+                  }, {
+                    default: withCtx(() => [
+                      _ctx.collapseTagsTooltip ? (openBlock(), createBlock(_component_el_tooltip, {
+                        key: 0,
+                        disabled: _ctx.dropMenuVisible,
+                        "fallback-placements": ["bottom", "top", "right", "left"],
+                        effect: _ctx.effect,
+                        placement: "bottom",
+                        teleported: _ctx.teleported
+                      }, {
+                        default: withCtx(() => [
+                          createElementVNode("span", {
+                            class: normalizeClass(_ctx.nsSelect.e("tags-text"))
+                          }, "+ " + toDisplayString(_ctx.selected.length - _ctx.maxCollapseTags), 3)
+                        ]),
+                        content: withCtx(() => [
+                          createElementVNode("div", {
+                            class: normalizeClass(_ctx.nsSelect.e("collapse-tags"))
+                          }, [
+                            (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.collapseTagList, (item) => {
+                              return openBlock(), createElementBlock("div", {
+                                key: _ctx.getValueKey(item),
+                                class: normalizeClass(_ctx.nsSelect.e("collapse-tag"))
+                              }, [
+                                createVNode(_component_el_tag, {
+                                  class: "in-tooltip",
+                                  closable: !_ctx.selectDisabled && !item.isDisabled,
+                                  size: _ctx.collapseTagSize,
+                                  hit: item.hitState,
+                                  type: _ctx.tagType,
+                                  "disable-transitions": "",
+                                  style: { margin: "2px" },
+                                  onClose: ($event) => _ctx.deleteTag($event, item)
+                                }, {
+                                  default: withCtx(() => [
+                                    createElementVNode("span", {
+                                      class: normalizeClass(_ctx.nsSelect.e("tags-text")),
+                                      style: normalizeStyle({
+                                        maxWidth: _ctx.inputWidth - 75 + "px"
+                                      })
+                                    }, toDisplayString(item.currentLabel), 7)
+                                  ]),
+                                  _: 2
+                                }, 1032, ["closable", "size", "hit", "type", "onClose"])
+                              ], 2);
+                            }), 128))
+                          ], 2)
+                        ]),
+                        _: 1
+                      }, 8, ["disabled", "effect", "teleported"])) : (openBlock(), createElementBlock("span", {
+                        key: 1,
+                        class: normalizeClass(_ctx.nsSelect.e("tags-text"))
+                      }, "+ " + toDisplayString(_ctx.selected.length - _ctx.maxCollapseTags), 3))
+                    ]),
+                    _: 1
+                  }, 8, ["size", "type"])) : createCommentVNode("v-if", true)
+                ], 2)
+              ]),
+              _: 1
+            }, 8, ["onAfterLeave"])) : createCommentVNode("v-if", true),
+            !_ctx.collapseTags ? (openBlock(), createBlock(Transition, {
+              key: 1,
+              onAfterLeave: _ctx.resetInputHeight
+            }, {
+              default: withCtx(() => [
+                createElementVNode("span", {
+                  class: normalizeClass([
+                    _ctx.nsSelect.b("tags-wrapper"),
+                    { "has-prefix": _ctx.prefixWidth && _ctx.selected.length }
+                  ])
+                }, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.selected, (item) => {
+                    return openBlock(), createBlock(_component_el_tag, {
+                      key: _ctx.getValueKey(item),
+                      closable: !_ctx.selectDisabled && !item.isDisabled,
+                      size: _ctx.collapseTagSize,
+                      hit: item.hitState,
+                      type: _ctx.tagType,
+                      "disable-transitions": "",
+                      onClose: ($event) => _ctx.deleteTag($event, item)
+                    }, {
+                      default: withCtx(() => [
+                        createElementVNode("span", {
+                          class: normalizeClass(_ctx.nsSelect.e("tags-text")),
+                          style: normalizeStyle({ maxWidth: _ctx.inputWidth - 75 + "px" })
+                        }, toDisplayString(item.currentLabel), 7)
+                      ]),
+                      _: 2
+                    }, 1032, ["closable", "size", "hit", "type", "onClose"]);
+                  }), 128))
+                ], 2)
+              ]),
+              _: 1
+            }, 8, ["onAfterLeave"])) : createCommentVNode("v-if", true),
+            _ctx.filterable ? withDirectives((openBlock(), createElementBlock("input", {
+              key: 2,
+              ref: "input",
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.query = $event),
+              type: "text",
+              class: normalizeClass([
+                _ctx.nsSelect.e("input"),
+                _ctx.nsSelect.is(_ctx.selectSize),
+                _ctx.nsSelect.is("disabled", _ctx.selectDisabled)
+              ]),
+              disabled: _ctx.selectDisabled,
+              autocomplete: _ctx.autocomplete,
+              style: normalizeStyle({
+                marginLeft: _ctx.prefixWidth && !_ctx.selected.length || _ctx.tagInMultiLine ? `${_ctx.prefixWidth}px` : "",
+                flexGrow: 1,
+                width: `${_ctx.inputLength / (_ctx.inputWidth - 32)}%`,
+                maxWidth: `${_ctx.inputWidth - 42}px`
+              }),
+              onFocus: _cache[1] || (_cache[1] = (...args) => _ctx.handleFocus && _ctx.handleFocus(...args)),
+              onBlur: _cache[2] || (_cache[2] = (...args) => _ctx.handleBlur && _ctx.handleBlur(...args)),
+              onKeyup: _cache[3] || (_cache[3] = (...args) => _ctx.managePlaceholder && _ctx.managePlaceholder(...args)),
+              onKeydown: [
+                _cache[4] || (_cache[4] = (...args) => _ctx.resetInputState && _ctx.resetInputState(...args)),
+                _cache[5] || (_cache[5] = withKeys(withModifiers(($event) => _ctx.navigateOptions("next"), ["prevent"]), ["down"])),
+                _cache[6] || (_cache[6] = withKeys(withModifiers(($event) => _ctx.navigateOptions("prev"), ["prevent"]), ["up"])),
+                _cache[7] || (_cache[7] = withKeys((...args) => _ctx.handleKeydownEscape && _ctx.handleKeydownEscape(...args), ["esc"])),
+                _cache[8] || (_cache[8] = withKeys(withModifiers((...args) => _ctx.selectOption && _ctx.selectOption(...args), ["stop", "prevent"]), ["enter"])),
+                _cache[9] || (_cache[9] = withKeys((...args) => _ctx.deletePrevTag && _ctx.deletePrevTag(...args), ["delete"])),
+                _cache[10] || (_cache[10] = withKeys(($event) => _ctx.visible = false, ["tab"]))
+              ],
+              onCompositionstart: _cache[11] || (_cache[11] = (...args) => _ctx.handleComposition && _ctx.handleComposition(...args)),
+              onCompositionupdate: _cache[12] || (_cache[12] = (...args) => _ctx.handleComposition && _ctx.handleComposition(...args)),
+              onCompositionend: _cache[13] || (_cache[13] = (...args) => _ctx.handleComposition && _ctx.handleComposition(...args)),
+              onInput: _cache[14] || (_cache[14] = (...args) => _ctx.debouncedQueryChange && _ctx.debouncedQueryChange(...args))
+            }, null, 46, _hoisted_1$3)), [
+              [vModelText, _ctx.query]
+            ]) : createCommentVNode("v-if", true)
+          ], 6)) : createCommentVNode("v-if", true),
+          createCommentVNode(" fix: https://github.com/element-plus/element-plus/issues/11415 "),
+          _ctx.isIOS && !_ctx.multiple && _ctx.filterable && _ctx.readonly ? (openBlock(), createElementBlock("input", {
+            key: 1,
+            ref: "iOSInput",
+            class: normalizeClass([
+              _ctx.nsSelect.e("input"),
+              _ctx.nsSelect.is(_ctx.selectSize),
+              _ctx.nsSelect.em("input", "iOS")
+            ]),
+            disabled: _ctx.selectDisabled,
+            type: "text"
+          }, null, 10, _hoisted_2$2)) : createCommentVNode("v-if", true),
+          createVNode(_component_el_input, {
+            id: _ctx.id,
+            ref: "reference",
+            modelValue: _ctx.selectedLabel,
+            "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => _ctx.selectedLabel = $event),
+            type: "text",
+            placeholder: typeof _ctx.currentPlaceholder === "function" ? _ctx.currentPlaceholder() : _ctx.currentPlaceholder,
+            name: _ctx.name,
+            autocomplete: _ctx.autocomplete,
+            size: _ctx.selectSize,
+            disabled: _ctx.selectDisabled,
+            readonly: _ctx.readonly,
+            "validate-event": false,
+            class: normalizeClass([_ctx.nsSelect.is("focus", _ctx.visible)]),
+            tabindex: _ctx.multiple && _ctx.filterable ? -1 : void 0,
+            onFocus: _ctx.handleFocus,
+            onBlur: _ctx.handleBlur,
+            onInput: _ctx.debouncedOnInputChange,
+            onPaste: _ctx.debouncedOnInputChange,
+            onCompositionstart: _ctx.handleComposition,
+            onCompositionupdate: _ctx.handleComposition,
+            onCompositionend: _ctx.handleComposition,
+            onKeydown: [
+              _cache[16] || (_cache[16] = withKeys(withModifiers(($event) => _ctx.navigateOptions("next"), ["stop", "prevent"]), ["down"])),
+              _cache[17] || (_cache[17] = withKeys(withModifiers(($event) => _ctx.navigateOptions("prev"), ["stop", "prevent"]), ["up"])),
+              withKeys(withModifiers(_ctx.selectOption, ["stop", "prevent"]), ["enter"]),
+              withKeys(_ctx.handleKeydownEscape, ["esc"]),
+              _cache[18] || (_cache[18] = withKeys(($event) => _ctx.visible = false, ["tab"]))
+            ]
+          }, createSlots({
+            suffix: withCtx(() => [
+              _ctx.iconComponent && !_ctx.showClose ? (openBlock(), createBlock(_component_el_icon, {
+                key: 0,
+                class: normalizeClass([_ctx.nsSelect.e("caret"), _ctx.nsSelect.e("icon"), _ctx.iconReverse])
+              }, {
+                default: withCtx(() => [
+                  (openBlock(), createBlock(resolveDynamicComponent(_ctx.iconComponent)))
+                ]),
+                _: 1
+              }, 8, ["class"])) : createCommentVNode("v-if", true),
+              _ctx.showClose && _ctx.clearIcon ? (openBlock(), createBlock(_component_el_icon, {
+                key: 1,
+                class: normalizeClass([_ctx.nsSelect.e("caret"), _ctx.nsSelect.e("icon")]),
+                onClick: _ctx.handleClearClick
+              }, {
+                default: withCtx(() => [
+                  (openBlock(), createBlock(resolveDynamicComponent(_ctx.clearIcon)))
+                ]),
+                _: 1
+              }, 8, ["class", "onClick"])) : createCommentVNode("v-if", true)
+            ]),
+            _: 2
+          }, [
+            _ctx.$slots.prefix ? {
+              name: "prefix",
+              fn: withCtx(() => [
+                createElementVNode("div", _hoisted_3$1, [
+                  renderSlot(_ctx.$slots, "prefix")
+                ])
+              ])
+            } : void 0
+          ]), 1032, ["id", "modelValue", "placeholder", "name", "autocomplete", "size", "disabled", "readonly", "class", "tabindex", "onFocus", "onBlur", "onInput", "onPaste", "onCompositionstart", "onCompositionupdate", "onCompositionend", "onKeydown"])
+        ], 32)
+      ]),
+      content: withCtx(() => [
+        createVNode(_component_el_select_menu, null, {
+          default: withCtx(() => [
+            withDirectives(createVNode(_component_el_scrollbar, {
+              ref: "scrollbar",
+              tag: "ul",
+              "wrap-class": _ctx.nsSelect.be("dropdown", "wrap"),
+              "view-class": _ctx.nsSelect.be("dropdown", "list"),
+              class: normalizeClass([
+                _ctx.nsSelect.is("empty", !_ctx.allowCreate && Boolean(_ctx.query) && _ctx.filteredOptionsCount === 0)
+              ])
+            }, {
+              default: withCtx(() => [
+                _ctx.showNewOption ? (openBlock(), createBlock(_component_el_option, {
+                  key: 0,
+                  value: _ctx.query,
+                  created: true
+                }, null, 8, ["value"])) : createCommentVNode("v-if", true),
+                createVNode(_component_el_options, { onUpdateOptions: _ctx.onOptionsRendered }, {
+                  default: withCtx(() => [
+                    renderSlot(_ctx.$slots, "default")
+                  ]),
+                  _: 3
+                }, 8, ["onUpdateOptions"])
+              ]),
+              _: 3
+            }, 8, ["wrap-class", "view-class", "class"]), [
+              [vShow, _ctx.options.size > 0 && !_ctx.loading]
+            ]),
+            _ctx.emptyText && (!_ctx.allowCreate || _ctx.loading || _ctx.allowCreate && _ctx.options.size === 0) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+              _ctx.$slots.empty ? renderSlot(_ctx.$slots, "empty", { key: 0 }) : (openBlock(), createElementBlock("p", {
+                key: 1,
+                class: normalizeClass(_ctx.nsSelect.be("dropdown", "empty"))
+              }, toDisplayString(_ctx.emptyText), 3))
+            ], 64)) : createCommentVNode("v-if", true)
+          ]),
+          _: 3
+        })
+      ]),
+      _: 3
+    }, 8, ["visible", "placement", "teleported", "popper-class", "popper-options", "effect", "transition", "persistent", "onShow"])
+  ], 34)), [
+    [_directive_click_outside, _ctx.handleClose, _ctx.popperPaneRef]
+  ]);
+}
+var Select = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["render", _sfc_render$1], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select.vue"]]);
+const _sfc_main$c = /* @__PURE__ */ defineComponent({
+  name: "ElOptionGroup",
+  componentName: "ElOptionGroup",
+  props: {
+    label: String,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup(props) {
+    const ns = useNamespace("select");
+    const visible = ref(true);
+    getCurrentInstance();
+    const children = ref([]);
+    provide(selectGroupKey, reactive({
+      ...toRefs(props)
+    }));
+    const select = inject(selectKey);
+    const { groupQueryChange } = toRaw(select);
+    watch(groupQueryChange, () => {
+      visible.value = children.value.some((option) => option.visible === true);
+    }, { flush: "post" });
+    return {
+      visible,
+      ns
+    };
+  }
+});
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return withDirectives((openBlock(), createElementBlock("ul", {
+    class: normalizeClass(_ctx.ns.be("group", "wrap"))
+  }, [
+    createElementVNode("li", {
+      class: normalizeClass(_ctx.ns.be("group", "title"))
+    }, toDisplayString(_ctx.label), 3),
+    createElementVNode("li", null, [
+      createElementVNode("ul", {
+        class: normalizeClass(_ctx.ns.b("group"))
+      }, [
+        renderSlot(_ctx.$slots, "default")
+      ], 2)
+    ])
+  ], 2)), [
+    [vShow, _ctx.visible]
+  ]);
+}
+var OptionGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["render", _sfc_render], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option-group.vue"]]);
+const ElSelect = withInstall(Select, {
+  Option,
+  OptionGroup
+});
+const ElOption = withNoopInstall(Option);
+withNoopInstall(OptionGroup);
 const sliderContextKey = Symbol("sliderContextKey");
 const sliderProps = buildProps({
   modelValue: {
@@ -6494,7 +8557,7 @@ const _hoisted_1$2 = ["tabindex"];
 const __default__$2 = /* @__PURE__ */ defineComponent({
   name: "ElSliderButton"
 });
-const _sfc_main$a = /* @__PURE__ */ defineComponent({
+const _sfc_main$b = /* @__PURE__ */ defineComponent({
   ...__default__$2,
   props: sliderButtonProps,
   emits: sliderButtonEmits,
@@ -6575,7 +8638,7 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var SliderButton = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/button.vue"]]);
+var SliderButton = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/button.vue"]]);
 const sliderMarkerProps = buildProps({
   mark: {
     type: definePropType([String, Object]),
@@ -6602,7 +8665,7 @@ const _hoisted_2$1 = { key: 1 };
 const __default__$1 = /* @__PURE__ */ defineComponent({
   name: "ElSlider"
 });
-const _sfc_main$9 = /* @__PURE__ */ defineComponent({
+const _sfc_main$a = /* @__PURE__ */ defineComponent({
   ...__default__$1,
   props: sliderProps,
   emits: sliderEmits,
@@ -6812,7 +8875,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Slider = /* @__PURE__ */ _export_sfc$1(_sfc_main$9, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/slider.vue"]]);
+var Slider = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/slider.vue"]]);
 const ElSlider = withInstall(Slider);
 const switchProps = buildProps({
   modelValue: {
@@ -6907,7 +8970,7 @@ const COMPONENT_NAME = "ElSwitch";
 const __default__ = /* @__PURE__ */ defineComponent({
   name: COMPONENT_NAME
 });
-const _sfc_main$8 = /* @__PURE__ */ defineComponent({
+const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   ...__default__,
   props: switchProps,
   emits: switchEmits,
@@ -7121,7 +9184,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Switch = /* @__PURE__ */ _export_sfc$1(_sfc_main$8, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/switch/src/switch.vue"]]);
+var Switch = /* @__PURE__ */ _export_sfc$1(_sfc_main$9, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/switch/src/switch.vue"]]);
 const ElSwitch = withInstall(Switch);
 const element_plus_injection_plugin_1RNPi6ogby = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.provide(ID_INJECTION_KEY, { "prefix": 1024, "current": 0 });
@@ -7150,6 +9213,28 @@ const _plugins = [
   element_plus_injection_plugin_1RNPi6ogby,
   vuex_owYp5qnaH8
 ];
+const __nuxt_component_0$1 = /* @__PURE__ */ defineComponent({
+  name: "ClientOnly",
+  inheritAttrs: false,
+  // eslint-disable-next-line vue/require-prop-types
+  props: ["fallback", "placeholder", "placeholderTag", "fallbackTag"],
+  setup(_2, { slots, attrs }) {
+    const mounted = ref(false);
+    return (props) => {
+      var _a;
+      if (mounted.value) {
+        return (_a = slots.default) == null ? void 0 : _a.call(slots);
+      }
+      const slot = slots.fallback || slots.placeholder;
+      if (slot) {
+        return slot();
+      }
+      const fallbackStr = props.fallback || props.placeholder || "";
+      const fallbackTag = props.fallbackTag || props.placeholderTag || "span";
+      return createElementBlock(fallbackTag, attrs, fallbackStr);
+    };
+  }
+});
 let inputs = [];
 let outputs = [];
 let midiInput;
@@ -7202,7 +9287,7 @@ function getPortNames() {
 function noteOn(channel, note, velocity) {
   const status = 144 + channel - 1;
   if (!midiOutput)
-    console.error("error sending noteOn: no output configured");
+    throw "error sending noteOn: no output configured";
   midiOutput && midiOutput.send([status, note, velocity]);
 }
 function noteOff(channel, note, velocity) {
@@ -7237,80 +9322,6 @@ const midi = {
   noteOff,
   sendControlChange
 };
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const _sfc_main$7 = {
-  data() {
-    return {
-      inputPorts: [],
-      outputPorts: []
-    };
-  },
-  computed: {
-    showConfigurationEdit() {
-      return true;
-    },
-    inputPort() {
-    },
-    outputPort() {
-    }
-  },
-  mounted() {
-    console.log("mounting midi drivers");
-    midi.getPortNames().then(({ inputs: inputs2, outputs: outputs2 }) => {
-      this.inputPorts = inputs2;
-      this.outputPorts = outputs2;
-      const [defaultOutput] = outputs2;
-      console.log("inputs", inputs2);
-      console.log("outputs", outputs2);
-      this.outputPort = defaultOutput;
-      midi.setOutput(defaultOutput);
-    });
-  },
-  methods: {
-    isSelectedInput(port) {
-      return this.inputPort === port;
-    },
-    isSelectedOutput(port) {
-      return this.outputPort === port;
-    },
-    selectInput(e) {
-      const portName = e.target.value;
-      midi.setInput(portName);
-    },
-    selectOutput(e) {
-      const portName = e.target.value;
-      midi.setOutput(portName);
-    }
-  }
-};
-function _sfc_ssrRender$2(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
-  if ($options.showConfigurationEdit) {
-    _push(`<section${ssrRenderAttrs(mergeProps({ class: "midi-drivers" }, _attrs))} data-v-c4f740eb><h2 data-v-c4f740eb>MIDI Port Configuration</h2><div class="drivers-wrapper" data-v-c4f740eb><div class="drivers-item input" data-v-c4f740eb><h4 data-v-c4f740eb>Select Input Port</h4><select class="drivers-input-select" name="" data-v-c4f740eb><!--[-->`);
-    ssrRenderList($data.inputPorts, (port) => {
-      _push(`<option${ssrRenderAttr("value", port)}${ssrIncludeBooleanAttr($options.isSelectedInput(port)) ? " selected" : ""} data-v-c4f740eb>${ssrInterpolate(port)}</option>`);
-    });
-    _push(`<!--]--></select></div><div class="drivers-item output" data-v-c4f740eb><h4 data-v-c4f740eb>Select Output Port</h4><select class="drivers-output-select" name="" data-v-c4f740eb><!--[-->`);
-    ssrRenderList($data.outputPorts, (port) => {
-      _push(`<option${ssrRenderAttr("value", port)}${ssrIncludeBooleanAttr($options.isSelectedOutput(port)) ? " selected" : ""} data-v-c4f740eb>${ssrInterpolate(port)}</option>`);
-    });
-    _push(`<!--]--></select></div></div></section>`);
-  } else {
-    _push(`<!---->`);
-  }
-}
-const _sfc_setup$7 = _sfc_main$7.setup;
-_sfc_main$7.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/MidiDrivers.vue");
-  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
-};
-const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["ssrRender", _sfc_ssrRender$2], ["__scopeId", "data-v-c4f740eb"]]);
 class webAudio {
   constructor(numberOfVoices) {
     __publicField(this, "numberOfVoices");
@@ -7340,10 +9351,13 @@ class webAudio {
   playNote(voiceIndex, note, noteLength) {
     var _a, _b, _c;
     const voice = this.voices[voiceIndex];
-    const frequency = mtof(note);
+    console.log("voiceIndex", voiceIndex);
+    console.log("this.voices", this.voices);
+    let frequency = mtof(note);
     const attack = noteLength * 0.55;
     const decay = noteLength - attack;
     const currentTime = (_a = voice.ctx) == null ? void 0 : _a.currentTime;
+    frequency *= -1 + Math.floor(voiceIndex / 2);
     if (!voice.hasStarted) {
       voice.oscillatorNode.start();
       voice.hasStarted = true;
@@ -7353,21 +9367,71 @@ class webAudio {
     voice.gainNode.gain.linearRampToValueAtTime(0, currentTime + attack / 1e3 + decay / 1e3);
   }
 }
+const useMusicStore = defineStore("music-settings", {
+  state: () => {
+    return {
+      noteScale: "maj7",
+      chordSizeFilter: 4,
+      rangeMin: 4,
+      rangeMax: 6
+    };
+  },
+  getters: {
+    chordOptions: (state) => {
+      const names = Chord.names();
+      return names.filter((name) => {
+        return Chord.notes(`C4${name}`).length === state.chordSizeFilter;
+      });
+    }
+  },
+  // could also be defined as
+  // state: () => ({ count: 0 })
+  actions: {
+    handleRandomize() {
+    }
+  }
+});
+const useWeaveStore = defineStore("weave-settings", {
+  state: () => {
+    return {
+      patternOptions: ["weave", "euclidean"],
+      patternType: "weave",
+      swatchWidth: 16,
+      swatchDepth: 8,
+      weaveX: 1,
+      weaveY: 1,
+      euclideanCount: 1
+    };
+  },
+  getters: {
+    chordOptions: (state) => {
+    }
+  },
+  // could also be defined as
+  // state: () => ({ count: 0 })
+  actions: {
+    handleRandomize() {
+    }
+  }
+});
 const useStore = defineStore("main", {
   state: () => {
     return {
+      useWebAudio: true,
+      midiInputPort: null,
+      midiOutputPort: null,
+      isOn: false,
       bpm: 400,
       count: 0,
       showConfigurationEdit: true,
-      useWebAudio: true,
-      swatchWidth: 16,
-      swatchDepth: 2,
       webAudioSynth: null,
-      rangeMin: 4,
-      rangeMax: 6,
+      // rangeMin: 4,
+      // rangeMax: 6,
       warpNotes: [],
+      notes: [],
       noteGrid: [],
-      gridItemsKey: Date.now()
+      gridItemsKey: Date.now(),
+      errorMsg: ""
     };
   },
   getters: {
@@ -7381,7 +9445,8 @@ const useStore = defineStore("main", {
       return _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
     },
     warpNoteColors: (state) => {
-      const length = (state.rangeMax - state.rangeMin) * 12 + 1;
+      const musicStore = useMusicStore();
+      const length = (musicStore.rangeMax - musicStore.rangeMin) * 12 + 1;
       const colors = colormap({
         colormap: "jet",
         nshades: length,
@@ -7389,11 +9454,14 @@ const useStore = defineStore("main", {
         alpha: 1
       });
       return state.warpNotes.map((item) => {
-        const colorIndex = item - 12 - state.rangeMin * 12;
+        const colorIndex = item - 12 - musicStore.rangeMin * 12;
         return colors[colorIndex];
       });
     },
-    numberOfVoices: (state) => state.swatchDepth
+    numberOfVoices: () => {
+      const weave = useWeaveStore();
+      return weave.swatchDepth;
+    }
   },
   // could also be defined as
   // state: () => ({ count: 0 })
@@ -7401,11 +9469,26 @@ const useStore = defineStore("main", {
     updateGridItemsKey() {
       this.gridItemsKey = Date.now();
     },
+    // initNotes() {
+    //   this.notes = [];
+    //   if (props.mode === 'stack' && props.type === 'weft') {
+    //     _.times (props.length, i => {
+    //       const value = noteOptions.value[i % noteOptions.value.length];
+    //       this.notes[i] = value;
+    //     });
+    //     return;
+    //   }
+    //   _.times(props.length, i => {
+    //     // get random note
+    //     const value = _.random(0, noteOptions.value.length - 1);
+    //     this.notes[i] = noteOptions.value[value];
+    //   }
+    // },
     increment() {
       this.count++;
     },
-    updateConfig(config2) {
-      console.log("config", config2);
+    updateConfig(config) {
+      console.log("config", config);
     },
     stopEngine() {
       console.log("stopEngine");
@@ -7418,59 +9501,75 @@ const useStore = defineStore("main", {
     }
   }
 });
-const _sfc_main$6 = {
-  data() {
-    return {
-      configurationAction: ""
+const _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
+const _sfc_main$8 = {
+  __name: "MidiDrivers",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const store2 = useStore();
+    const { midiInputPort, midiOutputPort } = storeToRefs(store2);
+    watch(midiOutputPort, (val) => {
+      midi.setOutput(val);
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_client_only = __nuxt_component_0$1;
+      _push(`<section${ssrRenderAttrs(mergeProps({ class: "midi-drivers" }, _attrs))} data-v-b71e0b7a><header data-v-b71e0b7a>MIDI Settings</header><div class="drivers-wrapper" data-v-b71e0b7a><div class="drivers-item output" data-v-b71e0b7a><h4 data-v-b71e0b7a>Select Output Port</h4>`);
+      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
+      _push(`</div></div></section>`);
     };
-  },
-  computed: {
-    showConfigurationEdit() {
-      return false;
-    },
-    configurationEditText() {
-      return this.showConfigurationEdit ? "Hide Configuration Settings" : "Show ConfigurationSettings";
-    }
-  },
-  methods: {
-    toggleConfigurationMode() {
-      const showConfigurationEdit = !this.showConfigurationEdit;
-      config.updateConfig({ showConfigurationEdit });
-    }
   }
 };
-function _sfc_ssrRender$1(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
-  _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-9b30ce5f><h1 data-v-9b30ce5f>Weaving Music</h1><button class="btn btn-secondary" data-v-9b30ce5f>${ssrInterpolate($options.configurationEditText)}</button></nav>`);
-}
-const _sfc_setup$6 = _sfc_main$6.setup;
-_sfc_main$6.setup = (props, ctx) => {
+const _sfc_setup$8 = _sfc_main$8.setup;
+_sfc_main$8.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/MidiDrivers.vue");
+  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
+};
+const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-b71e0b7a"]]);
+const _sfc_main$7 = {
+  __name: "TopNav",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const store2 = useStore();
+    const { useWebAudio, isOn, errorMsg } = storeToRefs(store2);
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_el_switch = ElSwitch;
+      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-17acaf7f><h1 data-v-17acaf7f>Weaving Music</h1>`);
+      if (unref(errorMsg)) {
+        _push(`<p class="error" data-v-17acaf7f>${ssrInterpolate(unref(errorMsg))}</p>`);
+      } else {
+        _push(`<!---->`);
+      }
+      _push(`<div class="switches" data-v-17acaf7f>`);
+      _push(ssrRenderComponent(_component_el_switch, {
+        modelValue: unref(useWebAudio),
+        "onUpdate:modelValue": ($event) => isRef(useWebAudio) ? useWebAudio.value = $event : null,
+        "active-text": "Use Web Audio to Play",
+        "inactive-text": "Use External MIDI to Play"
+      }, null, _parent));
+      _push(ssrRenderComponent(_component_el_switch, {
+        "active-text": "start",
+        "inactive-text": "stop",
+        modelValue: unref(isOn),
+        "onUpdate:modelValue": ($event) => isRef(isOn) ? isOn.value = $event : null
+      }, null, _parent));
+      _push(`</div></nav>`);
+    };
+  }
+};
+const _sfc_setup$7 = _sfc_main$7.setup;
+_sfc_main$7.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
-  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
+  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["ssrRender", _sfc_ssrRender$1], ["__scopeId", "data-v-9b30ce5f"]]);
-const __nuxt_component_0$1 = /* @__PURE__ */ defineComponent({
-  name: "ClientOnly",
-  inheritAttrs: false,
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["fallback", "placeholder", "placeholderTag", "fallbackTag"],
-  setup(_2, { slots, attrs }) {
-    const mounted = ref(false);
-    return (props) => {
-      var _a;
-      if (mounted.value) {
-        return (_a = slots.default) == null ? void 0 : _a.call(slots);
-      }
-      const slot = slots.fallback || slots.placeholder;
-      if (slot) {
-        return slot();
-      }
-      const fallbackStr = props.fallback || props.placeholder || "";
-      const fallbackTag = props.fallbackTag || props.placeholderTag || "span";
-      return createElementBlock(fallbackTag, attrs, fallbackStr);
-    };
-  }
-});
+const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-17acaf7f"]]);
 const tonics = ["Ab", "A", "Bb", "B", "C", "C#", "Db", "D", "Eb", "E", "F", "F#", "G", "G#"];
 function noteSet(chordName, tonic, octave, range) {
   const notes = Chord.notes(`${tonic}${chordName}`);
@@ -7502,19 +9601,19 @@ const scale = {
   noteSet,
   determineNote
 };
-const _sfc_main$5 = {
+const _sfc_main$6 = {
   __name: "Woof",
   __ssrInlineRender: true,
   props: {
     length: Number,
     type: String,
-    scale: String,
+    // scale: String,
     active: Boolean,
     index: Number,
     tick: Number,
     note: Number,
-    rangeMin: Number,
-    rangeMax: Number,
+    // rangeMin: Number,
+    // rangeMax: Number,
     chord: String,
     mode: String
   },
@@ -7522,6 +9621,8 @@ const _sfc_main$5 = {
     const props = __props;
     useNuxtApp();
     const store2 = useStore();
+    const musicStore = useMusicStore();
+    const { noteScale, rangeMin, rangeMax } = storeToRefs(musicStore);
     let chordIndex = ref(0);
     const data = reactive({
       notes: []
@@ -7529,10 +9630,10 @@ const _sfc_main$5 = {
     const noteOptions = computed({
       get: () => {
         const tonic = "C";
-        const range = Math.max(props.rangeMax - props.rangeMin, 0);
+        const range = Math.max(rangeMax.value - rangeMin.value, 0);
         if (props.mode === "stack") {
           if (props.type === "warp") {
-            return (scale.noteSet(props.scale, tonic, props.rangeMin, range) || []).map((num) => `${num}`);
+            return (scale.noteSet(noteScale.value, tonic, rangeMin.value, range) || []).map((num) => `${num}`);
           } else {
             const intervals = Chord.intervals(props.chord);
             const semitones = intervals.map((interval2) => Interval.semitones(interval2));
@@ -7543,8 +9644,8 @@ const _sfc_main$5 = {
           console.log("scale", scale);
           console.log("range", range);
           console.log("tonic", tonic);
-          console.log("single", scale.noteSet(props.scale, tonic, props.rangeMin, range));
-          return (scale.noteSet(props.scale, tonic, props.rangeMin, range) || []).map((num) => `${num}`);
+          console.log("single", scale.noteSet(noteScale.value, tonic, rangeMin.value, range));
+          return (scale.noteSet(noteScale.value, tonic, rangeMin.value, range) || []).map((num) => `${num}`);
         }
       }
     });
@@ -7594,7 +9695,7 @@ const _sfc_main$5 = {
       const note = scale.determineNote(noteOptions.value.map((x) => parseInt(x)), value);
       handleInput(index, note);
     }
-    watch(() => props.scale, (xx) => {
+    watch(() => noteScale.value, (xx) => {
       initNotes();
     });
     watch(() => props.chord, (val) => {
@@ -7610,10 +9711,10 @@ const _sfc_main$5 = {
       initNotes();
       console.log("props.length", props.length);
     });
-    watch(() => props.rangeMin, () => {
+    watch(() => rangeMin.value, () => {
       initNotes();
     });
-    watch(() => props.rangeMax, () => {
+    watch(() => rangeMax.value, () => {
       initNotes();
     });
     onMounted(() => {
@@ -7639,11 +9740,11 @@ const _sfc_main$5 = {
     };
   }
 };
-const _sfc_setup$5 = _sfc_main$5.setup;
-_sfc_main$5.setup = (props, ctx) => {
+const _sfc_setup$6 = _sfc_main$6.setup;
+_sfc_main$6.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Woof.vue");
-  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
+  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
 };
 function buildString(level, arr, count, remainder) {
   if (level === -1) {
@@ -7684,61 +9785,41 @@ const euclidean = {
   generateEuclideanSequence,
   buildString
 };
-function playNote(channel, note, noteLength, webSynth) {
-  if (webSynth) {
-    webSynth.playNote(channel, note, noteLength);
-  }
-}
-const audio = {
-  playNote
-};
-const _sfc_main$4 = {
+const _sfc_main$5 = {
   __name: "Swatch",
   __ssrInlineRender: true,
   setup(__props) {
-    const RESET_TIMEOUT = 10 * 1e3;
     const store2 = useStore();
-    const { useWebAudio, webAudioSynth, gridItems, gridItemsKey, warpNoteColors } = storeToRefs(store2);
+    const weaveStore = useWeaveStore();
+    useMusicStore();
+    const { useWebAudio, webAudioSynth, warpNoteColors, gridItems, gridItemsKey, errorMsg } = storeToRefs(store2);
+    const { swatchWidth, swatchDepth, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
     const warp = ref();
     const weft = ref();
-    ref(100);
-    let noteScale = ref("maj7");
-    let pattern = ref("euclidean");
     let readMode = ref("stack");
     ref(scale.names);
-    ref(["weave", "euclidean"]);
     ref({});
-    let index = ref(-1), warpActive = ref(false), warpIndex = ref(-1), weftActive = ref(false), weftIndex = ref(-1);
-    ref([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
-    let warpNote = ref(0), weftNote = ref(0), euclideanCount = ref(1), weaveX = ref(1), weaveY = ref(1), chord = ref("Maj7"), chordSizeFilter = ref(4);
+    let index = ref(-1), warpActive = ref(false), warpIndex = ref(-1), weftActive = ref(false), weftIndex = ref(-1), warpNote = ref(0), weftNote = ref(0), chord = ref("Maj7");
     ref("");
-    let resetTimer = setTimeout(() => {
+    setTimeout(() => {
     }, 0);
     ref([]);
-    const { $listen } = useNuxtApp();
+    useNuxtApp();
     computed({
       get: () => {
-        return (store2.swatchWidth + 1) * (store2.swatchDepth + 1);
+        return (swatchWidth.value + 1) * (swatchDepth.value + 1);
       }
     });
-    computed({
-      get: () => {
-        const names = Chord.names();
-        return names.filter((name) => {
-          return Chord.notes(`C4${name}`).length === chordSizeFilter.value;
-        });
-      }
-    });
-    watch(pattern, () => {
+    watch(patternType, () => {
       handlePatternChange();
     });
     watch(euclideanCount, () => {
       handlePatternChange();
     });
-    watch(store2.swatchWidth, () => {
+    watch(swatchWidth.value, () => {
       handleUpdateLength();
     });
-    watch(store2.swatchDepth, () => {
+    watch(swatchDepth.value, () => {
       handleUpdateLength();
     });
     watch(weaveX, () => {
@@ -7748,266 +9829,104 @@ const _sfc_main$4 = {
       computeWeave();
     });
     function computeWeave() {
-      const pattern2 = [weaveX.value, weaveY.value], length = pattern2.reduce((acc, item) => acc += item);
+      const pattern = [weaveX.value, weaveY.value], length = pattern.reduce((acc, item) => acc += item);
       store2.noteGrid = [];
-      _.times(store2.swatchDepth, (i) => {
+      _.times(swatchDepth.value, (i) => {
         const row = [];
-        _.times(store2.swatchWidth, (j) => {
-          row.push((i + store2.swatchWidth - j) % length < pattern2[0] ? true : false);
+        _.times(swatchWidth.value, (j) => {
+          row.push((i + swatchWidth.value - j) % length < pattern[0] ? true : false);
         });
         store2.noteGrid.push(row);
         console.log("store.noteGrid", store2.noteGrid);
       });
-    }
-    function handleRandomize() {
-      warp.value.initNotes();
-    }
-    function handleTick(source, value) {
-      index.value++;
-      if (source === "external") {
-        const warpIndex2 = index.value % store2.swatchWidth;
-        warp.updateNoteAtIndex(value, warpIndex2);
-        console.log("value", value);
-      }
-      advance();
-      clearTimeout(resetTimer);
-      resetTimer = setTimeout(() => {
-        handleClockOff();
-      }, RESET_TIMEOUT);
     }
     function handleUpdateLength() {
       computeWeave();
       index.value = 0;
     }
     function handlePatternChange() {
-      if (pattern.value === "euclidean") {
+      if (patternType.value === "euclidean") {
         return handleEuclidean();
       }
       computeWeave();
     }
     function handleEuclidean() {
-      let pattern2 = euclidean.generateEuclideanSequence(store2.swatchWidth, euclideanCount.value);
-      console.log("pattern", pattern2);
-      let shiftPattern = (pattern3, x) => {
-        let shift = _.clone(pattern3);
+      let pattern = euclidean.generateEuclideanSequence(swatchWidth.value, euclideanCount.value);
+      console.log("pattern", pattern);
+      let shiftPattern = (pattern2, x) => {
+        let shift = _.clone(pattern2);
         return shift.map((val, i) => {
-          const index2 = (i + pattern3.length - x) % pattern3.length;
-          return pattern3[index2];
+          const index2 = (i + pattern2.length - x) % pattern2.length;
+          return pattern2[index2];
         });
       };
       store2.noteGrid = [];
-      _.times(store2.swatchDepth, (i) => {
-        const shift = shiftPattern(pattern2, i);
+      _.times(swatchDepth.value, (i) => {
+        const shift = shiftPattern(pattern, i);
         console.log("shift", shift);
         store2.noteGrid.push(shift);
       });
       console.log("store.noteGrid", store2.noteGrid);
     }
-    function sendNote(channel, note, velocity) {
-      audio.playNote(channel, note, store2.noteLength, useWebAudio.value && webAudioSynth.value);
-      return;
-    }
-    function advanceSingle() {
-      let warpIndex2 = index.value % store2.swatchWidth;
-      let weftIndex2 = Math.floor(index.value / store2.swatchWidth) % store2.swatchDepth;
-      let isWarpActive = store2.noteGrid[weftIndex2][warpIndex2];
-      if (isWarpActive) {
-        warpActive = true;
-        weftActive = false;
-        warpIndex2 = warpIndex2;
-        const noteValue = parseInt(warp.getNextNoteInChord());
-        console.log("1: noteValue", noteValue);
-        sendNote(1, noteValue);
-      }
-      if (!isWarpActive) {
-        warpActive = false;
-        weftActive = true;
-        weftIndex2 = weftIndex2;
-        const noteValue = parseInt(weft.getNextNoteInChord());
-        console.log("2: noteValue", noteValue);
-        sendNote(2, noteValue);
-        sendNote(4, noteValue - 5);
-      }
-      index.value = index.value % (store2.swatchWidth * store2.swatchDepth);
-    }
-    function advanceStack() {
-      let noteValue;
-      let warpIndex2 = index.value % store2.swatchWidth;
-      Math.floor(index.value / store2.swatchWidth) % store2.swatchDepth;
-      if (!warp) {
-        console.log("warp not found");
-        return;
-      }
-      noteValue = parseInt(warp.value.getNote(warpIndex2));
-      const rows = store2.swatchDepth;
-      _.times(rows, (row) => {
-        const isActive = store2.noteGrid[row][warpIndex2];
-        if (isActive) {
-          sendNote(row, noteValue);
-        }
-      });
-      return;
-    }
-    function advance() {
-      if (readMode.value === "single") {
-        advanceSingle();
-      } else if (readMode.value === "stack") {
-        advanceStack();
-      }
-    }
     function isActiveGridItem(i) {
       if (readMode.value === "single") {
         return index.value === i;
       } else if (readMode.value === "stack") {
-        return index.value % store2.swatchWidth === i % store2.swatchWidth;
+        return index.value % swatchWidth.value === i % swatchWidth.value;
       }
       return false;
     }
-    function handleClockOff() {
-      index.value = -1;
-      warpActive = false;
-      warpIndex = -1;
-      weftActive = false;
-      weftIndex = -1;
-    }
-    computeWeave();
-    onMounted(() => {
-      $listen("tick", () => handleTick("internal"));
-      $listen("clock-off", handleClockOff);
-      $listen("trigger-in", ({ noteValue, velocity }) => handleTick("external", noteValue / 127));
-    });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_client_only = __nuxt_component_0$1;
-      const _component_el_slider = ElSlider;
-      const _component_el_button = ElButton;
-      _push(`<section${ssrRenderAttrs(mergeProps({ class: "swatch" }, _attrs))}><div class="swatch-settings"><div><h2>Weave settings</h2><header>Warp Length</header>`);
-      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
-      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
-      if (unref(pattern) === "weave") {
-        _push(`<div><header>Weave X</header>`);
-        _push(ssrRenderComponent(_component_el_slider, {
-          modelValue: unref(weaveX),
-          "onUpdate:modelValue": ($event) => isRef(weaveX) ? weaveX.value = $event : weaveX = $event,
-          min: 1,
-          max: 8,
-          step: 1
-        }, null, _parent));
-        _push(`<header>Weave Y</header>`);
-        if (unref(pattern) === "weave") {
-          _push(ssrRenderComponent(_component_el_slider, {
-            modelValue: unref(weaveY),
-            "onUpdate:modelValue": ($event) => isRef(weaveY) ? weaveY.value = $event : weaveY = $event,
-            min: 1,
-            max: 8,
-            step: 1
-          }, null, _parent));
-        } else {
-          _push(`<!---->`);
-        }
-        _push(`</div>`);
-      } else {
-        _push(`<!---->`);
-      }
-      if (unref(pattern) === "euclidean") {
-        _push(`<div><header>Euclidean Sequence Density</header></div>`);
-      } else {
-        _push(`<!---->`);
-      }
-      _push(ssrRenderComponent(_component_el_slider, {
-        modelValue: unref(euclideanCount),
-        "onUpdate:modelValue": ($event) => isRef(euclideanCount) ? euclideanCount.value = $event : euclideanCount = $event,
-        min: 1,
-        max: unref(store2).swatchWidth,
-        step: 1
-      }, null, _parent));
-      _push(`</div><div><header>Music Settings</header><h3>Musical Scale</h3>`);
-      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
-      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
-      _push(`<header>Octave Range</header>`);
-      _push(ssrRenderComponent(_component_el_slider, {
-        min: 0,
-        max: 8,
-        step: 1,
-        "show-stops": "",
-        modelValue: unref(store2).rangeMin,
-        "onUpdate:modelValue": ($event) => unref(store2).rangeMin = $event
-      }, null, _parent));
-      _push(ssrRenderComponent(_component_el_slider, {
-        min: 0,
-        max: 8,
-        step: 1,
-        "show-stops": "",
-        modelValue: unref(store2).rangeMax,
-        "onUpdate:modelValue": ($event) => unref(store2).rangeMax = $event
-      }, null, _parent));
-      _push(ssrRenderComponent(_component_el_button, { onClick: handleRandomize }, {
-        default: withCtx((_2, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(`Randomize note sequence`);
-          } else {
-            return [
-              createTextVNode("Randomize note sequence")
-            ];
-          }
-        }),
-        _: 1
-      }, _parent));
-      _push(`</div></div><div class="swatch-display">`);
-      _push(ssrRenderComponent(unref(_sfc_main$5), {
+      _push(`<section${ssrRenderAttrs(mergeProps({ class: "swatch" }, _attrs))}><header>Weaving Swatch</header><div class="swatch-display">`);
+      _push(ssrRenderComponent(unref(_sfc_main$6), {
         ref_key: "warp",
         ref: warp,
-        length: unref(store2).swatchWidth,
-        scale: unref(noteScale),
+        length: unref(swatchWidth),
         mode: unref(readMode),
         type: "warp",
         active: unref(warpActive),
         index: unref(warpIndex),
         tick: unref(index),
         note: unref(warpNote),
-        rangeMin: unref(store2).rangeMin,
-        rangeMax: unref(store2).rangeMax,
         chord: unref(chord)
       }, null, _parent));
-      _push(ssrRenderComponent(unref(_sfc_main$5), {
+      _push(ssrRenderComponent(unref(_sfc_main$6), {
         ref_key: "weft",
         ref: weft,
-        length: unref(store2).swatchDepth,
-        scale: unref(noteScale),
+        length: unref(swatchDepth),
         mode: unref(readMode),
         type: "weft",
         active: unref(weftActive),
         index: unref(weftIndex),
         tick: unref(index),
         note: unref(weftNote),
-        rangeMin: unref(store2).rangeMin,
-        rangeMax: unref(store2).rangeMax,
         chord: unref(chord)
       }, null, _parent));
       _push(`<div class="swatch-grid" style="${ssrRenderStyle({
-        gridTemplateColumns: "repeat(" + unref(store2).swatchWidth + ", 1fr)",
-        width: 50 * unref(store2).swatchWidth + "px"
+        gridTemplateColumns: "repeat(" + unref(swatchWidth) + ", 1fr)",
+        width: 50 * unref(swatchWidth) + "px"
       })}"><!--[-->`);
       ssrRenderList(unref(gridItems), (item, i) => {
-        _push(`<div class="${ssrRenderClass([{ hide: !item, active: isActiveGridItem(i) }, "swatch-grid-note"])}" style="${ssrRenderStyle({ "background-color": unref(warpNoteColors)[i % unref(store2).swatchWidth] })}"></div>`);
+        _push(`<div class="${ssrRenderClass([{ hide: !item, active: isActiveGridItem(i) }, "swatch-grid-note"])}" style="${ssrRenderStyle({ "background-color": unref(warpNoteColors)[i % unref(swatchWidth)] })}"></div>`);
       });
       _push(`<!--]--></div></div></section>`);
     };
   }
 };
-const _sfc_setup$4 = _sfc_main$4.setup;
-_sfc_main$4.setup = (props, ctx) => {
+const _sfc_setup$5 = _sfc_main$5.setup;
+_sfc_main$5.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Swatch.vue");
-  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
+  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const _sfc_main$3 = {
+const _sfc_main$4 = {
   __name: "Clock",
   __ssrInlineRender: true,
   setup(__props) {
     const { $event } = useNuxtApp();
     const store2 = useStore();
-    const { bpm, bpmInterval } = storeToRefs(store2);
-    let timer = null, isOn = ref(false);
+    const { isOn, bpm, bpmInterval } = storeToRefs(store2);
+    let timer = null;
     computed({
       get: () => {
         return "" + interval.value;
@@ -8038,8 +9957,7 @@ const _sfc_main$3 = {
     return (_ctx, _push, _parent, _attrs) => {
       const _component_el_input = ElInput;
       const _component_el_slider = ElSlider;
-      const _component_el_switch = ElSwitch;
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "clock" }, _attrs))}><h4>Clock</h4>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "clock" }, _attrs))}><header>Clock Settings</header>`);
       _push(ssrRenderComponent(_component_el_input, {
         modelValue: unref(store2).bpm,
         "onUpdate:modelValue": ($event2) => unref(store2).bpm = $event2,
@@ -8064,12 +9982,27 @@ const _sfc_main$3 = {
         modelValue: unref(store2).bpm,
         "onUpdate:modelValue": ($event2) => unref(store2).bpm = $event2
       }, null, _parent));
-      _push(ssrRenderComponent(_component_el_switch, {
-        "active-text": "start",
-        "inactive-text": "stop",
-        modelValue: unref(isOn),
-        "onUpdate:modelValue": ($event2) => isRef(isOn) ? isOn.value = $event2 : isOn = $event2
-      }, null, _parent));
+      _push(`</div>`);
+    };
+  }
+};
+const _sfc_setup$4 = _sfc_main$4.setup;
+_sfc_main$4.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Clock.vue");
+  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
+};
+const _sfc_main$3 = {
+  __name: "SettingsPane",
+  __ssrInlineRender: true,
+  props: {
+    title: String
+  },
+  setup(__props) {
+    const props = __props;
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "settings-pane" }, _attrs))}><header>${ssrInterpolate(props.title)}</header>`);
+      ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
       _push(`</div>`);
     };
   }
@@ -8077,7 +10010,7 @@ const _sfc_main$3 = {
 const _sfc_setup$3 = _sfc_main$3.setup;
 _sfc_main$3.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Clock.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/SettingsPane.vue");
   return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
 };
 const _sfc_main$2 = {
@@ -8085,25 +10018,247 @@ const _sfc_main$2 = {
   __ssrInlineRender: true,
   setup(__props) {
     const store2 = useStore();
+    const musicStore = useMusicStore();
+    const weaveStore = useWeaveStore();
     const { useWebAudio } = storeToRefs(store2);
+    const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax } = storeToRefs(musicStore);
+    const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_el_switch = ElSwitch;
+      const _component_client_only = __nuxt_component_0$1;
+      const _component_el_select = ElSelect;
+      const _component_el_option = ElOption;
+      const _component_el_slider = ElSlider;
       _push(`<div${ssrRenderAttrs(mergeProps({ id: "wrapper" }, _attrs))}>`);
       _push(ssrRenderComponent(unref(TopNav), null, null, _parent));
       _push(`<main>`);
-      _push(ssrRenderComponent(_component_el_switch, {
-        modelValue: unref(useWebAudio),
-        "onUpdate:modelValue": ($event) => isRef(useWebAudio) ? useWebAudio.value = $event : null,
-        "active-text": "Use Web Audio to Play",
-        "inactive-text": "Use External MIDI to Play"
-      }, null, _parent));
       if (!unref(useWebAudio)) {
-        _push(ssrRenderComponent(unref(MidiDrivers), null, null, _parent));
+        _push(ssrRenderComponent(unref(MidiDrivers), { class: "config-section" }, null, _parent));
       } else {
         _push(`<!---->`);
       }
-      _push(ssrRenderComponent(unref(_sfc_main$3), null, null, _parent));
-      _push(ssrRenderComponent(unref(_sfc_main$4), null, null, _parent));
+      _push(ssrRenderComponent(unref(_sfc_main$4), { class: "config-section" }, null, _parent));
+      _push(ssrRenderComponent(unref(_sfc_main$3), { title: "Music Settings" }, {
+        default: withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
+            _push2(`<p${_scopeId}>Octave Range</p>`);
+            _push2(ssrRenderComponent(_component_el_slider, {
+              min: 0,
+              max: 8,
+              step: 1,
+              "show-stops": "",
+              modelValue: unref(rangeMin),
+              "onUpdate:modelValue": ($event) => isRef(rangeMin) ? rangeMin.value = $event : null
+            }, null, _parent2, _scopeId));
+            _push2(ssrRenderComponent(_component_el_slider, {
+              min: 0,
+              max: 8,
+              step: 1,
+              "show-stops": "",
+              modelValue: unref(rangeMax),
+              "onUpdate:modelValue": ($event) => isRef(rangeMax) ? rangeMax.value = $event : null
+            }, null, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(_component_client_only, null, {
+                default: withCtx(() => [
+                  createVNode("p", null, "Chord Name"),
+                  createVNode(_component_el_select, {
+                    modelValue: unref(noteScale),
+                    "onUpdate:modelValue": ($event) => isRef(noteScale) ? noteScale.value = $event : null
+                  }, {
+                    default: withCtx(() => [
+                      (openBlock(true), createBlock(Fragment, null, renderList(unref(chordOptions), (item) => {
+                        return openBlock(), createBlock(_component_el_option, {
+                          key: item,
+                          label: item,
+                          value: item
+                        }, null, 8, ["label", "value"]);
+                      }), 128))
+                    ]),
+                    _: 1
+                  }, 8, ["modelValue", "onUpdate:modelValue"]),
+                  createVNode("p", null, "Filter chord by number of notes in chord"),
+                  createVNode(_component_el_select, {
+                    label: "Filter chord selector by number of notes",
+                    modelValue: unref(chordSizeFilter),
+                    "onUpdate:modelValue": ($event) => isRef(chordSizeFilter) ? chordSizeFilter.value = $event : null
+                  }, {
+                    default: withCtx(() => [
+                      (openBlock(), createBlock(Fragment, null, renderList([3, 4, 5, 6, 7], (item) => {
+                        return createVNode(_component_el_option, {
+                          key: item,
+                          label: item,
+                          value: item
+                        }, null, 8, ["label", "value"]);
+                      }), 64))
+                    ]),
+                    _: 1
+                  }, 8, ["modelValue", "onUpdate:modelValue"])
+                ]),
+                _: 1
+              }),
+              createVNode("p", null, "Octave Range"),
+              createVNode(_component_el_slider, {
+                min: 0,
+                max: 8,
+                step: 1,
+                "show-stops": "",
+                modelValue: unref(rangeMin),
+                "onUpdate:modelValue": ($event) => isRef(rangeMin) ? rangeMin.value = $event : null
+              }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+              createVNode(_component_el_slider, {
+                min: 0,
+                max: 8,
+                step: 1,
+                "show-stops": "",
+                modelValue: unref(rangeMax),
+                "onUpdate:modelValue": ($event) => isRef(rangeMax) ? rangeMax.value = $event : null
+              }, null, 8, ["modelValue", "onUpdate:modelValue"])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(ssrRenderComponent(unref(_sfc_main$3), { title: "Weave Settings" }, {
+        default: withCtx((_2, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<p${_scopeId}>Weft Length</p>`);
+            _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
+            _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
+            if (unref(patternType) === "weave") {
+              _push2(`<div${_scopeId}><p${_scopeId}>Weave X</p>`);
+              _push2(ssrRenderComponent(_component_el_slider, {
+                modelValue: unref(weaveX),
+                "onUpdate:modelValue": ($event) => isRef(weaveX) ? weaveX.value = $event : null,
+                min: 1,
+                max: 8,
+                step: 1
+              }, null, _parent2, _scopeId));
+              _push2(`<p${_scopeId}>Weave Y</p>`);
+              if (unref(patternType) === "weave") {
+                _push2(ssrRenderComponent(_component_el_slider, {
+                  modelValue: unref(weaveY),
+                  "onUpdate:modelValue": ($event) => isRef(weaveY) ? weaveY.value = $event : null,
+                  min: 1,
+                  max: 8,
+                  step: 1
+                }, null, _parent2, _scopeId));
+              } else {
+                _push2(`<!---->`);
+              }
+              _push2(`</div>`);
+            } else {
+              _push2(`<!---->`);
+            }
+            if (unref(patternType) === "euclidean") {
+              _push2(`<div${_scopeId}><p${_scopeId}>Euclidean Sequence Density</p>`);
+              _push2(ssrRenderComponent(_component_el_slider, {
+                modelValue: unref(euclideanCount),
+                "onUpdate:modelValue": ($event) => isRef(euclideanCount) ? euclideanCount.value = $event : null,
+                min: 1,
+                max: unref(swatchWidth),
+                step: 1
+              }, null, _parent2, _scopeId));
+              _push2(`</div>`);
+            } else {
+              _push2(`<!---->`);
+            }
+          } else {
+            return [
+              createVNode("p", null, "Weft Length"),
+              createVNode(_component_client_only, null, {
+                default: withCtx(() => [
+                  createVNode(_component_el_select, {
+                    modelValue: unref(swatchWidth),
+                    "onUpdate:modelValue": ($event) => isRef(swatchWidth) ? swatchWidth.value = $event : null
+                  }, {
+                    default: withCtx(() => [
+                      (openBlock(), createBlock(Fragment, null, renderList([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], (item) => {
+                        return createVNode(_component_el_option, {
+                          key: item,
+                          label: item,
+                          value: item
+                        }, null, 8, ["label", "value"]);
+                      }), 64))
+                    ]),
+                    _: 1
+                  }, 8, ["modelValue", "onUpdate:modelValue"]),
+                  createVNode("p", null, "Warp Length"),
+                  createVNode(_component_el_select, {
+                    modelValue: unref(swatchDepth),
+                    "onUpdate:modelValue": ($event) => isRef(swatchDepth) ? swatchDepth.value = $event : null
+                  }, {
+                    default: withCtx(() => [
+                      (openBlock(), createBlock(Fragment, null, renderList([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], (item) => {
+                        return createVNode(_component_el_option, {
+                          key: item,
+                          label: item,
+                          value: item
+                        }, null, 8, ["label", "value"]);
+                      }), 64))
+                    ]),
+                    _: 1
+                  }, 8, ["modelValue", "onUpdate:modelValue"])
+                ]),
+                _: 1
+              }),
+              createVNode(_component_client_only, null, {
+                default: withCtx(() => [
+                  createVNode("p", null, "Pattern Type"),
+                  createVNode(_component_el_select, {
+                    modelValue: unref(patternType),
+                    "onUpdate:modelValue": ($event) => isRef(patternType) ? patternType.value = $event : null
+                  }, {
+                    default: withCtx(() => [
+                      (openBlock(true), createBlock(Fragment, null, renderList(unref(patternOptions), (item) => {
+                        return openBlock(), createBlock(_component_el_option, {
+                          key: item,
+                          label: item,
+                          value: item
+                        }, null, 8, ["label", "value"]);
+                      }), 128))
+                    ]),
+                    _: 1
+                  }, 8, ["modelValue", "onUpdate:modelValue"])
+                ]),
+                _: 1
+              }),
+              unref(patternType) === "weave" ? (openBlock(), createBlock("div", { key: 0 }, [
+                createVNode("p", null, "Weave X"),
+                createVNode(_component_el_slider, {
+                  modelValue: unref(weaveX),
+                  "onUpdate:modelValue": ($event) => isRef(weaveX) ? weaveX.value = $event : null,
+                  min: 1,
+                  max: 8,
+                  step: 1
+                }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+                createVNode("p", null, "Weave Y"),
+                unref(patternType) === "weave" ? (openBlock(), createBlock(_component_el_slider, {
+                  key: 0,
+                  modelValue: unref(weaveY),
+                  "onUpdate:modelValue": ($event) => isRef(weaveY) ? weaveY.value = $event : null,
+                  min: 1,
+                  max: 8,
+                  step: 1
+                }, null, 8, ["modelValue", "onUpdate:modelValue"])) : createCommentVNode("", true)
+              ])) : createCommentVNode("", true),
+              unref(patternType) === "euclidean" ? (openBlock(), createBlock("div", { key: 1 }, [
+                createVNode("p", null, "Euclidean Sequence Density"),
+                createVNode(_component_el_slider, {
+                  modelValue: unref(euclideanCount),
+                  "onUpdate:modelValue": ($event) => isRef(euclideanCount) ? euclideanCount.value = $event : null,
+                  min: 1,
+                  max: unref(swatchWidth),
+                  step: 1
+                }, null, 8, ["modelValue", "onUpdate:modelValue", "max"])
+              ])) : createCommentVNode("", true)
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(ssrRenderComponent(unref(_sfc_main$5), null, null, _parent));
       _push(`</main></div>`);
     };
   }
@@ -8133,8 +10288,8 @@ const _sfc_main = {
   __name: "nuxt-root",
   __ssrInlineRender: true,
   setup(__props) {
-    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-component-2c35b684.mjs').then((r) => r.default || r));
-    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-cd3c6483.mjs').then((r) => r.default || r));
+    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-component-d6aeaffe.mjs').then((r) => r.default || r));
+    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-06272643.mjs').then((r) => r.default || r));
     const nuxtApp = useNuxtApp();
     nuxtApp.deferHydration();
     nuxtApp.ssrContext.url;

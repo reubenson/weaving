@@ -1,6 +1,6 @@
 <template>
   <div class="clock">
-    <h4>Clock</h4>
+    <header>Clock Settings</header>
     <el-input v-model="store.bpm" placeholder="BPM">
       <template #prepend>BPM</template>
     </el-input>
@@ -11,11 +11,11 @@
         :step="10"
         v-model="store.bpm"
       ></el-slider>
-    <el-switch
+    <!-- <el-switch
       active-text="start"
       inactive-text="stop"
       v-model="isOn"
-    ></el-switch>
+    ></el-switch> -->
   </div>
 </template>
 
@@ -28,11 +28,11 @@ import { storeToRefs } from 'pinia';
 // anything that needs a clock will listen to emitter?
 const { $event } = useNuxtApp();
 const store = useStore();
-const { bpm, bpmInterval } = storeToRefs(store);
+const { isOn, bpm, bpmInterval } = storeToRefs(store);
 
 // let bpm = ref(200),
-let timer = null,
-  isOn = ref(false);
+let timer = null;
+  // isOn = ref(false);
     //   };
     // },
     // computed: {
@@ -89,6 +89,6 @@ watch(bpm, () => {
     border: solid black 2px;
     margin-top: 20px;
     padding: 20px;
-    max-width: 300px;
+    /* max-width: 300px; */
   }
 </style>
