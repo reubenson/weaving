@@ -1,21 +1,5 @@
 <template>
   <div class="clock">
-    <header>Clock Settings</header>
-    <el-input v-model="store.bpm" placeholder="BPM">
-      <template #prepend>BPM</template>
-    </el-input>
-    <el-slider
-        label="clock"
-        :min="50"
-        :max="1000"
-        :step="10"
-        v-model="store.bpm"
-      ></el-slider>
-    <!-- <el-switch
-      active-text="start"
-      inactive-text="stop"
-      v-model="isOn"
-    ></el-switch> -->
   </div>
 </template>
 
@@ -30,24 +14,7 @@ const { $event } = useNuxtApp();
 const store = useStore();
 const { isOn, bpm, bpmInterval } = storeToRefs(store);
 
-// let bpm = ref(200),
 let timer = null;
-  // isOn = ref(false);
-    //   };
-    // },
-    // computed: {
-// const interval = computed({
-//   get: () => {
-//     const bpmInt = parseInt(store.bpm, 10);
-
-//     return 60 * (1000 / bpmInt);
-//   }
-// });
-const intervalString = computed({
-  get: () => {
-    return '' + interval.value;
-  }
-});
 
 function handleTimer() {
   // todo: https://incolumitas.com/2021/12/18/on-high-precision-javascript-timers/
@@ -59,12 +26,12 @@ function handleTimer() {
 }
 
 function tick() {
-  // eventBus.emit('tick', 'clock.id');
   $event('tick', 'clock.id');
 }
-    // },
-    // watch: {
+
 watch(isOn, val => {
+  store.startSynth(); 
+
   handleTimer();
   if (val) {
     // this.timer = setInterval(this.tick, this.intervalString);
@@ -77,11 +44,6 @@ watch(isOn, val => {
 watch(bpm, () => {
   handleTimer();
 });
-// watch(bpmString, (input) => {
-//         bpm = parseInt(input, 10);
-//       });
-  //   }
-  // };
 </script>
 
 <style>
@@ -89,6 +51,5 @@ watch(bpm, () => {
     border: solid black 2px;
     margin-top: 20px;
     padding: 20px;
-    /* max-width: 300px; */
   }
 </style>

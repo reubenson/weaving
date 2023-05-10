@@ -131,6 +131,12 @@ function getInterval(index) {
       return props.type === 'weft' ? data.notes[index] : 0;
     }
 function initNotes() {
+  store.initNotes();
+
+  data.notes = store.notes;
+
+  return;
+
   data.notes = [];
 
   if (props.mode === 'stack' && props.type === 'weft') {
@@ -144,8 +150,9 @@ function initNotes() {
   }
 
   _.times(props.length, i => {
+    data.notes = store.notes;
     // get random note
-    const value = _.random(0, noteOptions.value.length - 1);
+    // const value = _.random(0, noteOptions.value.length - 1);
 
   // const note = baseNote + semitones[chordIndex % semitones.length];
   // console.log('note', note);
@@ -156,7 +163,7 @@ function initNotes() {
     // console.log('index', index);
     // console.log('this.noteOptions', this.noteOptions);
     // Vue.set(this.notes, i, '' + this.noteOptions[value]);
-    data.notes[i] = noteOptions.value[value];
+    // data.notes[i] = noteOptions.value[value];
     // Vue.set(this.notes, i, '' + note);
 
     // console.log('this.noteOptions', this.noteOptions);
@@ -164,6 +171,7 @@ function initNotes() {
     //   this.intervals = Chord.intervals(this.chord).map(interval => Chord.semitones(interval));
     // }
     // return this.noteOptions[index];
+
   });
 
   // $event('notes-set', data.notes);

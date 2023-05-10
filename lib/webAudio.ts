@@ -35,25 +35,27 @@ export class webAudio {
   
   public playNote(voiceIndex: number, note: number, noteLength: number) {
     const voice = this.voices[voiceIndex];
-    console.log('voiceIndex', voiceIndex);
-    console.log('this.voices', this.voices);
+
     let frequency = mtof(note);
     // const attack = 220; // ms
     // const decay = 300; // ms
-    const attack = noteLength * 0.55;
+    const attack = noteLength * 0.5;
     const decay = noteLength - attack;
     const currentTime = voice.ctx?.currentTime;
 
     frequency *= -1 + Math.floor(voiceIndex / 2);
-    
-    if (!voice.hasStarted) {
-      voice.oscillatorNode.start();
-      voice.hasStarted = true;
-    }
+
 
     voice?.oscillatorNode?.frequency?.setValueAtTime(frequency, currentTime);
     // set up simple envelope VCA
     voice.gainNode.gain.linearRampToValueAtTime(0.3, currentTime + attack/1000.);
     voice.gainNode.gain.linearRampToValueAtTime(0, currentTime + attack/1000. + decay/1000.);
+  }
+
+  public start() {
+    if (this.hasStarted) return;
+
+    this.voices.forEach(voice => voice.oscillatorNode.start());
+    this.hasStarted = true;
   }
 }

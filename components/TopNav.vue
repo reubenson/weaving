@@ -1,9 +1,6 @@
 <template>
   <nav class="top-nav">
     <h1>Weaving Music</h1>
-    <!-- <button class="btn btn-secondary" @click="toggleConfigurationMode" >
-      {{ configurationEditText }}
-    </button> -->
     <p class="error" v-if="errorMsg">{{ errorMsg }}</p>
     <div class="switches">
       <el-switch 
@@ -25,32 +22,6 @@
   import { storeToRefs } from 'pinia';
   const store = useStore();
   const { useWebAudio, isOn, errorMsg } = storeToRefs(store);
-
-  // export default {
-  //   data() {
-  //     return {
-  //       configurationAction: '',
-  //     };
-  //   },
-  //   computed: {
-  //     showConfigurationEdit() {
-  //       return false;
-  //       // return this.$store.state.Config.showConfigurationEdit;
-  //       // return config.showConfigurationEdit;
-  //     },
-  //     configurationEditText() {
-  //       return this.showConfigurationEdit ? 'Hide Configuration Settings' : 'Show ConfigurationSettings';
-  //     },
-  //   },
-  //   methods: {
-  //     toggleConfigurationMode() {
-  //       const showConfigurationEdit = !this.showConfigurationEdit;
-
-  //       // this.$store.commit('UPDATE_CONFIG', { showConfigurationEdit });
-  //       config.updateConfig({showConfigurationEdit});
-  //     },
-  //   },
-  // };
 </script>
 
 <style scoped lang="scss">
@@ -63,7 +34,7 @@
     padding: 10px;
     top: 0;
     width: 100vw;
-    z-index: 1;
+    z-index: 10;
 
     h1 {
       line-height: 1em;

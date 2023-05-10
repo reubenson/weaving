@@ -16,8 +16,6 @@ export const useStore = defineStore('main', {
       count: 0,
       showConfigurationEdit: true,
       webAudioSynth: null,
-      // rangeMin: 4,
-      // rangeMax: 6,
       warpNotes: [],
       notes: [],
       noteGrid: [],
@@ -47,7 +45,7 @@ export const useStore = defineStore('main', {
         alpha: 1
       });
     
-      return state.warpNotes.map(item => {
+      return state.notes.map(item => {
         const colorIndex = item - 12 - (musicStore.rangeMin * 12);
         
         return colors[colorIndex];
@@ -59,14 +57,41 @@ export const useStore = defineStore('main', {
       return weave.swatchDepth;
     }
   },
-  // could also be defined as
-  // state: () => ({ count: 0 })
   actions: {
     updateGridItemsKey() {
       this.gridItemsKey = Date.now();
     },
-    // initNotes() {
-    //   this.notes = [];
+    initNotes() {
+      const { sequenceType, noteOptions, waveformFn } = useMusicStore();
+      const { swatchWidth } = useWeaveStore();
+
+      if (sequenceType === 'random') {
+        this.notes = _.times(swatchWidth, () => {
+          const value = _.random(0, noteOptions.length - 1);
+
+          return noteOptions[value];
+        });
+      } else if (sequenceType === 'sine') {
+        this.notes = _.times(swatchWidth, i => {
+          const waveformIndex = -2 * Math.PI * i / swatchWidth;
+
+          // val ranges from -1 to 1, which needs to be mapped to the range of noteOptions
+          const val = waveformFn(waveformIndex);
+
+          const min = _.min(noteOptions);
+          const max = _.max(noteOptions);
+          const range = max - min;
+
+          const normalizedVal = (val + 1) / 2; // normalize to range from 0 to 1
+          const result = min + normalizedVal * range;
+          const quantizedResult = _.reduce(noteOptions, (acc, noteOption) => {
+            return Math.abs(result - noteOption) < Math.abs(result - acc) ?
+              noteOption : acc;
+          }, noteOptions[0]);
+          
+          return quantizedResult;
+        });
+      }
 
     //   if (props.mode === 'stack' && props.type === 'weft') {
     //     _.times (props.length, i => {
@@ -84,21 +109,15 @@ export const useStore = defineStore('main', {
     
     //     this.notes[i] = noteOptions.value[value];
     //   }
-    // },
+    },
     increment() {
       this.count++;
     },
-    updateConfig(config) {
-      console.log('config', config);
-    },
-    stopEngine() {
-      console.log('stopEngine');
-    },
-    startEngine() {
-      console.log('startEngine');
-    },
     initializeWebAudioSynth() {
       this.webAudioSynth = new webAudio(this.numberOfVoices);
+    },
+    startSynth() {
+      this.webAudioSynth?.start();
     }
-  },
+  }
 });
