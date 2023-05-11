@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import mtof from 'mtof';
 
 export class webAudio {
@@ -12,7 +13,8 @@ export class webAudio {
     this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
 
-    this.voices = Array(numberOfVoices).map(() => {
+    // this.voices = new Array(numberOfVoices).map(() => {
+    this.voices = _.times(numberOfVoices).map(() => {
       return {
         ctx: audioContext,
         oscillatorNode: audioContext.createOscillator(),
@@ -20,6 +22,8 @@ export class webAudio {
         panNode: audioContext.createStereoPanner()
       }
     });
+
+    console.log('this.voices', this.voices);
 
     this.voices.forEach((voice, i) => {
       voice.gainNode.gain.setValueAtTime(0, 0);
@@ -34,6 +38,10 @@ export class webAudio {
   
   public playNote(voiceIndex: number, note: number, noteLength: number) {
     const voice = this.voices[voiceIndex];
+
+    console.log('voice', voice);
+    console.log('this.voices', this.voices);
+    console.log('voiceIndex', voiceIndex);
 
     let frequency = mtof(note);
     // const attack = 220; // ms
