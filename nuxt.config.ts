@@ -1,4 +1,5 @@
-const path = require('path');
+// const path = require('path');
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -9,6 +10,14 @@ export default defineNuxtConfig({
   //     publicDir: path.join(__dirname, '/docs')
   //   }
   // },
+  build: {
+    transpile: [
+      /colormap/
+    ]
+  },
+  experimental: {
+    payloadExtraction: false
+  },
   modules: [
     '@pinia/nuxt',
     '@element-plus/nuxt'
@@ -21,13 +30,20 @@ export default defineNuxtConfig({
     optimizeDeps: { // https://vitejs.dev/config/dep-optimization-options.html
       include: [
         // 'mtof',
-        'sine-waves',
+        // 'sine-waves',
         'colormap',
         // 'abcjs',
         // 'lodash'
       ]
     },
     build: {
+      rollupOptions: {
+        plugins: [
+          // https://stackoverflow.com/questions/71645151/cannnot-initialize-coinbasesdk-in-nuxt3-project
+          nodePolyfills()
+        ],
+
+      },
       commonjsOptions: {
         // transformMixedEsModules: true,
         // https://github.com/vitejs/vite/issues/5668#issuecomment-968125763
@@ -43,12 +59,13 @@ export default defineNuxtConfig({
           /abcjs/,
           /dayjs/,
           /escape-html/,
-          // '/node_modules/**'
+          /node_modules/
         ],
-        // exclude: [
+        exclude: [
+          // /colormap/
           // 'mtof'
           // /sine-waves/
-        // ]
+        ]
       }
     }
   }

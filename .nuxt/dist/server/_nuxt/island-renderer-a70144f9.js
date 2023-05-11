@@ -22,6 +22,7 @@ import "@popperjs/core";
 import "@ctrl/tinycolor";
 import "lodash";
 import "tonal";
+import "lerp";
 import "mtof";
 import "tonal-chord";
 import "abcjs";
@@ -51,4 +52,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 export {
   islandRenderer as default
 };
-//# sourceMappingURL=island-renderer-8d5b3f91.js.map
+//# sourceMappingURL=island-renderer-a70144f9.js.map

@@ -26,6 +26,7 @@
     "mtof": "^1.0.2",
     "nanotimer": "^0.3.15",
     "pinia": "^2.0.35",
+    "rollup-plugin-polyfill-node": "^0.12.0",
     "sine-waves": "^0.3.0",
     "tonal": "^4.14.1",
     "tonal-chord": "^2.2.2",
