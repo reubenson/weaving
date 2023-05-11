@@ -170,11 +170,11 @@
           <el-slider
             :min="-8"
             :max="8"
-            :step="1"
+            :step="0.1"
             v-model="sineHarmonics"
             ></el-slider>
           <client-only>
-            <!-- <waveform></waveform> -->
+            <waveform></waveform>
           </client-only>
         </div>
       </settings-pane>
@@ -291,7 +291,7 @@
   import TopNav from './TopNav';
   import Swatch from './Swatch';
   import SettingsPane from './SettingsPane';
-  // import Waveform from './Waveform';
+  import Waveform from './Waveform';
   import Notation from './Notation';
   import { useStore } from '@/store/main';
   import { useMusicStore } from '@/store/music-settings';

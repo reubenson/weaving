@@ -30,6 +30,8 @@
     "sine-waves": "^0.3.0",
     "tonal": "^4.14.1",
     "tonal-chord": "^2.2.2",
+    "uplot": "^1.6.24",
+    "uplot-vue": "^1.1.4",
     "vuex": "^4.0.2"
   },
   "overrides": {

@@ -26,6 +26,7 @@ import "tonal";
 import "lerp";
 import "mtof";
 import "tonal-chord";
+import "uplot";
 import "abcjs";
 const error500_vue_vue_type_style_index_0_scoped_32388612_lang = "";
 const _sfc_main = {
@@ -79,4 +80,4 @@ const error500 = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3
 export {
   error500 as default
 };
-//# sourceMappingURL=error-500-d58225e7.js.map
+//# sourceMappingURL=error-500-ee40991e.js.map

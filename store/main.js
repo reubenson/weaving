@@ -78,11 +78,17 @@ export const useStore = defineStore('main', {
           return noteOptions[value];
         });
       } else if (sequenceType === 'sine') {
+        const steps = _.range(0, 2 * Math.PI, 0.1);
+        const waveformData = _.times(steps.length).map(i => waveformFn(i));
+        const waveformMax = Math.max(...waveformData);
+        const normalizationFactor = 1 / waveformMax;
+
         this.notes = _.times(swatchWidth, i => {
           const waveformIndex = -2 * Math.PI * i / swatchWidth;
 
           // val ranges from -1 to 1, which needs to be mapped to the range of noteOptions
-          const val = waveformFn(waveformIndex);
+          // val may not exactly range from -1 to 1, and should be renormalized
+          const val = waveformFn(waveformIndex) * normalizationFactor;
 
           const min = _.min(noteOptions);
           const max = _.max(noteOptions);

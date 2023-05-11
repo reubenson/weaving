@@ -48,13 +48,14 @@ export const useMusicStore = defineStore('music-settings', {
         const numberOfHarmonics = 8;
         let sum = 0;
 
+        // return Math.sin(x);
+
         _.range(-8, 9).forEach(index => {
-          // const index = i + 1;
-          // let factor = 1 / (1 + Math.abs(index - state.sineHarmonics));
-          const power = 1;
+          let factor = 1 / (1 + Math.abs(index - state.sineHarmonics));
+          const power = 2;
 
           // factor = Math.floor(factor);
-          let factor = index === state.sineHarmonics ? 1 : 0;
+          // let factor = index === state.sineHarmonics ? 1 : 0;
 
           // console.log('factor', factor);
           // console.log('state.sineHarmonics', state.sineHarmonics);
@@ -66,7 +67,6 @@ export const useMusicStore = defineStore('music-settings', {
           // } else {
             // sum -= Math.pow(factor, power) * Math.sin((index) * x);
           // }
-
         });
 
         return sum;

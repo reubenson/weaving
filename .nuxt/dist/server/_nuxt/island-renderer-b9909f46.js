@@ -25,6 +25,7 @@ import "tonal";
 import "lerp";
 import "mtof";
 import "tonal-chord";
+import "uplot";
 import "abcjs";
 const components_islands = {};
 const islandComponents = /* @__PURE__ */ Object.freeze({
@@ -52,4 +53,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 export {
   islandRenderer as default
 };
-//# sourceMappingURL=island-renderer-a70144f9.js.map
+//# sourceMappingURL=island-renderer-b9909f46.js.map

@@ -3421,7 +3421,7 @@ const __default__$h = /* @__PURE__ */ defineComponent({
   name: "ElIcon",
   inheritAttrs: false
 });
-const _sfc_main$z = /* @__PURE__ */ defineComponent({
+const _sfc_main$A = /* @__PURE__ */ defineComponent({
   ...__default__$h,
   props: iconProps,
   setup(__props) {
@@ -3446,7 +3446,7 @@ const _sfc_main$z = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Icon = /* @__PURE__ */ _export_sfc$1(_sfc_main$z, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/icon/src/icon.vue"]]);
+var Icon = /* @__PURE__ */ _export_sfc$1(_sfc_main$A, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/icon/src/icon.vue"]]);
 const ElIcon = withInstall(Icon);
 const formContextKey = Symbol("formContextKey");
 const formItemContextKey = Symbol("formItemContextKey");
@@ -3677,7 +3677,7 @@ const __default__$g = /* @__PURE__ */ defineComponent({
   name: "ElInput",
   inheritAttrs: false
 });
-const _sfc_main$y = /* @__PURE__ */ defineComponent({
+const _sfc_main$z = /* @__PURE__ */ defineComponent({
   ...__default__$g,
   props: inputProps,
   emits: inputEmits,
@@ -4099,7 +4099,7 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Input = /* @__PURE__ */ _export_sfc$1(_sfc_main$y, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input/src/input.vue"]]);
+var Input = /* @__PURE__ */ _export_sfc$1(_sfc_main$z, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input/src/input.vue"]]);
 const ElInput = withInstall(Input);
 const GAP = 4;
 const BAR_MAP = {
@@ -4144,7 +4144,7 @@ const thumbProps = buildProps({
   always: Boolean
 });
 const COMPONENT_NAME$3 = "Thumb";
-const _sfc_main$x = /* @__PURE__ */ defineComponent({
+const _sfc_main$y = /* @__PURE__ */ defineComponent({
   __name: "thumb",
   props: thumbProps,
   setup(__props) {
@@ -4259,7 +4259,7 @@ const _sfc_main$x = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Thumb = /* @__PURE__ */ _export_sfc$1(_sfc_main$x, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/thumb.vue"]]);
+var Thumb = /* @__PURE__ */ _export_sfc$1(_sfc_main$y, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/thumb.vue"]]);
 const barProps = buildProps({
   always: {
     type: Boolean,
@@ -4276,7 +4276,7 @@ const barProps = buildProps({
     default: 1
   }
 });
-const _sfc_main$w = /* @__PURE__ */ defineComponent({
+const _sfc_main$x = /* @__PURE__ */ defineComponent({
   __name: "bar",
   props: barProps,
   setup(__props, { expose }) {
@@ -4313,7 +4313,7 @@ const _sfc_main$w = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Bar = /* @__PURE__ */ _export_sfc$1(_sfc_main$w, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/bar.vue"]]);
+var Bar = /* @__PURE__ */ _export_sfc$1(_sfc_main$x, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/bar.vue"]]);
 const scrollbarProps = buildProps({
   height: {
     type: [String, Number],
@@ -4364,7 +4364,7 @@ const COMPONENT_NAME$2 = "ElScrollbar";
 const __default__$f = /* @__PURE__ */ defineComponent({
   name: COMPONENT_NAME$2
 });
-const _sfc_main$v = /* @__PURE__ */ defineComponent({
+const _sfc_main$w = /* @__PURE__ */ defineComponent({
   ...__default__$f,
   props: scrollbarProps,
   emits: scrollbarEmits,
@@ -4515,7 +4515,7 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Scrollbar = /* @__PURE__ */ _export_sfc$1(_sfc_main$v, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/scrollbar.vue"]]);
+var Scrollbar = /* @__PURE__ */ _export_sfc$1(_sfc_main$w, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/scrollbar.vue"]]);
 const ElScrollbar = withInstall(Scrollbar);
 const POPPER_INJECTION_KEY = Symbol("popper");
 const POPPER_CONTENT_INJECTION_KEY = Symbol("popperContent");
@@ -4540,7 +4540,7 @@ const __default__$e = /* @__PURE__ */ defineComponent({
   name: "ElPopper",
   inheritAttrs: false
 });
-const _sfc_main$u = /* @__PURE__ */ defineComponent({
+const _sfc_main$v = /* @__PURE__ */ defineComponent({
   ...__default__$e,
   props: popperProps,
   setup(__props, { expose }) {
@@ -4564,7 +4564,7 @@ const _sfc_main$u = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Popper = /* @__PURE__ */ _export_sfc$1(_sfc_main$u, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/popper.vue"]]);
+var Popper = /* @__PURE__ */ _export_sfc$1(_sfc_main$v, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/popper.vue"]]);
 const popperArrowProps = buildProps({
   arrowOffset: {
     type: Number,
@@ -4575,7 +4575,7 @@ const __default__$d = /* @__PURE__ */ defineComponent({
   name: "ElPopperArrow",
   inheritAttrs: false
 });
-const _sfc_main$t = /* @__PURE__ */ defineComponent({
+const _sfc_main$u = /* @__PURE__ */ defineComponent({
   ...__default__$d,
   props: popperArrowProps,
   setup(__props, { expose }) {
@@ -4599,7 +4599,7 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperArrow = /* @__PURE__ */ _export_sfc$1(_sfc_main$t, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/arrow.vue"]]);
+var ElPopperArrow = /* @__PURE__ */ _export_sfc$1(_sfc_main$u, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/arrow.vue"]]);
 const NAME = "ElOnlyChild";
 const OnlyChild = /* @__PURE__ */ defineComponent({
   name: NAME,
@@ -4689,7 +4689,7 @@ const __default__$c = /* @__PURE__ */ defineComponent({
   name: "ElPopperTrigger",
   inheritAttrs: false
 });
-const _sfc_main$s = /* @__PURE__ */ defineComponent({
+const _sfc_main$t = /* @__PURE__ */ defineComponent({
   ...__default__$c,
   props: popperTriggerProps,
   setup(__props, { expose }) {
@@ -4732,7 +4732,7 @@ const _sfc_main$s = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$s, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/trigger.vue"]]);
+var ElPopperTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$t, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/trigger.vue"]]);
 const FOCUSOUT_PREVENTED = "focus-trap.focusout-prevented";
 const FOCUSOUT_PREVENTED_OPTS = {
   cancelable: true,
@@ -4808,7 +4808,7 @@ const createFocusOutPreventedEvent = (detail) => {
     detail
   });
 };
-const _sfc_main$r = /* @__PURE__ */ defineComponent({
+const _sfc_main$s = /* @__PURE__ */ defineComponent({
   name: "ElFocusTrap",
   inheritAttrs: false,
   props: {
@@ -4953,7 +4953,7 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   return renderSlot(_ctx.$slots, "default", { handleKeydown: _ctx.onKeydown });
 }
-var ElFocusTrap = /* @__PURE__ */ _export_sfc$1(_sfc_main$r, [["render", _sfc_render$6], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/focus-trap/src/focus-trap.vue"]]);
+var ElFocusTrap = /* @__PURE__ */ _export_sfc$1(_sfc_main$s, [["render", _sfc_render$6], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/focus-trap/src/focus-trap.vue"]]);
 const POSITIONING_STRATEGIES = ["fixed", "absolute"];
 const popperCoreConfigProps = buildProps({
   boundariesPadding: {
@@ -5233,7 +5233,7 @@ const usePopperContentFocusTrap = (props, emit) => {
 const __default__$b = /* @__PURE__ */ defineComponent({
   name: "ElPopperContent"
 });
-const _sfc_main$q = /* @__PURE__ */ defineComponent({
+const _sfc_main$r = /* @__PURE__ */ defineComponent({
   ...__default__$b,
   props: popperContentProps,
   emits: popperContentEmits,
@@ -5316,7 +5316,7 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$q, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/content.vue"]]);
+var ElPopperContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$r, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/content.vue"]]);
 const ElPopper = withInstall(Popper);
 const TOOLTIP_INJECTION_KEY = Symbol("elTooltip");
 const useTooltipContentProps = buildProps({
@@ -5397,7 +5397,7 @@ const whenTrigger = (trigger, type, handler) => {
 const __default__$a = /* @__PURE__ */ defineComponent({
   name: "ElTooltipTrigger"
 });
-const _sfc_main$p = /* @__PURE__ */ defineComponent({
+const _sfc_main$q = /* @__PURE__ */ defineComponent({
   ...__default__$a,
   props: useTooltipTriggerProps,
   setup(__props, { expose }) {
@@ -5457,12 +5457,12 @@ const _sfc_main$p = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElTooltipTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$p, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/trigger.vue"]]);
+var ElTooltipTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$q, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/trigger.vue"]]);
 const __default__$9 = /* @__PURE__ */ defineComponent({
   name: "ElTooltipContent",
   inheritAttrs: false
 });
-const _sfc_main$o = /* @__PURE__ */ defineComponent({
+const _sfc_main$p = /* @__PURE__ */ defineComponent({
   ...__default__$9,
   props: useTooltipContentProps,
   setup(__props, { expose }) {
@@ -5618,13 +5618,13 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElTooltipContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$o, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/content.vue"]]);
+var ElTooltipContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$p, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/content.vue"]]);
 const _hoisted_1$5 = ["innerHTML"];
 const _hoisted_2$4 = { key: 1 };
 const __default__$8 = /* @__PURE__ */ defineComponent({
   name: "ElTooltip"
 });
-const _sfc_main$n = /* @__PURE__ */ defineComponent({
+const _sfc_main$o = /* @__PURE__ */ defineComponent({
   ...__default__$8,
   props: useTooltipProps,
   emits: tooltipEmits,
@@ -5775,7 +5775,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Tooltip = /* @__PURE__ */ _export_sfc$1(_sfc_main$n, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/tooltip.vue"]]);
+var Tooltip = /* @__PURE__ */ _export_sfc$1(_sfc_main$o, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/tooltip.vue"]]);
 const ElTooltip = withInstall(Tooltip);
 const buttonGroupContextKey = Symbol("buttonGroupContextKey");
 const useButton = (props, emit) => {
@@ -5946,7 +5946,7 @@ function useButtonCustomStyle(props) {
 const __default__$7 = /* @__PURE__ */ defineComponent({
   name: "ElButton"
 });
-const _sfc_main$m = /* @__PURE__ */ defineComponent({
+const _sfc_main$n = /* @__PURE__ */ defineComponent({
   ...__default__$7,
   props: buttonProps,
   emits: buttonEmits,
@@ -6012,7 +6012,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Button = /* @__PURE__ */ _export_sfc$1(_sfc_main$m, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button.vue"]]);
+var Button = /* @__PURE__ */ _export_sfc$1(_sfc_main$n, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button.vue"]]);
 const buttonGroupProps = {
   size: buttonProps.size,
   type: buttonProps.type
@@ -6020,7 +6020,7 @@ const buttonGroupProps = {
 const __default__$6 = /* @__PURE__ */ defineComponent({
   name: "ElButtonGroup"
 });
-const _sfc_main$l = /* @__PURE__ */ defineComponent({
+const _sfc_main$m = /* @__PURE__ */ defineComponent({
   ...__default__$6,
   props: buttonGroupProps,
   setup(__props) {
@@ -6039,7 +6039,7 @@ const _sfc_main$l = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ButtonGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$l, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button-group.vue"]]);
+var ButtonGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$m, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button-group.vue"]]);
 const ElButton = withInstall(Button, {
   ButtonGroup
 });
@@ -6176,7 +6176,7 @@ const tagEmits = {
 const __default__$5 = /* @__PURE__ */ defineComponent({
   name: "ElTag"
 });
-const _sfc_main$k = /* @__PURE__ */ defineComponent({
+const _sfc_main$l = /* @__PURE__ */ defineComponent({
   ...__default__$5,
   props: tagProps,
   emits: tagEmits,
@@ -6257,23 +6257,23 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Tag = /* @__PURE__ */ _export_sfc$1(_sfc_main$k, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tag/src/tag.vue"]]);
+var Tag = /* @__PURE__ */ _export_sfc$1(_sfc_main$l, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tag/src/tag.vue"]]);
 const ElTag = withInstall(Tag);
-const _sfc_main$j = /* @__PURE__ */ defineComponent({
+const _sfc_main$k = /* @__PURE__ */ defineComponent({
   inheritAttrs: false
 });
 function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   return renderSlot(_ctx.$slots, "default");
 }
-var Collection = /* @__PURE__ */ _export_sfc$1(_sfc_main$j, [["render", _sfc_render$5], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection.vue"]]);
-const _sfc_main$i = /* @__PURE__ */ defineComponent({
+var Collection = /* @__PURE__ */ _export_sfc$1(_sfc_main$k, [["render", _sfc_render$5], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection.vue"]]);
+const _sfc_main$j = /* @__PURE__ */ defineComponent({
   name: "ElCollectionItem",
   inheritAttrs: false
 });
 function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   return renderSlot(_ctx.$slots, "default");
 }
-var CollectionItem = /* @__PURE__ */ _export_sfc$1(_sfc_main$i, [["render", _sfc_render$4], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection-item.vue"]]);
+var CollectionItem = /* @__PURE__ */ _export_sfc$1(_sfc_main$j, [["render", _sfc_render$4], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection-item.vue"]]);
 const COLLECTION_ITEM_SIGN = `data-el-collection-item`;
 const createCollectionWithScope = (name) => {
   const COLLECTION_NAME = `El${name}Collection`;
@@ -6459,7 +6459,7 @@ const _hoisted_2$3 = ["aria-label", "onKeydown"];
 const __default__$4 = /* @__PURE__ */ defineComponent({
   name: "ElInputNumber"
 });
-const _sfc_main$h = /* @__PURE__ */ defineComponent({
+const _sfc_main$i = /* @__PURE__ */ defineComponent({
   ...__default__$4,
   props: inputNumberProps,
   emits: inputNumberEmits,
@@ -6723,7 +6723,7 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var InputNumber = /* @__PURE__ */ _export_sfc$1(_sfc_main$h, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input-number/src/input-number.vue"]]);
+var InputNumber = /* @__PURE__ */ _export_sfc$1(_sfc_main$i, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input-number/src/input-number.vue"]]);
 const ElInputNumber = withInstall(InputNumber);
 const selectGroupKey = Symbol("ElSelectGroup");
 const selectKey = Symbol("ElSelect");
@@ -6819,7 +6819,7 @@ function useOption(props, states) {
     hoverItem
   };
 }
-const _sfc_main$g = /* @__PURE__ */ defineComponent({
+const _sfc_main$h = /* @__PURE__ */ defineComponent({
   name: "ElOption",
   componentName: "ElOption",
   props: {
@@ -6886,8 +6886,8 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     [vShow, _ctx.visible]
   ]);
 }
-var Option = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["render", _sfc_render$3], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option.vue"]]);
-const _sfc_main$f = /* @__PURE__ */ defineComponent({
+var Option = /* @__PURE__ */ _export_sfc$1(_sfc_main$h, [["render", _sfc_render$3], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option.vue"]]);
+const _sfc_main$g = /* @__PURE__ */ defineComponent({
   name: "ElSelectDropdown",
   componentName: "ElSelectDropdown",
   setup() {
@@ -6914,7 +6914,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     renderSlot(_ctx.$slots, "default")
   ], 6);
 }
-var ElSelectMenu = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$2], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select-dropdown.vue"]]);
+var ElSelectMenu = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["render", _sfc_render$2], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select-dropdown.vue"]]);
 function useSelectStates(props) {
   const { t } = useLocale();
   return reactive({
@@ -7682,7 +7682,7 @@ var ElOptions = /* @__PURE__ */ defineComponent({
   }
 });
 const COMPONENT_NAME$1 = "ElSelect";
-const _sfc_main$e = /* @__PURE__ */ defineComponent({
+const _sfc_main$f = /* @__PURE__ */ defineComponent({
   name: COMPONENT_NAME$1,
   componentName: COMPONENT_NAME$1,
   components: {
@@ -8351,8 +8351,8 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     [_directive_click_outside, _ctx.handleClose, _ctx.popperPaneRef]
   ]);
 }
-var Select = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$1], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select.vue"]]);
-const _sfc_main$d = /* @__PURE__ */ defineComponent({
+var Select = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$1], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select.vue"]]);
+const _sfc_main$e = /* @__PURE__ */ defineComponent({
   name: "ElOptionGroup",
   componentName: "ElOptionGroup",
   props: {
@@ -8399,7 +8399,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     [vShow, _ctx.visible]
   ]);
 }
-var OptionGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["render", _sfc_render], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option-group.vue"]]);
+var OptionGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option-group.vue"]]);
 const ElSelect = withInstall(Select, {
   Option,
   OptionGroup
@@ -8470,7 +8470,7 @@ const updateEventKeyRaw = `onUpdate:visible`;
 const __default__$3 = /* @__PURE__ */ defineComponent({
   name: "ElPopover"
 });
-const _sfc_main$c = /* @__PURE__ */ defineComponent({
+const _sfc_main$d = /* @__PURE__ */ defineComponent({
   ...__default__$3,
   props: popoverProps,
   emits: popoverEmits,
@@ -8570,7 +8570,7 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Popover = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popover/src/popover.vue"]]);
+var Popover = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popover/src/popover.vue"]]);
 const attachEvents = (el, binding) => {
   const popperComponent = binding.arg || binding.value;
   const popover = popperComponent == null ? void 0 : popperComponent.popperRef;
@@ -9170,7 +9170,7 @@ const _hoisted_1$2 = ["tabindex"];
 const __default__$2 = /* @__PURE__ */ defineComponent({
   name: "ElSliderButton"
 });
-const _sfc_main$b = /* @__PURE__ */ defineComponent({
+const _sfc_main$c = /* @__PURE__ */ defineComponent({
   ...__default__$2,
   props: sliderButtonProps,
   emits: sliderButtonEmits,
@@ -9251,7 +9251,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var SliderButton = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/button.vue"]]);
+var SliderButton = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/button.vue"]]);
 const sliderMarkerProps = buildProps({
   mark: {
     type: definePropType([String, Object]),
@@ -9278,7 +9278,7 @@ const _hoisted_2$1 = { key: 1 };
 const __default__$1 = /* @__PURE__ */ defineComponent({
   name: "ElSlider"
 });
-const _sfc_main$a = /* @__PURE__ */ defineComponent({
+const _sfc_main$b = /* @__PURE__ */ defineComponent({
   ...__default__$1,
   props: sliderProps,
   emits: sliderEmits,
@@ -9488,7 +9488,7 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Slider = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/slider.vue"]]);
+var Slider = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/slider.vue"]]);
 const ElSlider = withInstall(Slider);
 const switchProps = buildProps({
   modelValue: {
@@ -9583,7 +9583,7 @@ const COMPONENT_NAME = "ElSwitch";
 const __default__ = /* @__PURE__ */ defineComponent({
   name: COMPONENT_NAME
 });
-const _sfc_main$9 = /* @__PURE__ */ defineComponent({
+const _sfc_main$a = /* @__PURE__ */ defineComponent({
   ...__default__,
   props: switchProps,
   emits: switchEmits,
@@ -9797,7 +9797,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Switch = /* @__PURE__ */ _export_sfc$1(_sfc_main$9, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/switch/src/switch.vue"]]);
+var Switch = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/switch/src/switch.vue"]]);
 const ElSwitch = withInstall(Switch);
 const element_plus_injection_plugin_1RNPi6ogby = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.provide(ID_INJECTION_KEY, { "prefix": 1024, "current": 0 });
@@ -10190,8 +10190,8 @@ const useMusicStore = defineStore("music-settings", {
       return (x) => {
         let sum = 0;
         _.range(-8, 9).forEach((index) => {
-          const power = 1;
-          let factor = index === state.sineHarmonics ? 1 : 0;
+          let factor = 1 / (1 + Math.abs(index - state.sineHarmonics));
+          const power = 2;
           sum += Math.pow(factor, power) * Math.sin(index * x);
         });
         return sum;
@@ -10283,9 +10283,13 @@ const useStore = defineStore("main", {
           return noteOptions[value];
         });
       } else if (sequenceType === "sine") {
+        const steps = _.range(0, 2 * Math.PI, 0.1);
+        const waveformData = _.times(steps.length).map((i) => waveformFn(i));
+        const waveformMax = Math.max(...waveformData);
+        const normalizationFactor = 1 / waveformMax;
         this.notes = _.times(swatchWidth, (i) => {
           const waveformIndex = -2 * Math.PI * i / swatchWidth;
-          const val = waveformFn(waveformIndex);
+          const val = waveformFn(waveformIndex) * normalizationFactor;
           const min = _.min(noteOptions);
           const max = _.max(noteOptions);
           const range = max - min;
@@ -10317,7 +10321,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$8 = {
+const _sfc_main$9 = {
   __name: "MidiDrivers",
   __ssrInlineRender: true,
   setup(__props) {
@@ -10334,14 +10338,14 @@ const _sfc_main$8 = {
     };
   }
 };
-const _sfc_setup$8 = _sfc_main$8.setup;
-_sfc_main$8.setup = (props, ctx) => {
+const _sfc_setup$9 = _sfc_main$9.setup;
+_sfc_main$9.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/MidiDrivers.vue");
-  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
+  return _sfc_setup$9 ? _sfc_setup$9(props, ctx) : void 0;
 };
-const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-836b8239"]]);
-const _sfc_main$7 = {
+const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-836b8239"]]);
+const _sfc_main$8 = {
   __name: "TopNav",
   __ssrInlineRender: true,
   setup(__props) {
@@ -10372,14 +10376,14 @@ const _sfc_main$7 = {
     };
   }
 };
-const _sfc_setup$7 = _sfc_main$7.setup;
-_sfc_main$7.setup = (props, ctx) => {
+const _sfc_setup$8 = _sfc_main$8.setup;
+_sfc_main$8.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
-  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
+  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-d0673b8f"]]);
-const _sfc_main$6 = {
+const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-d0673b8f"]]);
+const _sfc_main$7 = {
   __name: "Woof",
   __ssrInlineRender: true,
   props: {
@@ -10505,11 +10509,11 @@ const _sfc_main$6 = {
     };
   }
 };
-const _sfc_setup$6 = _sfc_main$6.setup;
-_sfc_main$6.setup = (props, ctx) => {
+const _sfc_setup$7 = _sfc_main$7.setup;
+_sfc_main$7.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Woof.vue");
-  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
+  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
 function buildString(level, arr, count, remainder) {
   if (level === -1) {
@@ -10550,7 +10554,7 @@ const euclidean = {
   generateEuclideanSequence,
   buildString
 };
-const _sfc_main$5 = {
+const _sfc_main$6 = {
   __name: "Swatch",
   __ssrInlineRender: true,
   setup(__props) {
@@ -10635,7 +10639,7 @@ const _sfc_main$5 = {
     }
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<section${ssrRenderAttrs(mergeProps({ class: "swatch" }, _attrs))}><header>Weaving Swatch</header><div class="swatch-display">`);
-      _push(ssrRenderComponent(unref(_sfc_main$6), {
+      _push(ssrRenderComponent(unref(_sfc_main$7), {
         ref_key: "warp",
         ref: warp,
         length: unref(swatchWidth),
@@ -10647,7 +10651,7 @@ const _sfc_main$5 = {
         note: unref(warpNote),
         chord: unref(chord)
       }, null, _parent));
-      _push(ssrRenderComponent(unref(_sfc_main$6), {
+      _push(ssrRenderComponent(unref(_sfc_main$7), {
         ref_key: "weft",
         ref: weft,
         length: unref(swatchDepth),
@@ -10669,13 +10673,13 @@ const _sfc_main$5 = {
     };
   }
 };
-const _sfc_setup$5 = _sfc_main$5.setup;
-_sfc_main$5.setup = (props, ctx) => {
+const _sfc_setup$6 = _sfc_main$6.setup;
+_sfc_main$6.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Swatch.vue");
-  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
+  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
 };
-const _sfc_main$4 = {
+const _sfc_main$5 = {
   __name: "SettingsPane",
   __ssrInlineRender: true,
   props: {
@@ -10690,12 +10694,45 @@ const _sfc_main$4 = {
     };
   }
 };
+const _sfc_setup$5 = _sfc_main$5.setup;
+_sfc_main$5.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/SettingsPane.vue");
+  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
+};
+const _sfc_main$4 = {
+  __name: "Waveform",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const musicStore = useMusicStore();
+    const { waveformFn } = storeToRefs(musicStore);
+    computed({
+      get: () => {
+        const timesteps = _.range(0, 2 * Math.PI, 0.05);
+        const values = _.times(timesteps.length).map((i) => {
+          return waveformFn.value(timesteps[i]);
+        });
+        return [
+          timesteps,
+          values
+        ];
+      }
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_client_only = __nuxt_component_2;
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "waveform" }, _attrs))} data-v-e907c89a>`);
+      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
+      _push(`</div>`);
+    };
+  }
+};
 const _sfc_setup$4 = _sfc_main$4.setup;
 _sfc_main$4.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/SettingsPane.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Waveform.vue");
   return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
+const Waveform = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-e907c89a"]]);
 const _sfc_main$3 = {
   __name: "Notation",
   __ssrInlineRender: true,
@@ -10785,7 +10822,7 @@ const _sfc_main$2 = {
       } else {
         _push(`<!---->`);
       }
-      _push(ssrRenderComponent(unref(_sfc_main$4), { title: "Clock Settings" }, {
+      _push(ssrRenderComponent(unref(_sfc_main$5), { title: "Clock Settings" }, {
         default: withCtx((_2, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(`<p class="settings-description"${_scopeId}>Change the BPM (beats per minute) to modify how fast we advance through the sequence controlled in <em${_scopeId}>Music Settings</em></p>`);
@@ -10842,7 +10879,7 @@ const _sfc_main$2 = {
         }),
         _: 1
       }, _parent));
-      _push(ssrRenderComponent(unref(_sfc_main$4), { title: "Music Settings" }, {
+      _push(ssrRenderComponent(unref(_sfc_main$5), { title: "Music Settings" }, {
         default: withCtx((_2, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(`<p class="settings-description"${_scopeId}>These settings modify the underlying sequence of notes played as we advance from left to right in the <em${_scopeId}>Weaving Swatch</em> below.</p><div${_scopeId}><p class="setting-title"${_scopeId}>Sequence Type</p>`);
@@ -10900,11 +10937,11 @@ const _sfc_main$2 = {
               _push2(ssrRenderComponent(_component_el_slider, {
                 min: -8,
                 max: 8,
-                step: 1,
+                step: 0.1,
                 modelValue: unref(sineHarmonics),
                 "onUpdate:modelValue": ($event2) => isRef(sineHarmonics) ? sineHarmonics.value = $event2 : null
               }, null, _parent2, _scopeId));
-              _push2(ssrRenderComponent(_component_client_only, null, null, _parent2, _scopeId));
+              _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
               _push2(`</div>`);
             } else {
               _push2(`<!---->`);
@@ -11140,18 +11177,23 @@ const _sfc_main$2 = {
                 createVNode(_component_el_slider, {
                   min: -8,
                   max: 8,
-                  step: 1,
+                  step: 0.1,
                   modelValue: unref(sineHarmonics),
                   "onUpdate:modelValue": ($event2) => isRef(sineHarmonics) ? sineHarmonics.value = $event2 : null
-                }, null, 8, ["modelValue", "onUpdate:modelValue"]),
-                createVNode(_component_client_only)
+                }, null, 8, ["step", "modelValue", "onUpdate:modelValue"]),
+                createVNode(_component_client_only, null, {
+                  default: withCtx(() => [
+                    createVNode(unref(Waveform))
+                  ]),
+                  _: 1
+                })
               ])) : createCommentVNode("", true)
             ];
           }
         }),
         _: 1
       }, _parent));
-      _push(ssrRenderComponent(unref(_sfc_main$4), { title: "Weave Settings" }, {
+      _push(ssrRenderComponent(unref(_sfc_main$5), { title: "Weave Settings" }, {
         default: withCtx((_2, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(`<p class="settings-description"${_scopeId}> In weaving, <em${_scopeId}>warp</em> refers to the vertical lines and <em${_scopeId}>warp</em> refers to the horizontal lines, which are woven between the weft. In the swatch below, the warp (vertical) lines represent notes in the note sequence generated by the <em${_scopeId}>Music Settings</em>, and the weft (horizontal) lines represent individual voices that play the notes defined by the warp. To simplify the resulting tonality, the weft lines are handles as octaves, such that when more than one is played simultaneously, they alter the timbre of the voicing rather simply, as stacked octaves. This results in a translation of the weaving pattern that would be rather familiar to anyone who has previously used an MPC sequencer. </p><div${_scopeId}><p class="setting-title"${_scopeId}>Warp Count</p>`);
@@ -11369,7 +11411,7 @@ const _sfc_main$2 = {
         }),
         _: 1
       }, _parent));
-      _push(ssrRenderComponent(unref(_sfc_main$5), null, null, _parent));
+      _push(ssrRenderComponent(unref(_sfc_main$6), null, null, _parent));
       _push(`</main></div>`);
     };
   }
@@ -11399,8 +11441,8 @@ const _sfc_main = {
   __name: "nuxt-root",
   __ssrInlineRender: true,
   setup(__props) {
-    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-component-4872209b.mjs').then((r) => r.default || r));
-    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-a70144f9.mjs').then((r) => r.default || r));
+    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-component-37cedd95.mjs').then((r) => r.default || r));
+    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-b9909f46.mjs').then((r) => r.default || r));
     const nuxtApp = useNuxtApp();
     nuxtApp.deferHydration();
     nuxtApp.ssrContext.url;

@@ -57,4 +57,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 });
 
 export { islandRenderer as default };
-//# sourceMappingURL=island-renderer-a70144f9.mjs.map
+//# sourceMappingURL=island-renderer-b9909f46.mjs.map

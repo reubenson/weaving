@@ -1,4 +1,3 @@
-// const path = require('path');
 import nodePolyfills from 'rollup-plugin-polyfill-node';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -12,7 +11,9 @@ export default defineNuxtConfig({
   // },
   build: {
     transpile: [
-      /colormap/
+      /colormap/,
+      /sine-waves/,
+      // 'uplot-vue'
     ]
   },
   experimental: {
@@ -25,12 +26,15 @@ export default defineNuxtConfig({
   app: {
     baseURL: '/weaving/'
   },
-  plugins: ['~/plugins/mitt.client.js'],
+  plugins: [
+    '~/plugins/mitt.client.js',
+    // '~/plugins/uplot.client.js'
+  ],
   vite: {
     optimizeDeps: { // https://vitejs.dev/config/dep-optimization-options.html
       include: [
         // 'mtof',
-        // 'sine-waves',
+        'sine-waves',
         'colormap',
         // 'abcjs',
         // 'lodash'
@@ -45,12 +49,10 @@ export default defineNuxtConfig({
 
       },
       commonjsOptions: {
-        // transformMixedEsModules: true,
+        transformMixedEsModules: true,
         // https://github.com/vitejs/vite/issues/5668#issuecomment-968125763
         include: [
-          // https://github.com/vitejs/vite/issues/2679
-          // 'sine-waves/*',
-          // 'sine-waves',
+          // https://vitejs.dev/guide/dep-pre-bundling.html#monorepos-and-linked-dependencies
           'lodash',
           /mtof/,
           /sine-waves/,
@@ -59,12 +61,9 @@ export default defineNuxtConfig({
           /abcjs/,
           /dayjs/,
           /escape-html/,
+          // /uplot/,
+          // /uplot-vue/,
           /node_modules/
-        ],
-        exclude: [
-          // /colormap/
-          // 'mtof'
-          // /sine-waves/
         ]
       }
     }
