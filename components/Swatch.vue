@@ -355,7 +355,7 @@ onMounted(() => {
 <style lang="scss">
 .swatch {
   display: block;
-  margin-top: 20px;
+  margin-top: 120px;
   position: relative;
   width: 100%;
 

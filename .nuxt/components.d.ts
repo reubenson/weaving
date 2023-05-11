@@ -3,6 +3,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     'Clock': typeof import("../components/Clock.vue")['default']
     'MidiDrivers': typeof import("../components/MidiDrivers.vue")['default']
+    'Notation': typeof import("../components/Notation.vue")['default']
     'OnWeaving': typeof import("../components/OnWeaving.vue")['default']
     'SettingsPane': typeof import("../components/SettingsPane.vue")['default']
     'Swatch': typeof import("../components/Swatch.vue")['default']
@@ -420,6 +421,7 @@ declare module 'vue' {
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
     'LazyClock': typeof import("../components/Clock.vue")['default']
     'LazyMidiDrivers': typeof import("../components/MidiDrivers.vue")['default']
+    'LazyNotation': typeof import("../components/Notation.vue")['default']
     'LazyOnWeaving': typeof import("../components/OnWeaving.vue")['default']
     'LazySettingsPane': typeof import("../components/SettingsPane.vue")['default']
     'LazySwatch': typeof import("../components/Swatch.vue")['default']
@@ -840,6 +842,7 @@ declare module 'vue' {
 
 export const Clock: typeof import("../components/Clock.vue")['default']
 export const MidiDrivers: typeof import("../components/MidiDrivers.vue")['default']
+export const Notation: typeof import("../components/Notation.vue")['default']
 export const OnWeaving: typeof import("../components/OnWeaving.vue")['default']
 export const SettingsPane: typeof import("../components/SettingsPane.vue")['default']
 export const Swatch: typeof import("../components/Swatch.vue")['default']
@@ -1257,6 +1260,7 @@ export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
 export const LazyClock: typeof import("../components/Clock.vue")['default']
 export const LazyMidiDrivers: typeof import("../components/MidiDrivers.vue")['default']
+export const LazyNotation: typeof import("../components/Notation.vue")['default']
 export const LazyOnWeaving: typeof import("../components/OnWeaving.vue")['default']
 export const LazySettingsPane: typeof import("../components/SettingsPane.vue")['default']
 export const LazySwatch: typeof import("../components/Swatch.vue")['default']

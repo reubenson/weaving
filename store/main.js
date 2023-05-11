@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import _ from 'lodash';
+import { Midi } from 'tonal';
 import colormap from 'colormap';
 import { webAudio } from '~/lib/webAudio';
 import { useMusicStore } from './music-settings';
@@ -55,6 +56,10 @@ export const useStore = defineStore('main', {
       const weave = useWeaveStore();
 
       return weave.swatchDepth;
+    },
+    notesAsNames: state => {
+      return state.notes
+        .map(note => Midi.midiToNoteName(note));
     }
   },
   actions: {

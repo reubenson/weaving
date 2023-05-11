@@ -5,14 +5,16 @@
 </template>
 
 <script setup>
-  import { SineWaves } from 'sine-waves';
+  import SineWaves from 'sine-waves';
   import { useMusicStore } from '~/store/music-settings';
+
+  console.log('SineWaves', SineWaves);
 
   const musicStore = useMusicStore();
   const root = ref(null);
 
   onMounted(() => {
-    const waves = new SineWaves({
+    const waves = new SineWaves.SineWaves({
       el: root.value,
       speed: 0,
       rotate: 0,

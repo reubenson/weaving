@@ -12,7 +12,7 @@ export const useMusicStore = defineStore('music-settings', {
       rangeMin: 4,
       rangeMax: 6,
       sequenceType: 'random',
-      sequenceTypeOptions: ['random', 'sine'],
+      sequenceTypeOptions: ['random'],
       sineHarmonics: 1
     }
   },

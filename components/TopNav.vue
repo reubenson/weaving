@@ -28,7 +28,7 @@
   .top-nav {
     background-color: white;
     border-bottom: solid black 1px;
-    position: fixed;
+    position: sticky;
     height: 70px;
     left: 0;
     padding: 10px;

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import mtof from 'mtof';
 
 export class webAudio {
@@ -13,7 +12,7 @@ export class webAudio {
     this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
 
-    this.voices = _.times(numberOfVoices, () => {
+    this.voices = Array(numberOfVoices).map(() => {
       return {
         ctx: audioContext,
         oscillatorNode: audioContext.createOscillator(),
