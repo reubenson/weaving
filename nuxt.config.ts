@@ -2,7 +2,8 @@ const path = require('path');
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: false,
+  // https://nuxt.com/docs/getting-started/introduction#server-side-rendering
+  ssr: true, // https://nuxt.com/docs/getting-started/deployment#static-hosting
   // nitro: {
   //   output: {
   //     publicDir: path.join(__dirname, '/docs')
@@ -17,10 +18,12 @@ export default defineNuxtConfig({
   },
   plugins: ['~/plugins/mitt.client.js'],
   vite: {
-    optimizeDeps: {
+    optimizeDeps: { // https://vitejs.dev/config/dep-optimization-options.html
       include: [
         // 'mtof',
-        'sine-waves'
+        'sine-waves',
+        // /colormap/,
+        'colormap'
       ]
     },
     build: {
