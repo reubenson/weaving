@@ -2,7 +2,7 @@ const path = require('path');
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: true,
+  ssr: false,
   // nitro: {
   //   output: {
   //     publicDir: path.join(__dirname, '/docs')
