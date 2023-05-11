@@ -21,9 +21,10 @@ export default defineNuxtConfig({
     optimizeDeps: { // https://vitejs.dev/config/dep-optimization-options.html
       include: [
         // 'mtof',
-        'sine-waves',
-        // /colormap/,
-        'colormap'
+        // 'sine-waves',
+        // 'colormap',
+        // 'abcjs',
+        // 'lodash'
       ]
     },
     build: {
