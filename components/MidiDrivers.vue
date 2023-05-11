@@ -14,11 +14,11 @@
         <div class="drivers-item output">
           <h4>Select Output Port</h4>
           <client-only>
-          <el-select v-model="midiOutputPort">
-            <el-option
-              v-for="item in outputPorts"
-            />
-          </el-select>
+            <el-select v-model="midiOutputPort">
+              <el-option
+                v-for="item in outputPorts"
+              />
+            </el-select>
         </client-only>
           <!-- <select class="drivers-output-select" name="" @change="selectOutput">
             <option v-for="port in outputPorts" :key="port" :value="port" :selected="isSelectedOutput(port)">

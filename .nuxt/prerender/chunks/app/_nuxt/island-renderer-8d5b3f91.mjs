@@ -17,7 +17,6 @@ import 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dis
 import 'file:///Users/reubenson/Projects/weaving/node_modules/@ctrl/tinycolor/dist/public_api.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/lodash/lodash.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/tonal/dist/index.js';
-import 'file:///Users/reubenson/Projects/weaving/node_modules/colormap/index.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/mtof/index.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/tonal-chord/build/es5.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/abcjs/index.js';
@@ -57,4 +56,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 });
 
 export { islandRenderer as default };
-//# sourceMappingURL=island-renderer-d1d6ea0d.mjs.map
+//# sourceMappingURL=island-renderer-8d5b3f91.mjs.map

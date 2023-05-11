@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import _ from 'lodash';
 import { Midi } from 'tonal';
-import colormap from 'colormap';
+// import colormap from 'colormap';
 import { webAudio } from '~/lib/webAudio';
 import { useMusicStore } from './music-settings';
 import { useWeaveStore } from './weave-settings';
@@ -39,17 +39,18 @@ export const useStore = defineStore('main', {
     warpNoteColors: state => {
       const musicStore = useMusicStore();
       const length = (musicStore.rangeMax - musicStore.rangeMin) * 12. + 1;
-      const colors = colormap({
-        colormap: 'jet',
-        nshades: length,
-        format: 'hex',
-        alpha: 1
-      });
+      // const colors = colormap({
+      //   colormap: 'jet',
+      //   nshades: length,
+      //   format: 'hex',``
+      //   alpha: 1
+      // });
     
       return state.notes.map(item => {
         const colorIndex = item - 12 - (musicStore.rangeMin * 12);
         
-        return colors[colorIndex];
+        // return colors[colorIndex];
+        return '#000000';
       });
     },
     numberOfVoices: () => {

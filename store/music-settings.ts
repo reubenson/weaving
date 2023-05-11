@@ -45,9 +45,10 @@ export const useMusicStore = defineStore('music-settings', {
     },
     waveformFn: state => {
       return (x: number) => {
+        const numberOfHarmonics = 8;
         let sum = 0;
 
-        _.times(Math.abs(state.sineHarmonics), i => {
+        _.times(Math.abs(numberOfHarmonics), i => {
           const index = i + 1;
 
           if (state.sineHarmonics > 1) {

@@ -17,7 +17,6 @@ import 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dis
 import 'file:///Users/reubenson/Projects/weaving/node_modules/@ctrl/tinycolor/dist/public_api.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/lodash/lodash.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/tonal/dist/index.js';
-import 'file:///Users/reubenson/Projects/weaving/node_modules/colormap/index.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/mtof/index.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/tonal-chord/build/es5.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/abcjs/index.js';
@@ -82,4 +81,4 @@ _sfc_main.setup = (props, ctx) => {
 const error500 = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-32388612"]]);
 
 export { error500 as default };
-//# sourceMappingURL=error-500-928bc250.mjs.map
+//# sourceMappingURL=error-500-f9fd54b2.mjs.map

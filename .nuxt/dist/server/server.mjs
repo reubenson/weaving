@@ -27,7 +27,6 @@ import { createPopper, placements } from "@popperjs/core";
 import { TinyColor } from "@ctrl/tinycolor";
 import _ from "lodash";
 import { Scale, Note, Midi, Interval } from "tonal";
-import colormap from "colormap";
 import mtof from "mtof";
 import * as Chord from "tonal-chord";
 import abcjs from "abcjs";
@@ -9626,8 +9625,9 @@ const useMusicStore = defineStore("music-settings", {
     },
     waveformFn: (state) => {
       return (x) => {
+        const numberOfHarmonics = 8;
         let sum = 0;
-        _.times(Math.abs(state.sineHarmonics), (i) => {
+        _.times(Math.abs(numberOfHarmonics), (i) => {
           const index = i + 1;
           if (state.sineHarmonics > 1) {
             sum += 1 / index * Math.sin(index * x);
@@ -9691,16 +9691,10 @@ const useStore = defineStore("main", {
     },
     warpNoteColors: (state) => {
       const musicStore = useMusicStore();
-      const length = (musicStore.rangeMax - musicStore.rangeMin) * 12 + 1;
-      const colors = colormap({
-        colormap: "jet",
-        nshades: length,
-        format: "hex",
-        alpha: 1
-      });
+      (musicStore.rangeMax - musicStore.rangeMin) * 12 + 1;
       return state.notes.map((item) => {
-        const colorIndex = item - 12 - musicStore.rangeMin * 12;
-        return colors[colorIndex];
+        item - 12 - musicStore.rangeMin * 12;
+        return "#000000";
       });
     },
     numberOfVoices: () => {
@@ -9751,7 +9745,7 @@ const useStore = defineStore("main", {
     }
   }
 });
-const MidiDrivers_vue_vue_type_style_index_0_scoped_b71e0b7a_lang = "";
+const MidiDrivers_vue_vue_type_style_index_0_scoped_836b8239_lang = "";
 const _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -9770,7 +9764,7 @@ const _sfc_main$8 = {
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_client_only = __nuxt_component_2;
-      _push(`<section${ssrRenderAttrs(mergeProps({ class: "midi-drivers" }, _attrs))} data-v-b71e0b7a><header data-v-b71e0b7a>MIDI Settings</header><div class="drivers-wrapper" data-v-b71e0b7a><div class="drivers-item output" data-v-b71e0b7a><h4 data-v-b71e0b7a>Select Output Port</h4>`);
+      _push(`<section${ssrRenderAttrs(mergeProps({ class: "midi-drivers" }, _attrs))} data-v-836b8239><header data-v-836b8239>MIDI Settings</header><div class="drivers-wrapper" data-v-836b8239><div class="drivers-item output" data-v-836b8239><h4 data-v-836b8239>Select Output Port</h4>`);
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       _push(`</div></div></section>`);
     };
@@ -9782,7 +9776,7 @@ _sfc_main$8.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/MidiDrivers.vue");
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-b71e0b7a"]]);
+const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-836b8239"]]);
 const elSwitch = "";
 const TopNav_vue_vue_type_style_index_0_scoped_d0673b8f_lang = "";
 const _sfc_main$7 = {
@@ -10847,8 +10841,8 @@ const _sfc_main = {
   __name: "nuxt-root",
   __ssrInlineRender: true,
   setup(__props) {
-    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/error-component-fa22ebd6.js").then((r) => r.default || r));
-    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/island-renderer-d1d6ea0d.js").then((r) => r.default || r));
+    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/error-component-abf75277.js").then((r) => r.default || r));
+    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/island-renderer-8d5b3f91.js").then((r) => r.default || r));
     const nuxtApp = useNuxtApp();
     nuxtApp.deferHydration();
     nuxtApp.ssrContext.url;

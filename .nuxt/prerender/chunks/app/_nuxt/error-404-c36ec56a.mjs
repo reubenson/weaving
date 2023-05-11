@@ -1,32 +1,36 @@
-import { defineComponent, computed, ref, h, resolveComponent, mergeProps, withCtx, createTextVNode, toDisplayString, useSSRContext } from "vue";
-import { hasProtocol, parseURL, parseQuery, withTrailingSlash, withoutTrailingSlash } from "ufo";
-import "hookable";
-import { u as useRouter, n as navigateTo, _ as _export_sfc, a as useHead } from "../server.mjs";
-import "./index-e12b288f.js";
-import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent } from "vue/server-renderer";
-import "ofetch";
-import "#internal/nitro";
-import "unctx";
-import "@vue/devtools-api";
-import "destr";
-import "devalue";
-import "klona";
-import "@unhead/ssr";
-import "unhead";
-import "@unhead/shared";
-import "h3";
-import "@vueuse/core";
-import "@vue/shared";
-import "vuex";
-import "lodash-unified";
-import "@popperjs/core";
-import "@ctrl/tinycolor";
-import "lodash";
-import "tonal";
-import "colormap";
-import "mtof";
-import "tonal-chord";
-import "abcjs";
+import { mergeProps, withCtx, createTextVNode, toDisplayString, useSSRContext, defineComponent, computed, ref, h, resolveComponent } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/index.mjs';
+import { hasProtocol, parseURL, parseQuery, withTrailingSlash, withoutTrailingSlash } from 'file:///Users/reubenson/Projects/weaving/node_modules/ufo/dist/index.mjs';
+import { _ as _export_sfc, a as useHead, u as useRouter, n as navigateTo } from '../server.mjs';
+import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/server-renderer/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/ofetch/dist/node.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/hookable/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/unctx/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/@unhead/ssr/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/unhead/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/@unhead/shared/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/h3/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/@vueuse/core/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/@vue/shared/index.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/vue-devtools-stub/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/lodash-unified/import.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/@ctrl/tinycolor/dist/public_api.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/lodash/lodash.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/tonal/dist/index.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/mtof/index.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/tonal-chord/build/es5.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/abcjs/index.js';
+import '../../nitro/nitro-prerenderer.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/node-fetch-native/dist/polyfill.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/destr/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/unenv/runtime/fetch/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/scule/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/defu/dist/defu.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/ohash/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/unstorage/dist/index.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/unstorage/drivers/fs.mjs';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/radix3/dist/index.mjs';
+
 const firstNonUndefined = (...args) => args.find((arg) => arg !== void 0);
 const DEFAULT_EXTERNAL_REL_ATTRIBUTE = "noopener noreferrer";
 function defineNuxtLink(options) {
@@ -150,6 +154,7 @@ function defineNuxtLink(options) {
       const el = void 0;
       const elRef = void 0;
       return () => {
+        var _a2;
         var _a, _b;
         if (!isExternal.value) {
           const routerLinkProps = {
@@ -173,7 +178,7 @@ function defineNuxtLink(options) {
             slots.default
           );
         }
-        const href = typeof to.value === "object" ? ((_a = router.resolve(to.value)) == null ? void 0 : _a.href) ?? null : to.value || null;
+        const href = typeof to.value === "object" ? (_a2 = (_a = router.resolve(to.value)) == null ? void 0 : _a.href) != null ? _a2 : null : to.value || null;
         const target = props.target || null;
         const rel = props.noRel ? null : firstNonUndefined(props.rel, options.externalRelAttribute, href ? DEFAULT_EXTERNAL_REL_ATTRIBUTE : "") || null;
         const navigate = () => navigateTo(href, { replace: props.replace });
@@ -218,7 +223,6 @@ function defineNuxtLink(options) {
   });
 }
 const __nuxt_component_0 = /* @__PURE__ */ defineNuxtLink({ componentName: "NuxtLink" });
-const error404_vue_vue_type_style_index_0_scoped_30d2164e_lang = "";
 const _sfc_main = {
   __name: "error-404",
   __ssrInlineRender: true,
@@ -288,7 +292,6 @@ _sfc_main.setup = (props, ctx) => {
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
 const error404 = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-30d2164e"]]);
-export {
-  error404 as default
-};
-//# sourceMappingURL=error-404-0a5db25b.js.map
+
+export { error404 as default };
+//# sourceMappingURL=error-404-c36ec56a.mjs.map

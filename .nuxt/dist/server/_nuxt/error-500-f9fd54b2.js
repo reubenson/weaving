@@ -23,7 +23,6 @@ import "@popperjs/core";
 import "@ctrl/tinycolor";
 import "lodash";
 import "tonal";
-import "colormap";
 import "mtof";
 import "tonal-chord";
 import "abcjs";
@@ -79,4 +78,4 @@ const error500 = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3
 export {
   error500 as default
 };
-//# sourceMappingURL=error-500-928bc250.js.map
+//# sourceMappingURL=error-500-f9fd54b2.js.map
