@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     optimizeDeps: { // https://vitejs.dev/config/dep-optimization-options.html
       include: [
         // 'mtof',
-        // 'sine-waves',
+        'sine-waves',
         'colormap',
         // 'abcjs',
         // 'lodash'
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
         include: [
           // https://github.com/vitejs/vite/issues/2679
           // 'sine-waves/*',
-          'sine-waves',
+          // 'sine-waves',
           'lodash',
           /mtof/,
           /sine-waves/,
@@ -43,7 +43,7 @@ export default defineNuxtConfig({
           /abcjs/,
           /dayjs/,
           /escape-html/,
-          '/node_modules/**'
+          // '/node_modules/**'
         ],
         // exclude: [
           // 'mtof'

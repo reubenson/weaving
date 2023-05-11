@@ -9606,8 +9606,8 @@ const useMusicStore = defineStore("music-settings", {
       chordSizeFilter: 4,
       rangeMin: 4,
       rangeMax: 6,
-      sequenceType: "random",
-      sequenceTypeOptions: ["random"],
+      sequenceType: "sine",
+      sequenceTypeOptions: ["random", "sine"],
       sineHarmonics: 1
     };
   },
@@ -9625,15 +9625,11 @@ const useMusicStore = defineStore("music-settings", {
     },
     waveformFn: (state) => {
       return (x) => {
-        const numberOfHarmonics = 8;
         let sum = 0;
-        _.times(Math.abs(numberOfHarmonics), (i) => {
-          const index = i + 1;
-          if (state.sineHarmonics > 1) {
-            sum += 1 / index * Math.sin(index * x);
-          } else {
-            sum -= 1 / index * Math.sin(index * x);
-          }
+        _.range(-8, 9).forEach((index) => {
+          const power = 1;
+          let factor = index === state.sineHarmonics ? 1 : 0;
+          sum += Math.pow(factor, power) * Math.sin(index * x);
         });
         return sum;
       };

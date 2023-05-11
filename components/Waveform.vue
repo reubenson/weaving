@@ -8,25 +8,23 @@
   import SineWaves from 'sine-waves';
   import { useMusicStore } from '~/store/music-settings';
 
-  console.log('SineWaves', SineWaves);
-
   const musicStore = useMusicStore();
   const root = ref(null);
 
   onMounted(() => {
     const waves = new SineWaves.SineWaves({
       el: root.value,
-      speed: 0,
+      speed: 0.1,
       rotate: 0,
       ease: 'Linear',
-      waveWidth: '1%',
+      waveWidth: '100%',
       waves: [
         {
           timeModifier: 10,
           lineWidth: 2,
-          amplitude: 50,
+          amplitude: 40,
           segmentLenth: 1,
-          wavelength: 25,
+          wavelength: 1,
           type: musicStore.waveformFn
         }
       ],
