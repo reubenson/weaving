@@ -20,97 +20,113 @@
         <p class="settings-description">These settings modify the underlying sequence of notes played as we advance from left to right in the <em>Weaving Swatch</em> below.</p>
         <div>
           <p class="setting-title">Sequence Type</p>
-          <el-popover
-            class="settings-info"
-            placement="top-start"
-            title="Sequence Type"
-            :width="200"
-            trigger="click"
-            content="select the type of music sequence: random is random, and 'sine' provides a waveform that produces a set of notes."
-          >
-            <template #reference>
-              <el-button class="m-2">&#9432;</el-button>
-            </template>
-          </el-popover>
+          <client-only>
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Sequence Type"
+              :width="200"
+              trigger="click"
+              content="select the type of music sequence: random is random, and 'sine' provides a waveform that produces a set of notes."
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
           <!-- <p class="setting-description" v-if="waveformType === 'random'">The sequence of notes is randomly picked from the chord specified below</p>
           <p class="setting-description" v-if="waveformType === 'sine'">The sequence of notes is picked based on the shape of this waveform</p> -->
-          <el-select
-            v-model="sequenceType"
-          >
-            <el-option
-              v-for="item in sequenceTypeOptions"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
+          <client-only>
+            <el-select
+              v-model="sequenceType"
+            >
+              <el-option
+                v-for="item in sequenceTypeOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </client-only>
         </div>
         <div>
           <p class="setting-title">Chord Name</p>
-          <el-popover
-            class="settings-info"
-            placement="top-start"
-            title="Chord Name"
-            :width="200"
-            trigger="click"
-            content="The notes in the selected chord will be used to populate the note sequence"
-          >
-            <template #reference>
-              <el-button class="m-2">&#9432;</el-button>
-            </template>
-          </el-popover>
-          <el-select
-            v-model="noteScale"
-          >
-            <el-option
-              v-for="item in chordOptions"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
+          <client-only>
+
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Chord Name"
+              :width="200"
+              trigger="click"
+              content="The notes in the selected chord will be used to populate the note sequence"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
+          <client-only>
+            <el-select
+              v-model="noteScale"
+            >
+              <el-option
+                v-for="item in chordOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </client-only>
           <notation />
         </div>
         <div>
           <p class="setting-title">Filter chord by number of notes</p>
-          <el-popover
-            class="settings-info"
-            placement="top-start"
-            title="Chord Name"
-            :width="200"
-            trigger="click"
-            content="Select lower values to filter the chord options with fewer notes"
-          >
-            <template #reference>
-              <el-button class="m-2">&#9432;</el-button>
-            </template>
-          </el-popover>
-          <el-select
-            label="Filter chord selector by number of notes"
-            v-model="chordSizeFilter"
-          >
-            <el-option
-              v-for="item in [3, 4, 5, 6, 7]"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
+          <client-only>
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Chord Name"
+              :width="200"
+              trigger="click"
+              content="Select lower values to filter the chord options with fewer notes"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
+          <client-only>
+            <el-select
+              label="Filter chord selector by number of notes"
+              v-model="chordSizeFilter"
+            >
+              <el-option
+                v-for="item in [3, 4, 5, 6, 7]"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </client-only>
         </div>
         <div>
           <p class="setting-title">Lower Register</p>
-          <el-popover
-            class="settings-info"
-            placement="top-start"
-            title="Lower Register"
-            :width="200"
-            trigger="click"
-            content="Select lower values to filter the chord options with fewer notes"
-          >
-            <template #reference>
-              <el-button class="m-2">&#9432;</el-button>
-            </template>
-          </el-popover>
+          <client-only>
+
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Lower Register"
+              :width="200"
+              trigger="click"
+              content="Select lower values to filter the chord options with fewer notes"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
           <el-slider
             :min="0"
             :max="8"
@@ -121,18 +137,20 @@
         </div>
         <div>
           <p class="setting-title">Upper Register</p>
-          <el-popover
-            class="settings-info"
-            placement="top-start"
-            title="Upper Register"
-            :width="200"
-            trigger="click"
-            content="Select the upper register for the note sequence"
-          >
-            <template #reference>
-              <el-button class="m-2">&#9432;</el-button>
-            </template>
-          </el-popover>
+          <client-only>
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Upper Register"
+              :width="200"
+              trigger="click"
+              content="Select the upper register for the note sequence"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
           <el-slider
             :min="0"
             :max="8"
@@ -166,18 +184,20 @@
         </p>
         <div>
           <p class="setting-title">Warp Count</p>
-          <el-popover
-            class="settings-info"
-            placement="top-start"
-            title="Warp Count"
-            :width="200"
-            trigger="click"
-            content="In weaving, a warp is thread hung vertically. In our sequencer, a warp represents a note in the note sequence"
-          >
-            <template #reference>
-              <el-button class="m-2">&#9432;</el-button>
-            </template>
-          </el-popover>
+          <client-only>
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Warp Count"
+              :width="200"
+              trigger="click"
+              content="In weaving, a warp is thread hung vertically. In our sequencer, a warp represents a note in the note sequence"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
           <p class="setting-description"></p>
           <el-input-number 
             v-model="swatchWidth"
@@ -186,18 +206,20 @@
         </div>
         <div>
           <p class="setting-title">Weft Count</p>
-          <el-popover
-            class="settings-info"
-            placement="top-start"
-            title="Weft Count"
-            :width="200"
-            trigger="click"
-            content="In weaving, a warp is thread hung vertically. In our sequencer, a warp represents a note in the note sequence"
-          >
-            <template #reference>
-              <el-button class="m-2">&#9432;</el-button>
-            </template>
-          </el-popover>
+          <client-only>
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Weft Count"
+              :width="200"
+              trigger="click"
+              content="In weaving, a warp is thread hung vertically. In our sequencer, a warp represents a note in the note sequence"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
           <el-input-number 
             v-model="swatchDepth"
             :step="1"
@@ -205,28 +227,32 @@
         </div>
         <div>
           <p class="setting-title">Pattern Type</p>
-          <el-popover
-            class="settings-info"
-            placement="top-start"
-            title="Pattern Type"
-            :width="200"
-            trigger="click"
-            content="Weave: apply traditional weaving patterns. Euclidean: apply a 'euclidean' algorithm, which will construct a pattern in which notes are evenly spaced across the sequence"
-          >
-            <template #reference>
-              <el-button class="m-2">&#9432;</el-button>
-            </template>
-          </el-popover>
-          <el-select
-            v-model="patternType"
-          >
-            <el-option
-              v-for="item in patternOptions"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
+          <client-only>
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Pattern Type"
+              :width="200"
+              trigger="click"
+              content="Weave: apply traditional weaving patterns. Euclidean: apply a 'euclidean' algorithm, which will construct a pattern in which notes are evenly spaced across the sequence"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
+          <client-only>
+            <el-select
+              v-model="patternType"
+            >
+              <el-option
+                v-for="item in patternOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </client-only>
         </div>
         <div v-if="patternType === 'weave'">
           <p>Weave X</p>

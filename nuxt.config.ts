@@ -2,7 +2,7 @@ const path = require('path');
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: false,
+  ssr: true,
   // nitro: {
   //   output: {
   //     publicDir: path.join(__dirname, '/docs')
@@ -37,6 +37,8 @@ export default defineNuxtConfig({
           /lodash/,
           /colormap/,
           /abcjs/,
+          /dayjs/,
+          /escape-html/,
           '/node_modules/**'
         ],
         // exclude: [
