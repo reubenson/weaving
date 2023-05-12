@@ -1,7 +1,16 @@
-import nodePolyfills from 'rollup-plugin-polyfill-node';
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      title: 'Weaving Music',
+      meta: [
+        { name: 'description', content: 'weaving musical patterns'}
+      ]
+    }
+  },
+
   // https://nuxt.com/docs/getting-started/introduction#server-side-rendering
   ssr: true, // https://nuxt.com/docs/getting-started/deployment#static-hosting
   // nitro: {

@@ -14,7 +14,7 @@ export const useMusicStore = defineStore('music-settings', {
       sequenceType: 'random',
       sequenceTypeOptions: ['random', 'sine'],
       sineHarmonics: 1,
-      stackTypeOptions: ['octave', 'hocket'],
+      stackTypeOptions: ['octave', 'canon'],
       stackType: 'octave'
     }
   },

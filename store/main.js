@@ -69,7 +69,7 @@ export const useStore = defineStore('main', {
       return _.times(swatchDepth).map((i) => {
         let row = _.clone(state.notes);
 
-        if (stackType === 'hocket') {
+        if (stackType === 'canon') {
           for (let index = 0; index < i; index++) {
             row = rotateArray(row);
           }

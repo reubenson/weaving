@@ -1,4 +1,5 @@
 <template>
+  <head></head>
   <div>
     <OnWeaving />
   </div>

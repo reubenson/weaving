@@ -2,26 +2,6 @@
   <section class="swatch">
     <header>Weaving Swatch</header>
     <div class="swatch-display">
-      <!-- <woof
-        ref="warp"
-        :length=swatchWidth
-        type="warp"
-        :active="warpActive"
-        :index="warpIndex"
-        :tick="index"
-        :note="warpNote"
-        :chord="chord"
-      ></woof>
-      <woof
-        ref="weft"
-        :length=swatchDepth
-        type="weft"
-        :active="weftActive"
-        :index="weftIndex"
-        :tick="index"
-        :note="weftNote"
-        :chord="chord"
-      ></woof> -->
       <div class="swatch-grid" 
         :style="{
           gridTemplateColumns: 'repeat(' + (swatchWidth) + ', 1fr)'}"
@@ -264,8 +244,9 @@ onMounted(() => {
 .swatch {
   display: block;
   margin-top: 20px;
+  padding: 10px;
   position: relative;
-  width: 100%;
+  width: calc(100% - 20px);
 
   header {
     font-size: 24px;
@@ -298,7 +279,7 @@ onMounted(() => {
 
     margin: 0;
     padding: 5px;
-    border: 1px solid black;
+    border: 2px solid black;
     padding: 44%;
     // height: 50px;
     // width: 50px;
@@ -312,7 +293,7 @@ onMounted(() => {
     }
 
     &.active {
-      border-inline: solid black 3px;
+      border-inline: solid black 4px;
     }
   }
 }

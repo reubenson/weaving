@@ -15,7 +15,7 @@ export class webAudio {
     this.audioCtx = audioContext;
     this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
-    this.reverbNode = this.createReverb(audioContext);
+    this.reverbNode = this.audioCtx.createConvolver()
     this.reverbNode.connect(audioContext.destination);
     this.configureReverb();
     this.reverbNode.connect(this.audioCtx.destination);
@@ -41,17 +41,6 @@ export class webAudio {
     });
   }
 
-  private createReverb(audioCtx) {
-    let convolver = audioCtx.createConvolver();
-  
-    // load impulse response from file
-    // let response = await fetch("/weaving/Swede\ Plate\ 1.0s.aif");
-    // let arraybuffer = await response.arrayBuffer();
-    // convolver.buffer = await audioCtx.decodeAudioData(arraybuffer);
-  
-    return convolver;
-  }
-
   private async configureReverb() {
     // load impulse response from file
     let response = await fetch("/weaving/Swede\ Plate\ 3.0s.wav");
@@ -65,7 +54,7 @@ export class webAudio {
     let frequency = mtof(note);
     const attack = noteLength * 0.5;
     const decay = noteLength - attack;
-    const currentTime = voice.ctx?.currentTime;
+    const currentTime = this.audioCtx.currentTime;
 
     voice?.oscillatorNode?.frequency?.setValueAtTime(frequency, currentTime);
     // set up simple envelope VCA
@@ -75,6 +64,8 @@ export class webAudio {
 
   public start() {
     if (this.hasStarted) return;
+
+    this.audioCtx.resume();
 
     this.voices.forEach(voice => {
       voice.oscillatorNode.start();
