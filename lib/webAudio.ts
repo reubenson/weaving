@@ -18,6 +18,7 @@ export class webAudio {
     this.reverbNode = this.createReverb(audioContext);
     this.reverbNode.connect(audioContext.destination);
     this.configureReverb();
+    this.reverbNode.connect(this.audioCtx.destination);
 
     this.voices = _.times(numberOfVoices).map(() => {
       return {
@@ -76,7 +77,6 @@ export class webAudio {
     if (this.hasStarted) return;
 
     this.voices.forEach(voice => {
-      this.reverbNode.connect(audioContext.destination);
       voice.oscillatorNode.start();
     });
     this.hasStarted = true;
