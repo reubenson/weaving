@@ -51,6 +51,10 @@ export class webAudio {
   public playNote(voiceIndex: number, note: number, noteLength: number) {
     const voice = this.voices[voiceIndex];
 
+    console.log('voiceIndex', voiceIndex);
+    console.log('note', note);
+    console.log('voice', voice);
+
     let frequency = mtof(note);
     const attack = noteLength * 0.5;
     const decay = noteLength - attack;
