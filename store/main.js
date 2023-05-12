@@ -36,21 +36,81 @@ export const useStore = defineStore('main', {
 
       return _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
     },
-    warpNoteColors: state => {
+    noteColors: () => {
       const musicStore = useMusicStore();
       const length = (musicStore.rangeMax - musicStore.rangeMin) * 12. + 1;
-      const colors = colormap({
-        colormap: 'jet',
+      
+      return colormap({
+        colormap: 'bluered',
         nshades: length,
         format: 'hex',
         alpha: 1
       });
+    },
+
+    // array of arrays, building on notes
+    swatchNotes: state => {
+      const { swatchDepth } = useWeaveStore();
+      const { stackType } = useMusicStore();
+
+      /**
+       * rotate array by one item
+       * (first item is moved to second slot, etc)
+       * @param {array} arr
+       */
+      function rotateArray(arr) {
+        const item = arr.pop();
+
+        arr.unshift(item);
+        return arr;
+      }
+
+      return _.times(swatchDepth).map((i) => {
+        let row = _.clone(state.notes);
+
+        if (stackType === 'hocket') {
+          for (let index = 0; index < i; index++) {
+            row = rotateArray(row);
+          }
+        }
+        return row;
+      });
+    },
+
+    swatchNoteColors: state => {
+      const { rangeMin } = useMusicStore();
+      console.log('state.swatchNotes', state.swatchNotes);
+
+      const test = state.swatchNotes.map(row => {
+        console.log('row', row);
+        return row.map(note => {
+          const colorIndex = note - 12 - (rangeMin * 12);
+
+          console.log('colorIndex', colorIndex);
+          console.log('state.noteColors', state.noteColors);
+          return state.noteColors[colorIndex];
+        });
+      });
+      console.log('test', test);
+
+      return test;
+    },
+
+    warpNoteColors: state => {
+      const musicStore = useMusicStore();
+      // const length = (musicStore.rangeMax - musicStore.rangeMin) * 12. + 1;
+      // const colors = colormap({
+      //   colormap: 'bluered',
+      //   nshades: length,
+      //   format: 'hex',
+      //   alpha: 1
+      // });
+      // console.log('state.notesColors', state.notesColors);
     
       return state.notes.map(item => {
         const colorIndex = item - 12 - (musicStore.rangeMin * 12);
-        
-        return colors[colorIndex];
-        // return '#000000';
+
+        return state.noteColors[colorIndex];
       });
     },
     numberOfVoices: () => {

@@ -29,8 +29,10 @@
 
   let options = {
     title: 'Waveform', width: 300, height: 200,
-    series: [{
-        // label: 'x'
+    series: [
+      {
+        label: 'x',
+        show: false
       }, 
       {
         label: 'first',
@@ -38,7 +40,29 @@
         stroke: 'blue',
       },                 
     ],
-    scales: {x: {time: false}}
+    scales: {
+      x: {
+        time: false,
+      }
+    },
+    axes: [
+      {
+        grid: { show: true },
+        values: (self, ticks) => {
+          ticks = [0, 1, 3, 4 ,5]
+          console.log('ticks', ticks);
+          return ticks.map(val => '')
+        }
+      },
+      {
+        values: [],
+        grid: { show: false}
+      },
+      // {
+      //   label: 'test',
+      //   scale: '%'
+      // }
+    ]
   };
 
   const data = computed({
@@ -106,5 +130,9 @@
 <style scoped lang="scss">
   div {
     width: 100%;
+  }
+
+  .u-legend, .u-axis {
+    display: none;
   }
 </style>

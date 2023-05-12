@@ -113,7 +113,6 @@
         <div>
           <p class="setting-title">Lower Register</p>
           <client-only>
-
             <el-popover
               class="settings-info"
               placement="top-start"
@@ -159,6 +158,20 @@
             v-model="rangeMax"
           ></el-slider>
         </div>
+        <client-only>
+          <p class="setting-title">Stack Type</p>
+          <el-select
+              label="Stack Type"
+              v-model="stackType"
+            >
+              <el-option
+                v-for="item in stackTypeOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+        </client-only>
         <el-button
           class="border"
           v-if="musicStore.sequenceType === 'random'"
@@ -303,7 +316,7 @@
   const musicStore = useMusicStore();
   const weaveStore = useWeaveStore();
   const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames } = storeToRefs(store);
-  const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics } = storeToRefs(musicStore);
+  const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
   const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
 
   onMounted(() => {

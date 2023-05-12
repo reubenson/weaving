@@ -1,8 +1,8 @@
 const uPlot_min = '.uplot,.uplot *,.uplot :after,.uplot :before{box-sizing:border-box}.uplot{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5;width:-moz-min-content;width:min-content}.u-title{font-size:18px;font-weight:700;text-align:center}.u-wrap{position:relative;-webkit-user-select:none;-moz-user-select:none;user-select:none}.u-over,.u-under{position:absolute}.u-under{overflow:hidden}.uplot canvas{display:block;height:100%;position:relative;width:100%}.u-axis{position:absolute}.u-legend{font-size:14px;margin:auto;text-align:center}.u-inline{display:block}.u-inline *{display:inline-block}.u-inline tr{margin-right:16px}.u-legend th{font-weight:600}.u-legend th>*{display:inline-block;vertical-align:middle}.u-legend .u-marker{background-clip:padding-box!important;height:1em;margin-right:4px;width:1em}.u-inline.u-live th:after{content:":";vertical-align:middle}.u-inline:not(.u-live) .u-value{display:none}.u-series>*{padding:4px}.u-series th{cursor:pointer}.u-legend .u-off>*{opacity:.3}.u-select{background:rgba(0,0,0,.07)}.u-cursor-x,.u-cursor-y,.u-select{pointer-events:none;position:absolute}.u-cursor-x,.u-cursor-y{left:0;top:0;will-change:transform;z-index:100}.u-hz .u-cursor-x,.u-vt .u-cursor-y{border-right:1px dashed #607d8b;height:100%}.u-hz .u-cursor-y,.u-vt .u-cursor-x{border-bottom:1px dashed #607d8b;width:100%}.u-cursor-pt{background-clip:padding-box!important;border:0 solid;border-radius:50%;left:0;pointer-events:none;position:absolute;top:0;will-change:transform;z-index:100}.u-axis.u-off,.u-cursor-pt.u-off,.u-cursor-x.u-off,.u-cursor-y.u-off,.u-select.u-off{display:none}';
 
-const Waveform_vue_vue_type_style_index_0_scoped_e907c89a_lang = "div[data-v-e907c89a]{width:100%}";
+const Waveform_vue_vue_type_style_index_0_scoped_5b66b4f9_lang = "div[data-v-5b66b4f9]{width:100%}.u-axis[data-v-5b66b4f9],.u-legend[data-v-5b66b4f9]{display:none}";
 
-const WaveformStyles_d1a508b8 = [uPlot_min, Waveform_vue_vue_type_style_index_0_scoped_e907c89a_lang];
+const WaveformStyles_2fe27a16 = [uPlot_min, Waveform_vue_vue_type_style_index_0_scoped_5b66b4f9_lang];
 
-export { WaveformStyles_d1a508b8 as default };
-//# sourceMappingURL=Waveform-styles.d1a508b8.mjs.map
+export { WaveformStyles_2fe27a16 as default };
+//# sourceMappingURL=Waveform-styles.2fe27a16.mjs.map

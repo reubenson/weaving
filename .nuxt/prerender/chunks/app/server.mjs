@@ -10099,7 +10099,6 @@ class webAudio {
         panNode: audioContext.createStereoPanner()
       };
     });
-    console.log("this.voices", this.voices);
     this.voices.forEach((voice, i) => {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
@@ -10112,14 +10111,10 @@ class webAudio {
   playNote(voiceIndex, note, noteLength) {
     var _a, _b, _c;
     const voice = this.voices[voiceIndex];
-    console.log("voice", voice);
-    console.log("this.voices", this.voices);
-    console.log("voiceIndex", voiceIndex);
     let frequency = mtof(note);
     const attack = noteLength * 0.5;
     const decay = noteLength - attack;
     const currentTime = (_a = voice.ctx) == null ? void 0 : _a.currentTime;
-    frequency *= -1 + Math.floor(voiceIndex / 2);
     (_c = (_b = voice == null ? void 0 : voice.oscillatorNode) == null ? void 0 : _b.frequency) == null ? void 0 : _c.setValueAtTime(frequency, currentTime);
     voice.gainNode.gain.linearRampToValueAtTime(0.3, currentTime + attack / 1e3);
     voice.gainNode.gain.linearRampToValueAtTime(0, currentTime + attack / 1e3 + decay / 1e3);
@@ -10169,9 +10164,11 @@ const useMusicStore = defineStore("music-settings", {
       chordSizeFilter: 4,
       rangeMin: 4,
       rangeMax: 6,
-      sequenceType: "sine",
+      sequenceType: "random",
       sequenceTypeOptions: ["random", "sine"],
-      sineHarmonics: 1
+      sineHarmonics: 1,
+      stackTypeOptions: ["octave", "hocket"],
+      stackType: "octave"
     };
   },
   getters: {
@@ -10248,18 +10245,55 @@ const useStore = defineStore("main", {
       const { noteGrid } = state;
       return _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
     },
-    warpNoteColors: (state) => {
+    noteColors: () => {
       const musicStore = useMusicStore();
       const length = (musicStore.rangeMax - musicStore.rangeMin) * 12 + 1;
-      const colors = colormap$1({
-        colormap: "jet",
+      return colormap$1({
+        colormap: "bluered",
         nshades: length,
         format: "hex",
         alpha: 1
       });
+    },
+    // array of arrays, building on notes
+    swatchNotes: (state) => {
+      const { swatchDepth } = useWeaveStore();
+      const { stackType } = useMusicStore();
+      function rotateArray(arr) {
+        const item = arr.pop();
+        arr.unshift(item);
+        return arr;
+      }
+      return _.times(swatchDepth).map((i) => {
+        let row = _.clone(state.notes);
+        if (stackType === "hocket") {
+          for (let index = 0; index < i; index++) {
+            row = rotateArray(row);
+          }
+        }
+        return row;
+      });
+    },
+    swatchNoteColors: (state) => {
+      const { rangeMin } = useMusicStore();
+      console.log("state.swatchNotes", state.swatchNotes);
+      const test = state.swatchNotes.map((row) => {
+        console.log("row", row);
+        return row.map((note) => {
+          const colorIndex = note - 12 - rangeMin * 12;
+          console.log("colorIndex", colorIndex);
+          console.log("state.noteColors", state.noteColors);
+          return state.noteColors[colorIndex];
+        });
+      });
+      console.log("test", test);
+      return test;
+    },
+    warpNoteColors: (state) => {
+      const musicStore = useMusicStore();
       return state.notes.map((item) => {
         const colorIndex = item - 12 - musicStore.rangeMin * 12;
-        return colors[colorIndex];
+        return state.noteColors[colorIndex];
       });
     },
     numberOfVoices: () => {
@@ -10560,9 +10594,10 @@ const _sfc_main$6 = {
   setup(__props) {
     const store2 = useStore();
     const weaveStore = useWeaveStore();
-    useMusicStore();
-    const { useWebAudio, webAudioSynth, warpNoteColors, gridItems, gridItemsKey, errorMsg } = storeToRefs(store2);
+    const musicStore = useMusicStore();
+    const { useWebAudio, webAudioSynth, warpNoteColors, gridItems, gridItemsKey, errorMsg, swatchNoteColors } = storeToRefs(store2);
     const { swatchWidth, swatchDepth, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
+    storeToRefs(musicStore);
     const warp = ref();
     const weft = ref();
     let readMode = ref("stack");
@@ -10599,7 +10634,6 @@ const _sfc_main$6 = {
           row.push((i + swatchWidth.value - j) % length < pattern[0] ? true : false);
         });
         store2.noteGrid.push(row);
-        console.log("store.noteGrid", store2.noteGrid);
       });
     }
     function handleUpdateLength() {
@@ -10615,7 +10649,6 @@ const _sfc_main$6 = {
     }
     function handleEuclidean() {
       let pattern = euclidean.generateEuclideanSequence(swatchWidth.value, euclideanCount.value);
-      console.log("euclideanCount.value", euclideanCount.value);
       let shiftPattern = (pattern2, x) => {
         let shift = _.clone(pattern2);
         return shift.map((val, i) => {
@@ -10667,7 +10700,7 @@ const _sfc_main$6 = {
         gridTemplateColumns: "repeat(" + unref(swatchWidth) + ", 1fr)"
       })}"><!--[-->`);
       ssrRenderList(unref(gridItems), (item, i) => {
-        _push(`<div class="${ssrRenderClass([{ hide: !item, active: isActiveGridItem(i) }, "swatch-grid-note"])}" style="${ssrRenderStyle({ "background-color": item ? unref(warpNoteColors)[i % unref(swatchWidth)] : _ctx.transparent })}"></div>`);
+        _push(`<div class="${ssrRenderClass([{ hide: !item, active: isActiveGridItem(i) }, "swatch-grid-note"])}" style="${ssrRenderStyle({ "background-color": item ? unref(swatchNoteColors)[Math.floor(i / unref(swatchWidth))][i % unref(swatchWidth)] : _ctx.transparent })}"></div>`);
       });
       _push(`<!--]--></div></div></section>`);
     };
@@ -10720,7 +10753,7 @@ const _sfc_main$4 = {
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_client_only = __nuxt_component_2;
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "waveform" }, _attrs))} data-v-e907c89a>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "waveform" }, _attrs))} data-v-5b66b4f9>`);
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       _push(`</div>`);
     };
@@ -10732,7 +10765,7 @@ _sfc_main$4.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Waveform.vue");
   return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const Waveform = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-e907c89a"]]);
+const Waveform = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-5b66b4f9"]]);
 const _sfc_main$3 = {
   __name: "Notation",
   __ssrInlineRender: true,
@@ -10777,7 +10810,7 @@ const _sfc_main$2 = {
     const musicStore = useMusicStore();
     const weaveStore = useWeaveStore();
     const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames } = storeToRefs(store2);
-    const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics } = storeToRefs(musicStore);
+    const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
     const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
     watch(sequenceType, store2.initNotes);
     watch(sineHarmonics, store2.initNotes);
@@ -10913,6 +10946,7 @@ const _sfc_main$2 = {
               "onUpdate:modelValue": ($event2) => isRef(rangeMax) ? rangeMax.value = $event2 : null
             }, null, _parent2, _scopeId));
             _push2(`</div>`);
+            _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
             if (unref(musicStore).sequenceType === "random") {
               _push2(ssrRenderComponent(_component_el_button, {
                 class: "border",
@@ -11161,6 +11195,28 @@ const _sfc_main$2 = {
                   "onUpdate:modelValue": ($event2) => isRef(rangeMax) ? rangeMax.value = $event2 : null
                 }, null, 8, ["modelValue", "onUpdate:modelValue"])
               ]),
+              createVNode(_component_client_only, null, {
+                default: withCtx(() => [
+                  createVNode("p", { class: "setting-title" }, "Stack Type"),
+                  createVNode(_component_el_select, {
+                    label: "Stack Type",
+                    modelValue: unref(stackType),
+                    "onUpdate:modelValue": ($event2) => isRef(stackType) ? stackType.value = $event2 : null
+                  }, {
+                    default: withCtx(() => [
+                      (openBlock(true), createBlock(Fragment, null, renderList(unref(stackTypeOptions), (item) => {
+                        return openBlock(), createBlock(_component_el_option, {
+                          key: item,
+                          label: item,
+                          value: item
+                        }, null, 8, ["label", "value"]);
+                      }), 128))
+                    ]),
+                    _: 1
+                  }, 8, ["modelValue", "onUpdate:modelValue"])
+                ]),
+                _: 1
+              }),
               unref(musicStore).sequenceType === "random" ? (openBlock(), createBlock(_component_el_button, {
                 key: 0,
                 class: "border",

@@ -12,8 +12,7 @@ export default defineNuxtConfig({
   build: {
     transpile: [
       /colormap/,
-      /sine-waves/,
-      // 'uplot-vue'
+      /sine-waves/
     ]
   },
   experimental: {
@@ -27,24 +26,19 @@ export default defineNuxtConfig({
     baseURL: '/weaving/'
   },
   plugins: [
-    '~/plugins/mitt.client.js',
-    // '~/plugins/uplot.client.js'
+    '~/plugins/mitt.client.js'
   ],
   vite: {
     optimizeDeps: { // https://vitejs.dev/config/dep-optimization-options.html
       include: [
-        // 'mtof',
-        'sine-waves',
-        'colormap',
-        // 'abcjs',
-        // 'lodash'
+        'colormap'
       ]
     },
     build: {
       rollupOptions: {
         plugins: [
           // https://stackoverflow.com/questions/71645151/cannnot-initialize-coinbasesdk-in-nuxt3-project
-          nodePolyfills()
+          // nodePolyfills()
         ],
 
       },
@@ -55,14 +49,11 @@ export default defineNuxtConfig({
           // https://vitejs.dev/guide/dep-pre-bundling.html#monorepos-and-linked-dependencies
           'lodash',
           /mtof/,
-          /sine-waves/,
           /lodash/,
           /colormap/,
           /abcjs/,
           /dayjs/,
           /escape-html/,
-          // /uplot/,
-          // /uplot-vue/,
           /node_modules/
         ]
       }

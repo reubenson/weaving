@@ -11,9 +11,11 @@ export const useMusicStore = defineStore('music-settings', {
       chordSizeFilter: 4,
       rangeMin: 4,
       rangeMax: 6,
-      sequenceType: 'sine',
+      sequenceType: 'random',
       sequenceTypeOptions: ['random', 'sine'],
-      sineHarmonics: 1
+      sineHarmonics: 1,
+      stackTypeOptions: ['octave', 'hocket'],
+      stackType: 'octave'
     }
   },
   getters: {
@@ -45,10 +47,7 @@ export const useMusicStore = defineStore('music-settings', {
     },
     waveformFn: state => {
       return (x: number) => {
-        const numberOfHarmonics = 8;
         let sum = 0;
-
-        // return Math.sin(x);
 
         _.range(-8, 9).forEach(index => {
           let factor = 1 / (1 + Math.abs(index - state.sineHarmonics));

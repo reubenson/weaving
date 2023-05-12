@@ -23,8 +23,6 @@ export class webAudio {
       }
     });
 
-    console.log('this.voices', this.voices);
-
     this.voices.forEach((voice, i) => {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
@@ -39,10 +37,6 @@ export class webAudio {
   public playNote(voiceIndex: number, note: number, noteLength: number) {
     const voice = this.voices[voiceIndex];
 
-    console.log('voice', voice);
-    console.log('this.voices', this.voices);
-    console.log('voiceIndex', voiceIndex);
-
     let frequency = mtof(note);
     // const attack = 220; // ms
     // const decay = 300; // ms
@@ -50,7 +44,8 @@ export class webAudio {
     const decay = noteLength - attack;
     const currentTime = voice.ctx?.currentTime;
 
-    frequency *= -1 + Math.floor(voiceIndex / 2);
+    // move over octave handler
+    // frequency *= -1 + Math.floor(voiceIndex / 2);
 
 
     voice?.oscillatorNode?.frequency?.setValueAtTime(frequency, currentTime);

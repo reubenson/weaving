@@ -32,7 +32,7 @@
           class="swatch-grid-note"
           v-for="(item, i) in gridItems"
           :class="{hide: !item, active: isActiveGridItem(i)}"
-          :style="{'background-color': item ? warpNoteColors[i % swatchWidth] : transparent}"
+          :style="{'background-color': item ? swatchNoteColors[Math.floor(i / swatchWidth)][i % swatchWidth] : transparent}"
           :key="`${gridItemsKey}_${i}`">
         </div>
       </div>
@@ -59,8 +59,9 @@ import { storeToRefs } from 'pinia';
 const store = useStore();
 const weaveStore = useWeaveStore();
 const musicStore = useMusicStore();
-const { useWebAudio, webAudioSynth, warpNoteColors, gridItems, gridItemsKey, errorMsg } = storeToRefs(store);
+const { useWebAudio, webAudioSynth, warpNoteColors, gridItems, gridItemsKey, errorMsg, swatchNoteColors } = storeToRefs(store);
 const { swatchWidth, swatchDepth, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
+const { stackType } = storeToRefs(musicStore);
 
 const warp = ref();
 const weft = ref();
@@ -103,6 +104,7 @@ function computeWeave() {
   const pattern = [weaveX.value, weaveY.value],
     length = pattern.reduce((acc, item) => acc += item);
   
+  // to do: rename this, since it's more about the weave than the note
   store.noteGrid = [];
   _.times(swatchDepth.value, (i) => {
     const row = [];
@@ -114,7 +116,7 @@ function computeWeave() {
 
     store.noteGrid.push(row);
 
-    console.log('store.noteGrid', store.noteGrid);
+    // console.log('store.noteGrid', store.noteGrid);
   });
 }
 
@@ -131,7 +133,6 @@ function handleTick(source, value) {
     const warpIndex = index.value % swatchWidth.value; // make computed value
     // this.$refs.warp.updateNoteAtIndex(value, warpIndex);
     warp.updateNoteAtIndex(value, warpIndex);
-    console.log('value', value);
   }
 
   advance();
@@ -158,8 +159,6 @@ function handlePatternChange() {
 function handleEuclidean() {
   let pattern = euclidean.generateEuclideanSequence(swatchWidth.value, euclideanCount.value);
 
-  console.log('euclideanCount.value', euclideanCount.value);
-
   let shiftPattern = (pattern, x) => {
     let shift = _.clone(pattern);
 
@@ -175,10 +174,10 @@ function handleEuclidean() {
 
     store.noteGrid.push(shift);
   });
+
+  // console.log('store.noteGrid', store.noteGrid);
 }
 function sendNote(channel, note, velocity) {
-  // if (useWebAudio.value) {
-    // send note to web audio synth OR midi
   try {
     audio.playNote(channel, note, store.noteLength, useWebAudio.value && webAudioSynth.value );
   } catch (error) {
@@ -186,9 +185,7 @@ function sendNote(channel, note, velocity) {
     errorMsg.value = error;
     console.error(error);
   }
-  // } else {
-    // audio.playNote(channel, note, store.noteLength);
-  // }
+
       return;
       channel = 1;
       midi.noteOn(channel, note, velocity);
@@ -254,32 +251,29 @@ function advanceStack() {
   let noteValue, chordInterval;
   // determine warp/weft coordinates
   let warpIndex = index.value % swatchWidth.value;
-  let weftIndex = Math.floor(index.value / swatchWidth.value) % swatchDepth.value;
+  // let weftIndex = Math.floor(index.value / swatchWidth.value) % swatchDepth.value;
 
   if (!warp) {
     console.log('warp not found');
     return;
   }
 
-  // read from randomize
-  // noteValue = parseInt(this.$refs.warp.getNote(warpIndex));
-  // noteValue = parseInt(warp.value.getNote(warpIndex));
-  noteValue = parseInt(store.notes[warpIndex])
-  // read from LFO generator
-  // noteValue = 
-
-  // apply interval from weft
-
+  
   const rows = swatchDepth.value;
-
+  
   _.times(rows, row => {
     const channel = row + 1;
     const isActive = store.noteGrid[row][warpIndex];
-
+    
+    noteValue = parseInt(store.swatchNotes[row][warpIndex]);
     // apply interval from weft
     // chordInterval = parseInt(this.$refs.weft.getInterval(row)) || 0;
     // noteValue += chordInterval;
-
+    
+    if (stackType.value === 'octave') {
+      noteValue += (12 * row);
+    }
+      
     if (isActive) {
       sendNote(row, noteValue, 127);
       // forget why this factor of 2 for MIDI
@@ -355,7 +349,7 @@ onMounted(() => {
 <style lang="scss">
 .swatch {
   display: block;
-  margin-top: 120px;
+  margin-top: 20px;
   position: relative;
   width: 100%;
 
@@ -375,6 +369,7 @@ onMounted(() => {
     // border: solid black 2px;
     display: grid;
     position: absolute;
+    padding-bottom: 40px;
     width: 100%;
     // margin: 80px auto auto 80px;
     // grid-auto-rows: 1fr;
@@ -403,9 +398,8 @@ onMounted(() => {
     }
 
     &.active {
-      border: solid blue 4px;
+      border-inline: solid blue 4px;
     }
-    // display: inline;
   }
 }
 </style>

@@ -1,8 +1,6 @@
 import midi from "./midi";
 
 function playNote(channel: number, note: number, noteLength: number, webSynth: any) {
-  console.log('channel', channel);
-  console.log('note', note);
   if (webSynth) {
     // play via web audio
     webSynth.playNote(channel, note, noteLength);
