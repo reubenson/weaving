@@ -41,6 +41,7 @@ export const useStore = defineStore('main', {
       const length = (musicStore.rangeMax - musicStore.rangeMin) * 12. + 1;
       
       return colormap({
+        // https://github.com/bpostlethwaite/colormap
         colormap: 'bluered',
         nshades: length,
         format: 'hex',
@@ -79,21 +80,16 @@ export const useStore = defineStore('main', {
 
     swatchNoteColors: state => {
       const { rangeMin } = useMusicStore();
-      console.log('state.swatchNotes', state.swatchNotes);
 
-      const test = state.swatchNotes.map(row => {
-        console.log('row', row);
+      const noteColors = state.swatchNotes.map(row => {
         return row.map(note => {
           const colorIndex = note - 12 - (rangeMin * 12);
 
-          console.log('colorIndex', colorIndex);
-          console.log('state.noteColors', state.noteColors);
           return state.noteColors[colorIndex];
         });
       });
-      console.log('test', test);
 
-      return test;
+      return noteColors;
     },
 
     warpNoteColors: state => {
@@ -144,7 +140,7 @@ export const useStore = defineStore('main', {
         const normalizationFactor = 1 / waveformMax;
 
         this.notes = _.times(swatchWidth, i => {
-          const waveformIndex = -2 * Math.PI * i / swatchWidth;
+          const waveformIndex = 2 * Math.PI * i / swatchWidth;
 
           // val ranges from -1 to 1, which needs to be mapped to the range of noteOptions
           // val may not exactly range from -1 to 1, and should be renormalized
@@ -181,6 +177,9 @@ export const useStore = defineStore('main', {
     
     //     this.notes[i] = noteOptions.value[value];
     //   }
+    },
+    relalculateNotes() {
+
     },
     increment() {
       this.count++;

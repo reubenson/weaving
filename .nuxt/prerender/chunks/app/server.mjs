@@ -1,4 +1,4 @@
-import { watch, reactive, version, ref, defineComponent, computed, openBlock, createElementBlock, mergeProps, unref, renderSlot, useAttrs as useAttrs$1, useSlots, shallowRef, nextTick, toRef, withDirectives, createCommentVNode, Fragment, normalizeClass, createElementVNode, createBlock, withCtx, resolveDynamicComponent, withModifiers, createVNode, toDisplayString, normalizeStyle, vShow, provide, onUpdated, inject, Teleport, Transition, readonly, withKeys, toRefs, createTextVNode, renderList, getCurrentInstance, watchEffect, warn, onUnmounted, cloneVNode, Text, Comment, triggerRef, toRaw, h, useSSRContext, createApp, isRef, markRaw, effectScope, isReactive, resolveComponent, resolveDirective, vModelText, createSlots, onErrorCaptured, onServerPrefetch, getCurrentScope, onScopeDispose, isReadonly, defineAsyncComponent, onMounted } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/index.mjs';
+import { watch, reactive, version, ref, defineComponent, computed, openBlock, createElementBlock, mergeProps, unref, renderSlot, useSlots, createBlock, Transition, withCtx, withDirectives, createElementVNode, normalizeClass, resolveDynamicComponent, createCommentVNode, createTextVNode, toDisplayString, Fragment, createVNode, vShow, useAttrs as useAttrs$1, shallowRef, nextTick, toRef, withModifiers, normalizeStyle, provide, onUpdated, inject, Teleport, readonly, withKeys, toRefs, renderList, getCurrentInstance, watchEffect, warn, onUnmounted, cloneVNode, Text, Comment, triggerRef, toRaw, h, useSSRContext, createApp, isRef, markRaw, effectScope, isReactive, resolveComponent, resolveDirective, vModelText, createSlots, onErrorCaptured, onServerPrefetch, getCurrentScope, onScopeDispose, isReadonly, defineAsyncComponent } from 'file:///Users/reubenson/Projects/weaving/node_modules/vue/index.mjs';
 import { $fetch } from 'file:///Users/reubenson/Projects/weaving/node_modules/ofetch/dist/node.mjs';
 import { createHooks } from 'file:///Users/reubenson/Projects/weaving/node_modules/hookable/dist/index.mjs';
 import { getContext } from 'file:///Users/reubenson/Projects/weaving/node_modules/unctx/dist/index.mjs';
@@ -15,7 +15,7 @@ import { isNil, fromPairs, isUndefined as isUndefined$1, isEqual, get, debounce 
 import { placements, createPopper } from 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dist/index.mjs';
 import { TinyColor } from 'file:///Users/reubenson/Projects/weaving/node_modules/@ctrl/tinycolor/dist/public_api.js';
 import _ from 'file:///Users/reubenson/Projects/weaving/node_modules/lodash/lodash.js';
-import { Scale, Note, Midi, Interval } from 'file:///Users/reubenson/Projects/weaving/node_modules/tonal/dist/index.js';
+import { Scale, Note, Midi } from 'file:///Users/reubenson/Projects/weaving/node_modules/tonal/dist/index.js';
 import require$$1 from 'file:///Users/reubenson/Projects/weaving/node_modules/lerp/index.js';
 import mtof from 'file:///Users/reubenson/Projects/weaving/node_modules/mtof/index.js';
 import * as Chord from 'file:///Users/reubenson/Projects/weaving/node_modules/tonal-chord/build/es5.js';
@@ -2283,6 +2283,7 @@ const isStringNumber = (val) => {
   return !Number.isNaN(Number(val));
 };
 const escapeStringRegexp = (string = "") => string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
+const keysOf = (arr) => Object.keys(arr);
 class ElementPlusError extends Error {
   constructor(m) {
     super(m);
@@ -2415,6 +2416,28 @@ function _sfc_render49(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("svg", _hoisted_149, _hoisted_415);
 }
 var circle_check_default = /* @__PURE__ */ export_helper_default(circle_check_vue_vue_type_script_lang_default, [["render", _sfc_render49], ["__file", "circle-check.vue"]]);
+var circle_close_filled_vue_vue_type_script_lang_default = {
+  name: "CircleCloseFilled"
+};
+var _hoisted_150 = {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 1024 1024"
+}, _hoisted_250 = /* @__PURE__ */ createElementVNode(
+  "path",
+  {
+    fill: "currentColor",
+    d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm0 393.664L407.936 353.6a38.4 38.4 0 1 0-54.336 54.336L457.664 512 353.6 616.064a38.4 38.4 0 1 0 54.336 54.336L512 566.336 616.064 670.4a38.4 38.4 0 1 0 54.336-54.336L566.336 512 670.4 407.936a38.4 38.4 0 1 0-54.336-54.336L512 457.664z"
+  },
+  null,
+  -1
+  /* HOISTED */
+), _hoisted_349 = [
+  _hoisted_250
+];
+function _sfc_render50(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("svg", _hoisted_150, _hoisted_349);
+}
+var circle_close_filled_default = /* @__PURE__ */ export_helper_default(circle_close_filled_vue_vue_type_script_lang_default, [["render", _sfc_render50], ["__file", "circle-close-filled.vue"]]);
 var circle_close_vue_vue_type_script_lang_default = {
   name: "CircleClose"
 };
@@ -2501,6 +2524,28 @@ function _sfc_render133(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("svg", _hoisted_1133, _hoisted_438);
 }
 var hide_default = /* @__PURE__ */ export_helper_default(hide_vue_vue_type_script_lang_default, [["render", _sfc_render133], ["__file", "hide.vue"]]);
+var info_filled_vue_vue_type_script_lang_default = {
+  name: "InfoFilled"
+};
+var _hoisted_1143 = {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 1024 1024"
+}, _hoisted_2143 = /* @__PURE__ */ createElementVNode(
+  "path",
+  {
+    fill: "currentColor",
+    d: "M512 64a448 448 0 1 1 0 896.064A448 448 0 0 1 512 64zm67.2 275.072c33.28 0 60.288-23.104 60.288-57.344s-27.072-57.344-60.288-57.344c-33.28 0-60.16 23.104-60.16 57.344s26.88 57.344 60.16 57.344zM590.912 699.2c0-6.848 2.368-24.64 1.024-34.752l-52.608 60.544c-10.88 11.456-24.512 19.392-30.912 17.28a12.992 12.992 0 0 1-8.256-14.72l87.68-276.992c7.168-35.136-12.544-67.2-54.336-71.296-44.096 0-108.992 44.736-148.48 101.504 0 6.784-1.28 23.68.064 33.792l52.544-60.608c10.88-11.328 23.552-19.328 29.952-17.152a12.8 12.8 0 0 1 7.808 16.128L388.48 728.576c-10.048 32.256 8.96 63.872 55.04 71.04 67.84 0 107.904-43.648 147.456-100.416z"
+  },
+  null,
+  -1
+  /* HOISTED */
+), _hoisted_3142 = [
+  _hoisted_2143
+];
+function _sfc_render143(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("svg", _hoisted_1143, _hoisted_3142);
+}
+var info_filled_default = /* @__PURE__ */ export_helper_default(info_filled_vue_vue_type_script_lang_default, [["render", _sfc_render143], ["__file", "info-filled.vue"]]);
 var loading_vue_vue_type_script_lang_default = {
   name: "Loading"
 };
@@ -2567,6 +2612,28 @@ function _sfc_render201(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("svg", _hoisted_1201, _hoisted_3200);
 }
 var plus_default = /* @__PURE__ */ export_helper_default(plus_vue_vue_type_script_lang_default, [["render", _sfc_render201], ["__file", "plus.vue"]]);
+var success_filled_vue_vue_type_script_lang_default = {
+  name: "SuccessFilled"
+};
+var _hoisted_1249 = {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 1024 1024"
+}, _hoisted_2249 = /* @__PURE__ */ createElementVNode(
+  "path",
+  {
+    fill: "currentColor",
+    d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm-55.808 536.384-99.52-99.584a38.4 38.4 0 1 0-54.336 54.336l126.72 126.72a38.272 38.272 0 0 0 54.336 0l262.4-262.464a38.4 38.4 0 1 0-54.272-54.336L456.192 600.384z"
+  },
+  null,
+  -1
+  /* HOISTED */
+), _hoisted_3248 = [
+  _hoisted_2249
+];
+function _sfc_render249(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("svg", _hoisted_1249, _hoisted_3248);
+}
+var success_filled_default = /* @__PURE__ */ export_helper_default(success_filled_vue_vue_type_script_lang_default, [["render", _sfc_render249], ["__file", "success-filled.vue"]]);
 var view_vue_vue_type_script_lang_default = {
   name: "View"
 };
@@ -2589,6 +2656,28 @@ function _sfc_render283(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("svg", _hoisted_1283, _hoisted_3282);
 }
 var view_default = /* @__PURE__ */ export_helper_default(view_vue_vue_type_script_lang_default, [["render", _sfc_render283], ["__file", "view.vue"]]);
+var warning_filled_vue_vue_type_script_lang_default = {
+  name: "WarningFilled"
+};
+var _hoisted_1287 = {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 1024 1024"
+}, _hoisted_2287 = /* @__PURE__ */ createElementVNode(
+  "path",
+  {
+    fill: "currentColor",
+    d: "M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm0 192a58.432 58.432 0 0 0-58.24 63.744l23.36 256.384a35.072 35.072 0 0 0 69.76 0l23.296-256.384A58.432 58.432 0 0 0 512 256zm0 512a51.2 51.2 0 1 0 0-102.4 51.2 51.2 0 0 0 0 102.4z"
+  },
+  null,
+  -1
+  /* HOISTED */
+), _hoisted_3286 = [
+  _hoisted_2287
+];
+function _sfc_render287(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("svg", _hoisted_1287, _hoisted_3286);
+}
+var warning_filled_default = /* @__PURE__ */ export_helper_default(warning_filled_vue_vue_type_script_lang_default, [["render", _sfc_render287], ["__file", "warning-filled.vue"]]);
 const epPropKey = "__epPropKey";
 const definePropType = (val) => val;
 const isEpProp = (val) => isObject$1(val) && !!val[epPropKey];
@@ -2633,6 +2722,19 @@ const iconPropType = definePropType([
   Object,
   Function
 ]);
+const TypeComponents = {
+  Close: close_default,
+  SuccessFilled: success_filled_default,
+  InfoFilled: info_filled_default,
+  WarningFilled: warning_filled_default,
+  CircleCloseFilled: circle_close_filled_default
+};
+const TypeComponentsMap = {
+  success: success_filled_default,
+  warning: warning_filled_default,
+  error: circle_close_filled_default,
+  info: info_filled_default
+};
 const ValidateComponentsMap = {
   validating: loading_default,
   success: circle_check_default,
@@ -3417,12 +3519,12 @@ const iconProps = buildProps({
     type: String
   }
 });
-const __default__$h = /* @__PURE__ */ defineComponent({
+const __default__$i = /* @__PURE__ */ defineComponent({
   name: "ElIcon",
   inheritAttrs: false
 });
 const _sfc_main$A = /* @__PURE__ */ defineComponent({
-  ...__default__$h,
+  ...__default__$i,
   props: iconProps,
   setup(__props) {
     const props = __props;
@@ -3448,6 +3550,131 @@ const _sfc_main$A = /* @__PURE__ */ defineComponent({
 });
 var Icon = /* @__PURE__ */ _export_sfc$1(_sfc_main$A, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/icon/src/icon.vue"]]);
 const ElIcon = withInstall(Icon);
+const alertEffects = ["light", "dark"];
+const alertProps = buildProps({
+  title: {
+    type: String,
+    default: ""
+  },
+  description: {
+    type: String,
+    default: ""
+  },
+  type: {
+    type: String,
+    values: keysOf(TypeComponentsMap),
+    default: "info"
+  },
+  closable: {
+    type: Boolean,
+    default: true
+  },
+  closeText: {
+    type: String,
+    default: ""
+  },
+  showIcon: Boolean,
+  center: Boolean,
+  effect: {
+    type: String,
+    values: alertEffects,
+    default: "light"
+  }
+});
+const alertEmits = {
+  close: (evt) => evt instanceof MouseEvent
+};
+const __default__$h = /* @__PURE__ */ defineComponent({
+  name: "ElAlert"
+});
+const _sfc_main$z = /* @__PURE__ */ defineComponent({
+  ...__default__$h,
+  props: alertProps,
+  emits: alertEmits,
+  setup(__props, { emit }) {
+    const props = __props;
+    const { Close } = TypeComponents;
+    const slots = useSlots();
+    const ns = useNamespace("alert");
+    const visible = ref(true);
+    const iconComponent = computed(() => TypeComponentsMap[props.type]);
+    const iconClass = computed(() => [
+      ns.e("icon"),
+      { [ns.is("big")]: !!props.description || !!slots.default }
+    ]);
+    const isBoldTitle = computed(() => {
+      return { [ns.is("bold")]: props.description || slots.default };
+    });
+    const close = (evt) => {
+      visible.value = false;
+      emit("close", evt);
+    };
+    return (_ctx, _cache) => {
+      return openBlock(), createBlock(Transition, {
+        name: unref(ns).b("fade"),
+        persisted: ""
+      }, {
+        default: withCtx(() => [
+          withDirectives(createElementVNode("div", {
+            class: normalizeClass([unref(ns).b(), unref(ns).m(_ctx.type), unref(ns).is("center", _ctx.center), unref(ns).is(_ctx.effect)]),
+            role: "alert"
+          }, [
+            _ctx.showIcon && unref(iconComponent) ? (openBlock(), createBlock(unref(ElIcon), {
+              key: 0,
+              class: normalizeClass(unref(iconClass))
+            }, {
+              default: withCtx(() => [
+                (openBlock(), createBlock(resolveDynamicComponent(unref(iconComponent))))
+              ]),
+              _: 1
+            }, 8, ["class"])) : createCommentVNode("v-if", true),
+            createElementVNode("div", {
+              class: normalizeClass(unref(ns).e("content"))
+            }, [
+              _ctx.title || _ctx.$slots.title ? (openBlock(), createElementBlock("span", {
+                key: 0,
+                class: normalizeClass([unref(ns).e("title"), unref(isBoldTitle)])
+              }, [
+                renderSlot(_ctx.$slots, "title", {}, () => [
+                  createTextVNode(toDisplayString(_ctx.title), 1)
+                ])
+              ], 2)) : createCommentVNode("v-if", true),
+              _ctx.$slots.default || _ctx.description ? (openBlock(), createElementBlock("p", {
+                key: 1,
+                class: normalizeClass(unref(ns).e("description"))
+              }, [
+                renderSlot(_ctx.$slots, "default", {}, () => [
+                  createTextVNode(toDisplayString(_ctx.description), 1)
+                ])
+              ], 2)) : createCommentVNode("v-if", true),
+              _ctx.closable ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [
+                _ctx.closeText ? (openBlock(), createElementBlock("div", {
+                  key: 0,
+                  class: normalizeClass([unref(ns).e("close-btn"), unref(ns).is("customed")]),
+                  onClick: close
+                }, toDisplayString(_ctx.closeText), 3)) : (openBlock(), createBlock(unref(ElIcon), {
+                  key: 1,
+                  class: normalizeClass(unref(ns).e("close-btn")),
+                  onClick: close
+                }, {
+                  default: withCtx(() => [
+                    createVNode(unref(Close))
+                  ]),
+                  _: 1
+                }, 8, ["class"]))
+              ], 64)) : createCommentVNode("v-if", true)
+            ], 2)
+          ], 2), [
+            [vShow, visible.value]
+          ])
+        ]),
+        _: 3
+      }, 8, ["name"]);
+    };
+  }
+});
+var Alert = /* @__PURE__ */ _export_sfc$1(_sfc_main$z, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/alert/src/alert.vue"]]);
+const ElAlert = withInstall(Alert);
 const formContextKey = Symbol("formContextKey");
 const formItemContextKey = Symbol("formItemContextKey");
 const useFormSize = (fallback, ignore = {}) => {
@@ -3677,7 +3904,7 @@ const __default__$g = /* @__PURE__ */ defineComponent({
   name: "ElInput",
   inheritAttrs: false
 });
-const _sfc_main$z = /* @__PURE__ */ defineComponent({
+const _sfc_main$y = /* @__PURE__ */ defineComponent({
   ...__default__$g,
   props: inputProps,
   emits: inputEmits,
@@ -4099,7 +4326,7 @@ const _sfc_main$z = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Input = /* @__PURE__ */ _export_sfc$1(_sfc_main$z, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input/src/input.vue"]]);
+var Input = /* @__PURE__ */ _export_sfc$1(_sfc_main$y, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input/src/input.vue"]]);
 const ElInput = withInstall(Input);
 const GAP = 4;
 const BAR_MAP = {
@@ -4144,7 +4371,7 @@ const thumbProps = buildProps({
   always: Boolean
 });
 const COMPONENT_NAME$3 = "Thumb";
-const _sfc_main$y = /* @__PURE__ */ defineComponent({
+const _sfc_main$x = /* @__PURE__ */ defineComponent({
   __name: "thumb",
   props: thumbProps,
   setup(__props) {
@@ -4259,7 +4486,7 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Thumb = /* @__PURE__ */ _export_sfc$1(_sfc_main$y, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/thumb.vue"]]);
+var Thumb = /* @__PURE__ */ _export_sfc$1(_sfc_main$x, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/thumb.vue"]]);
 const barProps = buildProps({
   always: {
     type: Boolean,
@@ -4276,7 +4503,7 @@ const barProps = buildProps({
     default: 1
   }
 });
-const _sfc_main$x = /* @__PURE__ */ defineComponent({
+const _sfc_main$w = /* @__PURE__ */ defineComponent({
   __name: "bar",
   props: barProps,
   setup(__props, { expose }) {
@@ -4313,7 +4540,7 @@ const _sfc_main$x = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Bar = /* @__PURE__ */ _export_sfc$1(_sfc_main$x, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/bar.vue"]]);
+var Bar = /* @__PURE__ */ _export_sfc$1(_sfc_main$w, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/bar.vue"]]);
 const scrollbarProps = buildProps({
   height: {
     type: [String, Number],
@@ -4364,7 +4591,7 @@ const COMPONENT_NAME$2 = "ElScrollbar";
 const __default__$f = /* @__PURE__ */ defineComponent({
   name: COMPONENT_NAME$2
 });
-const _sfc_main$w = /* @__PURE__ */ defineComponent({
+const _sfc_main$v = /* @__PURE__ */ defineComponent({
   ...__default__$f,
   props: scrollbarProps,
   emits: scrollbarEmits,
@@ -4515,7 +4742,7 @@ const _sfc_main$w = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Scrollbar = /* @__PURE__ */ _export_sfc$1(_sfc_main$w, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/scrollbar.vue"]]);
+var Scrollbar = /* @__PURE__ */ _export_sfc$1(_sfc_main$v, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/scrollbar/src/scrollbar.vue"]]);
 const ElScrollbar = withInstall(Scrollbar);
 const POPPER_INJECTION_KEY = Symbol("popper");
 const POPPER_CONTENT_INJECTION_KEY = Symbol("popperContent");
@@ -4540,7 +4767,7 @@ const __default__$e = /* @__PURE__ */ defineComponent({
   name: "ElPopper",
   inheritAttrs: false
 });
-const _sfc_main$v = /* @__PURE__ */ defineComponent({
+const _sfc_main$u = /* @__PURE__ */ defineComponent({
   ...__default__$e,
   props: popperProps,
   setup(__props, { expose }) {
@@ -4564,7 +4791,7 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Popper = /* @__PURE__ */ _export_sfc$1(_sfc_main$v, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/popper.vue"]]);
+var Popper = /* @__PURE__ */ _export_sfc$1(_sfc_main$u, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/popper.vue"]]);
 const popperArrowProps = buildProps({
   arrowOffset: {
     type: Number,
@@ -4575,7 +4802,7 @@ const __default__$d = /* @__PURE__ */ defineComponent({
   name: "ElPopperArrow",
   inheritAttrs: false
 });
-const _sfc_main$u = /* @__PURE__ */ defineComponent({
+const _sfc_main$t = /* @__PURE__ */ defineComponent({
   ...__default__$d,
   props: popperArrowProps,
   setup(__props, { expose }) {
@@ -4599,7 +4826,7 @@ const _sfc_main$u = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperArrow = /* @__PURE__ */ _export_sfc$1(_sfc_main$u, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/arrow.vue"]]);
+var ElPopperArrow = /* @__PURE__ */ _export_sfc$1(_sfc_main$t, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/arrow.vue"]]);
 const NAME = "ElOnlyChild";
 const OnlyChild = /* @__PURE__ */ defineComponent({
   name: NAME,
@@ -4689,7 +4916,7 @@ const __default__$c = /* @__PURE__ */ defineComponent({
   name: "ElPopperTrigger",
   inheritAttrs: false
 });
-const _sfc_main$t = /* @__PURE__ */ defineComponent({
+const _sfc_main$s = /* @__PURE__ */ defineComponent({
   ...__default__$c,
   props: popperTriggerProps,
   setup(__props, { expose }) {
@@ -4732,7 +4959,7 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$t, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/trigger.vue"]]);
+var ElPopperTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$s, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/trigger.vue"]]);
 const FOCUSOUT_PREVENTED = "focus-trap.focusout-prevented";
 const FOCUSOUT_PREVENTED_OPTS = {
   cancelable: true,
@@ -4808,7 +5035,7 @@ const createFocusOutPreventedEvent = (detail) => {
     detail
   });
 };
-const _sfc_main$s = /* @__PURE__ */ defineComponent({
+const _sfc_main$r = /* @__PURE__ */ defineComponent({
   name: "ElFocusTrap",
   inheritAttrs: false,
   props: {
@@ -4953,7 +5180,7 @@ const _sfc_main$s = /* @__PURE__ */ defineComponent({
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   return renderSlot(_ctx.$slots, "default", { handleKeydown: _ctx.onKeydown });
 }
-var ElFocusTrap = /* @__PURE__ */ _export_sfc$1(_sfc_main$s, [["render", _sfc_render$6], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/focus-trap/src/focus-trap.vue"]]);
+var ElFocusTrap = /* @__PURE__ */ _export_sfc$1(_sfc_main$r, [["render", _sfc_render$6], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/focus-trap/src/focus-trap.vue"]]);
 const POSITIONING_STRATEGIES = ["fixed", "absolute"];
 const popperCoreConfigProps = buildProps({
   boundariesPadding: {
@@ -5233,7 +5460,7 @@ const usePopperContentFocusTrap = (props, emit) => {
 const __default__$b = /* @__PURE__ */ defineComponent({
   name: "ElPopperContent"
 });
-const _sfc_main$r = /* @__PURE__ */ defineComponent({
+const _sfc_main$q = /* @__PURE__ */ defineComponent({
   ...__default__$b,
   props: popperContentProps,
   emits: popperContentEmits,
@@ -5316,7 +5543,7 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElPopperContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$r, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/content.vue"]]);
+var ElPopperContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$q, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popper/src/content.vue"]]);
 const ElPopper = withInstall(Popper);
 const TOOLTIP_INJECTION_KEY = Symbol("elTooltip");
 const useTooltipContentProps = buildProps({
@@ -5397,7 +5624,7 @@ const whenTrigger = (trigger, type, handler) => {
 const __default__$a = /* @__PURE__ */ defineComponent({
   name: "ElTooltipTrigger"
 });
-const _sfc_main$q = /* @__PURE__ */ defineComponent({
+const _sfc_main$p = /* @__PURE__ */ defineComponent({
   ...__default__$a,
   props: useTooltipTriggerProps,
   setup(__props, { expose }) {
@@ -5457,12 +5684,12 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElTooltipTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$q, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/trigger.vue"]]);
+var ElTooltipTrigger = /* @__PURE__ */ _export_sfc$1(_sfc_main$p, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/trigger.vue"]]);
 const __default__$9 = /* @__PURE__ */ defineComponent({
   name: "ElTooltipContent",
   inheritAttrs: false
 });
-const _sfc_main$p = /* @__PURE__ */ defineComponent({
+const _sfc_main$o = /* @__PURE__ */ defineComponent({
   ...__default__$9,
   props: useTooltipContentProps,
   setup(__props, { expose }) {
@@ -5618,13 +5845,13 @@ const _sfc_main$p = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ElTooltipContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$p, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/content.vue"]]);
+var ElTooltipContent = /* @__PURE__ */ _export_sfc$1(_sfc_main$o, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/content.vue"]]);
 const _hoisted_1$5 = ["innerHTML"];
 const _hoisted_2$4 = { key: 1 };
 const __default__$8 = /* @__PURE__ */ defineComponent({
   name: "ElTooltip"
 });
-const _sfc_main$o = /* @__PURE__ */ defineComponent({
+const _sfc_main$n = /* @__PURE__ */ defineComponent({
   ...__default__$8,
   props: useTooltipProps,
   emits: tooltipEmits,
@@ -5775,7 +6002,7 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Tooltip = /* @__PURE__ */ _export_sfc$1(_sfc_main$o, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/tooltip.vue"]]);
+var Tooltip = /* @__PURE__ */ _export_sfc$1(_sfc_main$n, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tooltip/src/tooltip.vue"]]);
 const ElTooltip = withInstall(Tooltip);
 const buttonGroupContextKey = Symbol("buttonGroupContextKey");
 const useButton = (props, emit) => {
@@ -5946,7 +6173,7 @@ function useButtonCustomStyle(props) {
 const __default__$7 = /* @__PURE__ */ defineComponent({
   name: "ElButton"
 });
-const _sfc_main$n = /* @__PURE__ */ defineComponent({
+const _sfc_main$m = /* @__PURE__ */ defineComponent({
   ...__default__$7,
   props: buttonProps,
   emits: buttonEmits,
@@ -6012,7 +6239,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Button = /* @__PURE__ */ _export_sfc$1(_sfc_main$n, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button.vue"]]);
+var Button = /* @__PURE__ */ _export_sfc$1(_sfc_main$m, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button.vue"]]);
 const buttonGroupProps = {
   size: buttonProps.size,
   type: buttonProps.type
@@ -6020,7 +6247,7 @@ const buttonGroupProps = {
 const __default__$6 = /* @__PURE__ */ defineComponent({
   name: "ElButtonGroup"
 });
-const _sfc_main$m = /* @__PURE__ */ defineComponent({
+const _sfc_main$l = /* @__PURE__ */ defineComponent({
   ...__default__$6,
   props: buttonGroupProps,
   setup(__props) {
@@ -6039,7 +6266,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var ButtonGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$m, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button-group.vue"]]);
+var ButtonGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$l, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/button/src/button-group.vue"]]);
 const ElButton = withInstall(Button, {
   ButtonGroup
 });
@@ -6176,7 +6403,7 @@ const tagEmits = {
 const __default__$5 = /* @__PURE__ */ defineComponent({
   name: "ElTag"
 });
-const _sfc_main$l = /* @__PURE__ */ defineComponent({
+const _sfc_main$k = /* @__PURE__ */ defineComponent({
   ...__default__$5,
   props: tagProps,
   emits: tagEmits,
@@ -6257,23 +6484,23 @@ const _sfc_main$l = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Tag = /* @__PURE__ */ _export_sfc$1(_sfc_main$l, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tag/src/tag.vue"]]);
+var Tag = /* @__PURE__ */ _export_sfc$1(_sfc_main$k, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/tag/src/tag.vue"]]);
 const ElTag = withInstall(Tag);
-const _sfc_main$k = /* @__PURE__ */ defineComponent({
+const _sfc_main$j = /* @__PURE__ */ defineComponent({
   inheritAttrs: false
 });
 function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   return renderSlot(_ctx.$slots, "default");
 }
-var Collection = /* @__PURE__ */ _export_sfc$1(_sfc_main$k, [["render", _sfc_render$5], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection.vue"]]);
-const _sfc_main$j = /* @__PURE__ */ defineComponent({
+var Collection = /* @__PURE__ */ _export_sfc$1(_sfc_main$j, [["render", _sfc_render$5], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection.vue"]]);
+const _sfc_main$i = /* @__PURE__ */ defineComponent({
   name: "ElCollectionItem",
   inheritAttrs: false
 });
 function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   return renderSlot(_ctx.$slots, "default");
 }
-var CollectionItem = /* @__PURE__ */ _export_sfc$1(_sfc_main$j, [["render", _sfc_render$4], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection-item.vue"]]);
+var CollectionItem = /* @__PURE__ */ _export_sfc$1(_sfc_main$i, [["render", _sfc_render$4], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/collection/src/collection-item.vue"]]);
 const COLLECTION_ITEM_SIGN = `data-el-collection-item`;
 const createCollectionWithScope = (name) => {
   const COLLECTION_NAME = `El${name}Collection`;
@@ -6459,7 +6686,7 @@ const _hoisted_2$3 = ["aria-label", "onKeydown"];
 const __default__$4 = /* @__PURE__ */ defineComponent({
   name: "ElInputNumber"
 });
-const _sfc_main$i = /* @__PURE__ */ defineComponent({
+const _sfc_main$h = /* @__PURE__ */ defineComponent({
   ...__default__$4,
   props: inputNumberProps,
   emits: inputNumberEmits,
@@ -6723,7 +6950,7 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var InputNumber = /* @__PURE__ */ _export_sfc$1(_sfc_main$i, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input-number/src/input-number.vue"]]);
+var InputNumber = /* @__PURE__ */ _export_sfc$1(_sfc_main$h, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/input-number/src/input-number.vue"]]);
 const ElInputNumber = withInstall(InputNumber);
 const selectGroupKey = Symbol("ElSelectGroup");
 const selectKey = Symbol("ElSelect");
@@ -6819,7 +7046,7 @@ function useOption(props, states) {
     hoverItem
   };
 }
-const _sfc_main$h = /* @__PURE__ */ defineComponent({
+const _sfc_main$g = /* @__PURE__ */ defineComponent({
   name: "ElOption",
   componentName: "ElOption",
   props: {
@@ -6886,8 +7113,8 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     [vShow, _ctx.visible]
   ]);
 }
-var Option = /* @__PURE__ */ _export_sfc$1(_sfc_main$h, [["render", _sfc_render$3], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option.vue"]]);
-const _sfc_main$g = /* @__PURE__ */ defineComponent({
+var Option = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["render", _sfc_render$3], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option.vue"]]);
+const _sfc_main$f = /* @__PURE__ */ defineComponent({
   name: "ElSelectDropdown",
   componentName: "ElSelectDropdown",
   setup() {
@@ -6914,7 +7141,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     renderSlot(_ctx.$slots, "default")
   ], 6);
 }
-var ElSelectMenu = /* @__PURE__ */ _export_sfc$1(_sfc_main$g, [["render", _sfc_render$2], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select-dropdown.vue"]]);
+var ElSelectMenu = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$2], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select-dropdown.vue"]]);
 function useSelectStates(props) {
   const { t } = useLocale();
   return reactive({
@@ -7682,7 +7909,7 @@ var ElOptions = /* @__PURE__ */ defineComponent({
   }
 });
 const COMPONENT_NAME$1 = "ElSelect";
-const _sfc_main$f = /* @__PURE__ */ defineComponent({
+const _sfc_main$e = /* @__PURE__ */ defineComponent({
   name: COMPONENT_NAME$1,
   componentName: COMPONENT_NAME$1,
   components: {
@@ -8351,8 +8578,8 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     [_directive_click_outside, _ctx.handleClose, _ctx.popperPaneRef]
   ]);
 }
-var Select = /* @__PURE__ */ _export_sfc$1(_sfc_main$f, [["render", _sfc_render$1], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select.vue"]]);
-const _sfc_main$e = /* @__PURE__ */ defineComponent({
+var Select = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render$1], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/select.vue"]]);
+const _sfc_main$d = /* @__PURE__ */ defineComponent({
   name: "ElOptionGroup",
   componentName: "ElOptionGroup",
   props: {
@@ -8399,7 +8626,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     [vShow, _ctx.visible]
   ]);
 }
-var OptionGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$e, [["render", _sfc_render], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option-group.vue"]]);
+var OptionGroup = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["render", _sfc_render], ["__file", "/home/runner/work/element-plus/element-plus/packages/components/select/src/option-group.vue"]]);
 const ElSelect = withInstall(Select, {
   Option,
   OptionGroup
@@ -8470,7 +8697,7 @@ const updateEventKeyRaw = `onUpdate:visible`;
 const __default__$3 = /* @__PURE__ */ defineComponent({
   name: "ElPopover"
 });
-const _sfc_main$d = /* @__PURE__ */ defineComponent({
+const _sfc_main$c = /* @__PURE__ */ defineComponent({
   ...__default__$3,
   props: popoverProps,
   emits: popoverEmits,
@@ -8570,7 +8797,7 @@ const _sfc_main$d = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Popover = /* @__PURE__ */ _export_sfc$1(_sfc_main$d, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popover/src/popover.vue"]]);
+var Popover = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/popover/src/popover.vue"]]);
 const attachEvents = (el, binding) => {
   const popperComponent = binding.arg || binding.value;
   const popover = popperComponent == null ? void 0 : popperComponent.popperRef;
@@ -9170,7 +9397,7 @@ const _hoisted_1$2 = ["tabindex"];
 const __default__$2 = /* @__PURE__ */ defineComponent({
   name: "ElSliderButton"
 });
-const _sfc_main$c = /* @__PURE__ */ defineComponent({
+const _sfc_main$b = /* @__PURE__ */ defineComponent({
   ...__default__$2,
   props: sliderButtonProps,
   emits: sliderButtonEmits,
@@ -9251,7 +9478,7 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var SliderButton = /* @__PURE__ */ _export_sfc$1(_sfc_main$c, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/button.vue"]]);
+var SliderButton = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/button.vue"]]);
 const sliderMarkerProps = buildProps({
   mark: {
     type: definePropType([String, Object]),
@@ -9278,7 +9505,7 @@ const _hoisted_2$1 = { key: 1 };
 const __default__$1 = /* @__PURE__ */ defineComponent({
   name: "ElSlider"
 });
-const _sfc_main$b = /* @__PURE__ */ defineComponent({
+const _sfc_main$a = /* @__PURE__ */ defineComponent({
   ...__default__$1,
   props: sliderProps,
   emits: sliderEmits,
@@ -9488,7 +9715,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Slider = /* @__PURE__ */ _export_sfc$1(_sfc_main$b, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/slider.vue"]]);
+var Slider = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/slider/src/slider.vue"]]);
 const ElSlider = withInstall(Slider);
 const switchProps = buildProps({
   modelValue: {
@@ -9583,7 +9810,7 @@ const COMPONENT_NAME = "ElSwitch";
 const __default__ = /* @__PURE__ */ defineComponent({
   name: COMPONENT_NAME
 });
-const _sfc_main$a = /* @__PURE__ */ defineComponent({
+const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   ...__default__,
   props: switchProps,
   emits: switchEmits,
@@ -9797,7 +10024,7 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
     };
   }
 });
-var Switch = /* @__PURE__ */ _export_sfc$1(_sfc_main$a, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/switch/src/switch.vue"]]);
+var Switch = /* @__PURE__ */ _export_sfc$1(_sfc_main$9, [["__file", "/home/runner/work/element-plus/element-plus/packages/components/switch/src/switch.vue"]]);
 const ElSwitch = withInstall(Switch);
 const element_plus_injection_plugin_1RNPi6ogby = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.provide(ID_INJECTION_KEY, { "prefix": 1024, "current": 0 });
@@ -9826,7 +10053,7 @@ const _plugins = [
   element_plus_injection_plugin_1RNPi6ogby,
   vuex_owYp5qnaH8
 ];
-const __nuxt_component_2 = /* @__PURE__ */ defineComponent({
+const __nuxt_component_3 = /* @__PURE__ */ defineComponent({
   name: "ClientOnly",
   inheritAttrs: false,
   // eslint-disable-next-line vue/require-prop-types
@@ -9900,7 +10127,7 @@ function getPortNames() {
 function noteOn(channel, note, velocity) {
   const status = 144 + channel - 1;
   if (!midiOutput)
-    throw "error sending noteOn: no output configured";
+    throw "error playing sequence: no MIDI output configured";
   midiOutput && midiOutput.send([status, note, velocity]);
 }
 function noteOff(channel, note, velocity) {
@@ -10087,10 +10314,16 @@ class webAudio {
     __publicField(this, "numberOfVoices");
     __publicField(this, "voices");
     __publicField(this, "hasStarted");
+    __publicField(this, "audioCtx");
+    __publicField(this, "reverbNode");
     const audioContext = new AudioContext();
     const type = "sine";
+    this.audioCtx = audioContext;
     this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
+    this.reverbNode = this.createReverb(audioContext);
+    this.reverbNode.connect(audioContext.destination);
+    this.configureReverb();
     this.voices = _.times(numberOfVoices).map(() => {
       return {
         ctx: audioContext,
@@ -10103,10 +10336,20 @@ class webAudio {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
       voice.gainNode.connect(voice.panNode);
+      voice.panNode.connect(this.reverbNode);
       voice.panNode.connect(audioContext.destination);
       voice.oscillatorNode.type = type;
       voice.panNode.pan.setValueAtTime(-1 + i * (2 / (numberOfVoices - 1)), 0);
     });
+  }
+  createReverb(audioCtx) {
+    let convolver = audioCtx.createConvolver();
+    return convolver;
+  }
+  async configureReverb() {
+    let response = await fetch("/weaving/Swede Plate 3.0s.wav");
+    let arraybuffer = await response.arrayBuffer();
+    this.reverbNode.buffer = await this.audioCtx.decodeAudioData(arraybuffer);
   }
   playNote(voiceIndex, note, noteLength) {
     var _a, _b, _c;
@@ -10206,11 +10449,11 @@ const useWeaveStore = defineStore("weave-settings", {
   state: () => {
     return {
       patternOptions: ["weave", "euclidean"],
-      patternType: "euclidean",
+      patternType: "weave",
       swatchWidth: 16,
       swatchDepth: 8,
       weaveX: 1,
-      weaveY: 1,
+      weaveY: 4,
       euclideanCount: 4
     };
   },
@@ -10249,6 +10492,7 @@ const useStore = defineStore("main", {
       const musicStore = useMusicStore();
       const length = (musicStore.rangeMax - musicStore.rangeMin) * 12 + 1;
       return colormap$1({
+        // https://github.com/bpostlethwaite/colormap
         colormap: "bluered",
         nshades: length,
         format: "hex",
@@ -10276,18 +10520,13 @@ const useStore = defineStore("main", {
     },
     swatchNoteColors: (state) => {
       const { rangeMin } = useMusicStore();
-      console.log("state.swatchNotes", state.swatchNotes);
-      const test = state.swatchNotes.map((row) => {
-        console.log("row", row);
+      const noteColors = state.swatchNotes.map((row) => {
         return row.map((note) => {
           const colorIndex = note - 12 - rangeMin * 12;
-          console.log("colorIndex", colorIndex);
-          console.log("state.noteColors", state.noteColors);
           return state.noteColors[colorIndex];
         });
       });
-      console.log("test", test);
-      return test;
+      return noteColors;
     },
     warpNoteColors: (state) => {
       const musicStore = useMusicStore();
@@ -10322,7 +10561,7 @@ const useStore = defineStore("main", {
         const waveformMax = Math.max(...waveformData);
         const normalizationFactor = 1 / waveformMax;
         this.notes = _.times(swatchWidth, (i) => {
-          const waveformIndex = -2 * Math.PI * i / swatchWidth;
+          const waveformIndex = 2 * Math.PI * i / swatchWidth;
           const val = waveformFn(waveformIndex) * normalizationFactor;
           const min = _.min(noteOptions);
           const max = _.max(noteOptions);
@@ -10335,6 +10574,8 @@ const useStore = defineStore("main", {
           return quantizedResult;
         });
       }
+    },
+    relalculateNotes() {
     },
     increment() {
       this.count++;
@@ -10355,7 +10596,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$9 = {
+const _sfc_main$8 = {
   __name: "MidiDrivers",
   __ssrInlineRender: true,
   setup(__props) {
@@ -10365,21 +10606,21 @@ const _sfc_main$9 = {
       midi.setOutput(val);
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_client_only = __nuxt_component_2;
+      const _component_client_only = __nuxt_component_3;
       _push(`<section${ssrRenderAttrs(mergeProps({ class: "midi-drivers" }, _attrs))} data-v-836b8239><header data-v-836b8239>MIDI Settings</header><div class="drivers-wrapper" data-v-836b8239><div class="drivers-item output" data-v-836b8239><h4 data-v-836b8239>Select Output Port</h4>`);
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       _push(`</div></div></section>`);
     };
   }
 };
-const _sfc_setup$9 = _sfc_main$9.setup;
-_sfc_main$9.setup = (props, ctx) => {
+const _sfc_setup$8 = _sfc_main$8.setup;
+_sfc_main$8.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/MidiDrivers.vue");
-  return _sfc_setup$9 ? _sfc_setup$9(props, ctx) : void 0;
+  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-836b8239"]]);
-const _sfc_main$8 = {
+const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-836b8239"]]);
+const _sfc_main$7 = {
   __name: "TopNav",
   __ssrInlineRender: true,
   setup(__props) {
@@ -10387,18 +10628,12 @@ const _sfc_main$8 = {
     const { useWebAudio, isOn, errorMsg } = storeToRefs(store2);
     return (_ctx, _push, _parent, _attrs) => {
       const _component_el_switch = ElSwitch;
-      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-d0673b8f><h1 data-v-d0673b8f>Weaving Music</h1>`);
-      if (unref(errorMsg)) {
-        _push(`<p class="error" data-v-d0673b8f>${ssrInterpolate(unref(errorMsg))}</p>`);
-      } else {
-        _push(`<!---->`);
-      }
-      _push(`<div class="switches" data-v-d0673b8f>`);
+      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-eae74af1><h1 data-v-eae74af1>Weaving Music</h1><div class="switches" data-v-eae74af1>`);
       _push(ssrRenderComponent(_component_el_switch, {
         modelValue: unref(useWebAudio),
         "onUpdate:modelValue": ($event) => isRef(useWebAudio) ? useWebAudio.value = $event : null,
-        "active-text": "Use Web Audio to Play",
-        "inactive-text": "Use External MIDI to Play"
+        "active-text": "Use Web Audio",
+        "inactive-text": "Use External MIDI"
       }, null, _parent));
       _push(ssrRenderComponent(_component_el_switch, {
         "active-text": "start",
@@ -10410,145 +10645,13 @@ const _sfc_main$8 = {
     };
   }
 };
-const _sfc_setup$8 = _sfc_main$8.setup;
-_sfc_main$8.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
-  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
-};
-const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-d0673b8f"]]);
-const _sfc_main$7 = {
-  __name: "Woof",
-  __ssrInlineRender: true,
-  props: {
-    length: Number,
-    type: String,
-    // scale: String,
-    active: Boolean,
-    index: Number,
-    tick: Number,
-    note: Number,
-    // rangeMin: Number,
-    // rangeMax: Number,
-    chord: String,
-    mode: String
-  },
-  setup(__props, { expose }) {
-    const props = __props;
-    useNuxtApp();
-    const store2 = useStore();
-    const musicStore = useMusicStore();
-    const { noteScale, rangeMin, rangeMax } = storeToRefs(musicStore);
-    let chordIndex = ref(0);
-    const data = reactive({
-      notes: []
-    });
-    const noteOptions = computed({
-      get: () => {
-        const tonic = "C";
-        const range = Math.max(rangeMax.value - rangeMin.value, 0);
-        if (props.mode === "stack") {
-          if (props.type === "warp") {
-            return (scale.noteSet(noteScale.value, tonic, rangeMin.value, range) || []).map((num) => `${num}`);
-          } else {
-            const intervals = Chord.intervals(props.chord);
-            const semitones = intervals.map((interval) => Interval.semitones(interval));
-            return semitones.map((num) => `${num}`);
-          }
-        }
-        if (props.mode === "single") {
-          console.log("scale", scale);
-          console.log("range", range);
-          console.log("tonic", tonic);
-          console.log("single", scale.noteSet(noteScale.value, tonic, rangeMin.value, range));
-          return (scale.noteSet(noteScale.value, tonic, rangeMin.value, range) || []).map((num) => `${num}`);
-        }
-      }
-    });
-    const columnsLength = computed({
-      get: () => {
-        return props.type === "warp" ? props.length : 1;
-      }
-    });
-    function getNextNoteInChord() {
-      const intervals = Chord.intervals(props.chord);
-      const semitones = intervals.map((interval) => Interval.semitones(interval));
-      const baseNote = parseInt(noteOptions.value[0]);
-      console.log("baseNote", baseNote);
-      const note = baseNote + semitones[chordIndex % semitones.length];
-      console.log("note", note);
-      chordIndex += 1;
-      return note;
-    }
-    function initNotes() {
-      store2.initNotes();
-      data.notes = store2.notes;
-      return;
-    }
-    function getNote(index) {
-      return data.notes[index];
-    }
-    function getNotes() {
-      return data.notes;
-    }
-    function handleInput(i, val) {
-      data.notes[i] = val;
-    }
-    function updateNoteAtIndex(value, index) {
-      const note = scale.determineNote(noteOptions.value.map((x) => parseInt(x)), value);
-      handleInput(index, note);
-    }
-    watch(() => noteScale.value, (xx) => {
-      initNotes();
-    });
-    watch(() => props.chord, (val) => {
-      console.log("vall", val);
-      initNotes();
-    });
-    watch(props.index, () => {
-    });
-    watch(props.tick, () => {
-      return;
-    });
-    watch(() => props.length, () => {
-      initNotes();
-      console.log("props.length", props.length);
-    });
-    watch(() => rangeMin.value, () => {
-      initNotes();
-    });
-    watch(() => rangeMax.value, () => {
-      initNotes();
-    });
-    onMounted(() => {
-      initNotes();
-    });
-    expose({
-      initNotes,
-      updateNoteAtIndex,
-      getNextNoteInChord,
-      getNotes,
-      getNote
-    });
-    return (_ctx, _push, _parent, _attrs) => {
-      const _component_client_only = __nuxt_component_2;
-      _push(`<div${ssrRenderAttrs(mergeProps({
-        class: ["woof", __props.type]
-      }, _attrs))}><div class="woof-notes" style="${ssrRenderStyle({
-        gridTemplateColumns: "repeat(" + unref(columnsLength) + ", 1fr)",
-        width: 50 * __props.length + "px"
-      })}">`);
-      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
-      _push(`</div></div>`);
-    };
-  }
-};
 const _sfc_setup$7 = _sfc_main$7.setup;
 _sfc_main$7.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Woof.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
   return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
+const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-eae74af1"]]);
 function buildString(level, arr, count, remainder) {
   if (level === -1) {
     arr.unshift(false);
@@ -10567,8 +10670,6 @@ function buildString(level, arr, count, remainder) {
   }
 }
 function generateEuclideanSequence(numSlots, numPulses) {
-  console.log("numSlots", numSlots);
-  console.log("numPulses", numPulses);
   let divisor = numSlots - numPulses;
   const remainder = [numPulses];
   const count = new Array();
@@ -10597,13 +10698,19 @@ const _sfc_main$6 = {
     const musicStore = useMusicStore();
     const { useWebAudio, webAudioSynth, warpNoteColors, gridItems, gridItemsKey, errorMsg, swatchNoteColors } = storeToRefs(store2);
     const { swatchWidth, swatchDepth, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
-    storeToRefs(musicStore);
-    const warp = ref();
-    const weft = ref();
-    let readMode = ref("stack");
+    const { stackType, noteScale, rangeMin, rangeMax } = storeToRefs(musicStore);
+    ref();
+    ref();
     ref(scale.names);
     ref({});
-    let index = ref(-1), warpActive = ref(false), warpIndex = ref(-1), weftActive = ref(false), weftIndex = ref(-1), warpNote = ref(0), weftNote = ref(0), chord = ref("Maj7");
+    let index = ref(-1);
+    ref(false);
+    ref(-1);
+    ref(false);
+    ref(-1);
+    ref(0);
+    ref(0);
+    ref("Maj7");
     setTimeout(() => {
     }, 0);
     useNuxtApp();
@@ -10617,13 +10724,22 @@ const _sfc_main$6 = {
       handleUpdateLength();
     });
     watch(swatchDepth, () => {
-      handleUpdateLength();
+      handleDepthChange();
     });
     watch(weaveX, () => {
       computeWeave();
     });
     watch(weaveY, () => {
       computeWeave();
+    });
+    watch(() => noteScale.value, () => {
+      store2.initNotes();
+    });
+    watch(() => rangeMin.value, () => {
+      store2.initNotes();
+    });
+    watch(() => rangeMax.value, () => {
+      store2.initNotes();
     });
     function computeWeave() {
       const pattern = [weaveX.value, weaveY.value], length = pattern.reduce((acc, item) => acc += item);
@@ -10637,9 +10753,16 @@ const _sfc_main$6 = {
       });
     }
     function handleUpdateLength() {
-      computeWeave();
+      handlePatternChange();
       index.value = 0;
+      store2.initNotes();
       store2.initializeWebAudioSynth();
+      store2.webAudioSynth.start();
+    }
+    function handleDepthChange() {
+      handlePatternChange();
+      store2.initializeWebAudioSynth();
+      store2.webAudioSynth.start();
     }
     function handlePatternChange() {
       if (patternType.value === "euclidean") {
@@ -10663,44 +10786,14 @@ const _sfc_main$6 = {
       });
     }
     function isActiveGridItem(i) {
-      if (readMode.value === "single") {
-        return index.value === i;
-      } else if (readMode.value === "stack") {
-        return index.value % swatchWidth.value === i % swatchWidth.value;
-      }
-      return false;
+      return index.value % swatchWidth.value === i % swatchWidth.value;
     }
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<section${ssrRenderAttrs(mergeProps({ class: "swatch" }, _attrs))}><header>Weaving Swatch</header><div class="swatch-display">`);
-      _push(ssrRenderComponent(unref(_sfc_main$7), {
-        ref_key: "warp",
-        ref: warp,
-        length: unref(swatchWidth),
-        mode: unref(readMode),
-        type: "warp",
-        active: unref(warpActive),
-        index: unref(warpIndex),
-        tick: unref(index),
-        note: unref(warpNote),
-        chord: unref(chord)
-      }, null, _parent));
-      _push(ssrRenderComponent(unref(_sfc_main$7), {
-        ref_key: "weft",
-        ref: weft,
-        length: unref(swatchDepth),
-        mode: unref(readMode),
-        type: "weft",
-        active: unref(weftActive),
-        index: unref(weftIndex),
-        tick: unref(index),
-        note: unref(weftNote),
-        chord: unref(chord)
-      }, null, _parent));
-      _push(`<div class="swatch-grid" style="${ssrRenderStyle({
+      _push(`<section${ssrRenderAttrs(mergeProps({ class: "swatch" }, _attrs))}><header>Weaving Swatch</header><div class="swatch-display"><div class="swatch-grid" style="${ssrRenderStyle({
         gridTemplateColumns: "repeat(" + unref(swatchWidth) + ", 1fr)"
       })}"><!--[-->`);
       ssrRenderList(unref(gridItems), (item, i) => {
-        _push(`<div class="${ssrRenderClass([{ hide: !item, active: isActiveGridItem(i) }, "swatch-grid-note"])}" style="${ssrRenderStyle({ "background-color": item ? unref(swatchNoteColors)[Math.floor(i / unref(swatchWidth))][i % unref(swatchWidth)] : _ctx.transparent })}"></div>`);
+        _push(`<div class="${ssrRenderClass([{ hide: !item, active: isActiveGridItem(i) }, "swatch-grid-note"])}" style="${ssrRenderStyle({ "background-color": item ? unref(swatchNoteColors)[Math.floor(i / unref(swatchWidth))][i % unref(swatchWidth)] : "transparent" })}"></div>`);
       });
       _push(`<!--]--></div></div></section>`);
     };
@@ -10752,8 +10845,8 @@ const _sfc_main$4 = {
       }
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_client_only = __nuxt_component_2;
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "waveform" }, _attrs))} data-v-5b66b4f9>`);
+      const _component_client_only = __nuxt_component_3;
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "waveform" }, _attrs))}>`);
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       _push(`</div>`);
     };
@@ -10765,7 +10858,6 @@ _sfc_main$4.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Waveform.vue");
   return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const Waveform = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-5b66b4f9"]]);
 const _sfc_main$3 = {
   __name: "Notation",
   __ssrInlineRender: true,
@@ -10809,7 +10901,7 @@ const _sfc_main$2 = {
     const store2 = useStore();
     const musicStore = useMusicStore();
     const weaveStore = useWeaveStore();
-    const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames } = storeToRefs(store2);
+    const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames, errorMsg } = storeToRefs(store2);
     const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
     const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
     watch(sequenceType, store2.initNotes);
@@ -10839,9 +10931,10 @@ const _sfc_main$2 = {
       handleTimer();
     });
     return (_ctx, _push, _parent, _attrs) => {
+      const _component_el_alert = ElAlert;
       const _component_el_input = ElInput;
       const _component_el_slider = ElSlider;
-      const _component_client_only = __nuxt_component_2;
+      const _component_client_only = __nuxt_component_3;
       const _component_el_popover = ElPopover;
       const _component_el_button = ElButton;
       const _component_el_select = ElSelect;
@@ -10850,6 +10943,15 @@ const _sfc_main$2 = {
       _push(`<div${ssrRenderAttrs(mergeProps({ id: "wrapper" }, _attrs))}>`);
       _push(ssrRenderComponent(unref(TopNav), null, null, _parent));
       _push(`<main>`);
+      if (unref(errorMsg)) {
+        _push(ssrRenderComponent(_component_el_alert, {
+          title: unref(errorMsg),
+          type: "error",
+          "show-icon": ""
+        }, null, _parent));
+      } else {
+        _push(`<!---->`);
+      }
       if (!unref(useWebAudio)) {
         _push(ssrRenderComponent(unref(MidiDrivers), { class: "config-section" }, null, _parent));
       } else {
@@ -10947,6 +11049,7 @@ const _sfc_main$2 = {
             }, null, _parent2, _scopeId));
             _push2(`</div>`);
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
+            _push2(`<div${_scopeId}></div>`);
             if (unref(musicStore).sequenceType === "random") {
               _push2(ssrRenderComponent(_component_el_button, {
                 class: "border",
@@ -10954,10 +11057,10 @@ const _sfc_main$2 = {
               }, {
                 default: withCtx((_3, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`Randomize note sequence`);
+                    _push3(`Re-randomize note sequence`);
                   } else {
                     return [
-                      createTextVNode("Randomize note sequence")
+                      createTextVNode("Re-randomize note sequence")
                     ];
                   }
                 }),
@@ -11198,6 +11301,24 @@ const _sfc_main$2 = {
               createVNode(_component_client_only, null, {
                 default: withCtx(() => [
                   createVNode("p", { class: "setting-title" }, "Stack Type"),
+                  createVNode(_component_el_popover, {
+                    class: "settings-info",
+                    placement: "top-start",
+                    title: "Stack Type",
+                    width: 200,
+                    trigger: "click",
+                    content: "Stack refers to a vertical column of notes, which are played as the sequencer moves from left to right. In 'octave' mode, each subsequent row plays the same note as the row above it, except an octave higher. In 'hocket' mode, each row plays the same note as the column before, creating a hocketing (repeating) behavior"
+                  }, {
+                    reference: withCtx(() => [
+                      createVNode(_component_el_button, { class: "m-2" }, {
+                        default: withCtx(() => [
+                          createTextVNode("ⓘ")
+                        ]),
+                        _: 1
+                      })
+                    ]),
+                    _: 1
+                  }),
                   createVNode(_component_el_select, {
                     label: "Stack Type",
                     modelValue: unref(stackType),
@@ -11217,13 +11338,14 @@ const _sfc_main$2 = {
                 ]),
                 _: 1
               }),
+              createVNode("div"),
               unref(musicStore).sequenceType === "random" ? (openBlock(), createBlock(_component_el_button, {
                 key: 0,
                 class: "border",
                 onClick: unref(musicStore).handleRandomize
               }, {
                 default: withCtx(() => [
-                  createTextVNode("Randomize note sequence")
+                  createTextVNode("Re-randomize note sequence")
                 ]),
                 _: 1
               }, 8, ["onClick"])) : createCommentVNode("", true),
@@ -11239,7 +11361,7 @@ const _sfc_main$2 = {
                 }, null, 8, ["step", "modelValue", "onUpdate:modelValue"]),
                 createVNode(_component_client_only, null, {
                   default: withCtx(() => [
-                    createVNode(unref(Waveform))
+                    createVNode(unref(_sfc_main$4))
                   ]),
                   _: 1
                 })

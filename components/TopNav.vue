@@ -1,12 +1,12 @@
 <template>
   <nav class="top-nav">
     <h1>Weaving Music</h1>
-    <p class="error" v-if="errorMsg">{{ errorMsg }}</p>
+    <!-- <p class="error" v-if="errorMsg">{{ errorMsg }}</p> -->
     <div class="switches">
       <el-switch 
         v-model="useWebAudio"
-        active-text="Use Web Audio to Play"
-        inactive-text="Use External MIDI to Play"
+        active-text="Use Web Audio"
+        inactive-text="Use External MIDI"
       ></el-switch>
       <el-switch
         active-text="start"

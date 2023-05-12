@@ -2,6 +2,7 @@
   <div id="wrapper">
     <top-nav></top-nav>
     <main>
+      <el-alert v-if="errorMsg" :title="errorMsg" type="error" show-icon />
       <midi-drivers v-if="!useWebAudio" class="config-section"></midi-drivers>
       <settings-pane :title="'Clock Settings'">
         <p class="settings-description">Change the BPM (beats per minute) to modify how fast we advance through the sequence controlled in <em>Music Settings</em></p>
@@ -160,6 +161,18 @@
         </div>
         <client-only>
           <p class="setting-title">Stack Type</p>
+          <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Stack Type"
+              :width="200"
+              trigger="click"
+              content="Stack refers to a vertical column of notes, which are played as the sequencer moves from left to right. In 'octave' mode, each subsequent row plays the same note as the row above it, except an octave higher. In 'hocket' mode, each row plays the same note as the column before, creating a hocketing (repeating) behavior"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
           <el-select
               label="Stack Type"
               v-model="stackType"
@@ -172,11 +185,12 @@
               />
             </el-select>
         </client-only>
+        <div />
         <el-button
           class="border"
           v-if="musicStore.sequenceType === 'random'"
             @click="musicStore.handleRandomize"
-          >Randomize note sequence</el-button>
+          >Re-randomize note sequence</el-button>
         <div v-if="musicStore.sequenceType === 'sine'">
           <p>Change sine waveform</p>
           <p class="setting-description">This waveform is used to generate the note sequence. By adding negative or positive harmonics to a sine wave, this waveform can be transformed from a saw wave to a sine wave.</p>
@@ -315,7 +329,7 @@
   const store = useStore();
   const musicStore = useMusicStore();
   const weaveStore = useWeaveStore();
-  const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames } = storeToRefs(store);
+  const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames, errorMsg } = storeToRefs(store);
   const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
   const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
 
@@ -436,6 +450,7 @@
 
     .border {
       border: solid black 2px;
+      margin-top: 10px;
     }
 
     .el-slider {
@@ -444,6 +459,10 @@
 
     .el-input-number, .el-select {
       display: block;
+    }
+
+    .el-popper {
+      word-break: normal;
     }
   }
 </style>

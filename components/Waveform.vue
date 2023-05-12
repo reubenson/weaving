@@ -49,8 +49,8 @@
       {
         grid: { show: true },
         values: (self, ticks) => {
-          ticks = [0, 1, 3, 4 ,5]
-          console.log('ticks', ticks);
+          // ticks = [0, 1, 3, 4 ,5]
+          // console.log('ticks', ticks);
           return ticks.map(val => '')
         }
       },
@@ -127,12 +127,16 @@
   // });
 </script>
 
-<style scoped lang="scss">
-  div {
+<style lang="scss">
+  .waveform {
     width: 100%;
   }
 
-  .u-legend, .u-axis {
+  .uplot {
+    margin: auto;
+  }
+
+  .u-legend, .u-axis, .u-live {
     display: none;
   }
 </style>

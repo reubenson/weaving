@@ -5,15 +5,20 @@ export class webAudio {
   numberOfVoices: number;
   voices: Array<Object>;
   hasStarted: boolean;
+  audioCtx: AudioContext;
+  reverbNode: ConvolverNode;
 
   constructor(numberOfVoices: number) {
     const audioContext = new AudioContext();
     const type = 'sine';
 
+    this.audioCtx = audioContext;
     this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
+    this.reverbNode = this.createReverb(audioContext);
+    this.reverbNode.connect(audioContext.destination);
+    this.configureReverb();
 
-    // this.voices = new Array(numberOfVoices).map(() => {
     this.voices = _.times(numberOfVoices).map(() => {
       return {
         ctx: audioContext,
@@ -27,26 +32,39 @@ export class webAudio {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
       voice.gainNode.connect(voice.panNode);
+      voice.panNode.connect(this.reverbNode);
       voice.panNode.connect(audioContext.destination);
 
       voice.oscillatorNode.type = type;
       voice.panNode.pan.setValueAtTime(-1 + i * (2 / (numberOfVoices - 1)), 0);
     });
   }
+
+  private createReverb(audioCtx) {
+    let convolver = audioCtx.createConvolver();
+  
+    // load impulse response from file
+    // let response = await fetch("/weaving/Swede\ Plate\ 1.0s.aif");
+    // let arraybuffer = await response.arrayBuffer();
+    // convolver.buffer = await audioCtx.decodeAudioData(arraybuffer);
+  
+    return convolver;
+  }
+
+  private async configureReverb() {
+    // load impulse response from file
+    let response = await fetch("/weaving/Swede\ Plate\ 3.0s.wav");
+    let arraybuffer = await response.arrayBuffer();
+    this.reverbNode.buffer = await this.audioCtx.decodeAudioData(arraybuffer);
+  }
   
   public playNote(voiceIndex: number, note: number, noteLength: number) {
     const voice = this.voices[voiceIndex];
 
     let frequency = mtof(note);
-    // const attack = 220; // ms
-    // const decay = 300; // ms
     const attack = noteLength * 0.5;
     const decay = noteLength - attack;
     const currentTime = voice.ctx?.currentTime;
-
-    // move over octave handler
-    // frequency *= -1 + Math.floor(voiceIndex / 2);
-
 
     voice?.oscillatorNode?.frequency?.setValueAtTime(frequency, currentTime);
     // set up simple envelope VCA
