@@ -477,6 +477,7 @@
         flex-basis: 100%;
         max-width: 400px;
         margin: auto;
+        width: 100%;
       }
 
       .flex-half {

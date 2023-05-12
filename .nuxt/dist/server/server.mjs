@@ -10558,7 +10558,7 @@ _sfc_main$8.setup = (props, ctx) => {
 };
 const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-836b8239"]]);
 const elSwitch = "";
-const TopNav_vue_vue_type_style_index_0_scoped_eae74af1_lang = "";
+const TopNav_vue_vue_type_style_index_0_scoped_139a41d2_lang = "";
 const _sfc_main$7 = {
   __name: "TopNav",
   __ssrInlineRender: true,
@@ -10567,13 +10567,7 @@ const _sfc_main$7 = {
     const { useWebAudio, isOn, errorMsg } = storeToRefs(store2);
     return (_ctx, _push, _parent, _attrs) => {
       const _component_el_switch = ElSwitch;
-      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-eae74af1><h1 data-v-eae74af1>Weaving Music</h1><div class="switches" data-v-eae74af1>`);
-      _push(ssrRenderComponent(_component_el_switch, {
-        modelValue: unref(useWebAudio),
-        "onUpdate:modelValue": ($event) => isRef(useWebAudio) ? useWebAudio.value = $event : null,
-        "active-text": "Use Web Audio",
-        "inactive-text": "Use External MIDI"
-      }, null, _parent));
+      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-139a41d2><h1 data-v-139a41d2>Weaving Music</h1><div class="switches" data-v-139a41d2>`);
       _push(ssrRenderComponent(_component_el_switch, {
         "active-text": "start",
         "inactive-text": "stop",
@@ -10590,7 +10584,7 @@ _sfc_main$7.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
   return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-eae74af1"]]);
+const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-139a41d2"]]);
 const Woof_vue_vue_type_style_index_0_lang = "";
 function buildString(level, arr, count, remainder) {
   if (level === -1) {

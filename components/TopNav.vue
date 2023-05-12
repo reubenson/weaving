@@ -3,16 +3,16 @@
     <h1>Weaving Music</h1>
     <!-- <p class="error" v-if="errorMsg">{{ errorMsg }}</p> -->
     <div class="switches">
-      <el-switch 
-        v-model="useWebAudio"
-        active-text="Use Web Audio"
-        inactive-text="Use External MIDI"
-      ></el-switch>
       <el-switch
         active-text="start"
         inactive-text="stop"
         v-model="isOn"
       ></el-switch>
+      <!-- <el-switch 
+        v-model="useWebAudio"
+        active-text="Use Web Audio"
+        inactive-text="Use External MIDI"
+      ></el-switch> -->
     </div>
   </nav>
 </template>
