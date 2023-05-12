@@ -75,7 +75,10 @@ export class webAudio {
   public start() {
     if (this.hasStarted) return;
 
-    this.voices.forEach(voice => voice.oscillatorNode.start());
+    this.voices.forEach(voice => {
+      this.reverbNode.connect(audioContext.destination);
+      voice.oscillatorNode.start();
+    });
     this.hasStarted = true;
   }
 }

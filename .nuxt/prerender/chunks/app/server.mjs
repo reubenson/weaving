@@ -10316,20 +10316,20 @@ class webAudio {
     __publicField(this, "hasStarted");
     __publicField(this, "audioCtx");
     __publicField(this, "reverbNode");
-    const audioContext = new AudioContext();
+    const audioContext2 = new AudioContext();
     const type = "sine";
-    this.audioCtx = audioContext;
+    this.audioCtx = audioContext2;
     this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
-    this.reverbNode = this.createReverb(audioContext);
-    this.reverbNode.connect(audioContext.destination);
+    this.reverbNode = this.createReverb(audioContext2);
+    this.reverbNode.connect(audioContext2.destination);
     this.configureReverb();
     this.voices = _.times(numberOfVoices).map(() => {
       return {
-        ctx: audioContext,
-        oscillatorNode: audioContext.createOscillator(),
-        gainNode: audioContext.createGain(),
-        panNode: audioContext.createStereoPanner()
+        ctx: audioContext2,
+        oscillatorNode: audioContext2.createOscillator(),
+        gainNode: audioContext2.createGain(),
+        panNode: audioContext2.createStereoPanner()
       };
     });
     this.voices.forEach((voice, i) => {
@@ -10337,7 +10337,7 @@ class webAudio {
       voice.oscillatorNode.connect(voice.gainNode);
       voice.gainNode.connect(voice.panNode);
       voice.panNode.connect(this.reverbNode);
-      voice.panNode.connect(audioContext.destination);
+      voice.panNode.connect(audioContext2.destination);
       voice.oscillatorNode.type = type;
       voice.panNode.pan.setValueAtTime(-1 + i * (2 / (numberOfVoices - 1)), 0);
     });
@@ -10365,7 +10365,10 @@ class webAudio {
   start() {
     if (this.hasStarted)
       return;
-    this.voices.forEach((voice) => voice.oscillatorNode.start());
+    this.voices.forEach((voice) => {
+      this.reverbNode.connect(audioContext.destination);
+      voice.oscillatorNode.start();
+    });
     this.hasStarted = true;
   }
 }
