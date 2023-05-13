@@ -368,7 +368,6 @@
   const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
 
   onMounted(() => {
-    store.getMidiOutputs();
     store.initializeWebAudioSynth();
   });
 
@@ -377,6 +376,9 @@
   watch(midiOutputPort, (val) => {
     midi.setOutput(val);
   });
+  watch(useWebAudio, val => {
+    if (!val) store.getMidiOutputs();
+  })
 
   // clock
   let timer = null;

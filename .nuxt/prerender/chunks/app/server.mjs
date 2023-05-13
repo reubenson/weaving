@@ -11248,6 +11248,10 @@ const _sfc_main$2 = {
     watch(midiOutputPort, (val) => {
       midi.setOutput(val);
     });
+    watch(useWebAudio, (val) => {
+      if (!val)
+        store2.getMidiOutputs();
+    });
     let timer = null;
     function handleTimer() {
       clearInterval(timer);
