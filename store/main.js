@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import _ from 'lodash';
 import { Midi } from 'tonal';
+import midi from '~/lib/midi';
 import colormap from 'colormap';
 import { webAudio } from '~/lib/webAudio';
 import { useMusicStore } from './music-settings';
@@ -12,6 +13,8 @@ export const useStore = defineStore('main', {
       useWebAudio: true,
       midiInputPort: null,
       midiOutputPort: null,
+      midiInputPorts: [],
+      midiOutputPorts: [],
       isOn: false,
       bpm: 400,
       noteHoldCount: 1,
@@ -31,7 +34,7 @@ export const useStore = defineStore('main', {
 
       return 60 * (1000 / bpmInt);
     },
-    noteLength: state => state.noteHoldCount * state.bpmInterval * .95,
+    noteLength: state => Math.max(10, state.noteHoldCount * state.bpmInterval * .95),
     gridItems: state => {
       const { noteGrid } = state;
 
@@ -121,6 +124,26 @@ export const useStore = defineStore('main', {
     }
   },
   actions: {
+    getMidiOutputs() {
+      midi.getPortNames()
+        .then(({ inputs, outputs }) => {
+          this.midiInputPorts = inputs;
+          this.midiOutputPorts = outputs;
+          const [defaultInput] = inputs;
+          const [defaultOutput] = outputs;
+
+          // if (this.inputPort) {
+          // this.inputPort = defaultInput;
+          // midi.setInput(defaultInput);
+          // }
+
+          if (defaultOutput) {
+            this.midiOutputPort = defaultOutput;
+          }
+          // midi.setOutput(defaultOutput);
+          // }
+        });
+    },
     updateGridItemsKey() {
       this.gridItemsKey = Date.now();
     },

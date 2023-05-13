@@ -22,8 +22,17 @@
           </el-collapse-item>
         </el-collapse>
       </section>
-      <midi-drivers v-if="!useWebAudio" class="config-section"></midi-drivers>
-      <settings-pane :title="'Clock Settings'">
+      <settings-pane :title="'MIDI Settings'" v-if="!useWebAudio">
+        <p class="setting-description">Select Output Port</p>
+          <client-only>
+            <el-select v-model="midiOutputPort">
+              <el-option
+                v-for="item in outputPorts"
+              />
+            </el-select>
+        </client-only>
+      </settings-pane>
+      <settings-pane :title="'Time Settings'">
         <p class="settings-description">Change the BPM (beats per minute) to modify how fast we advance through the sequence controlled in <em>Music Settings</em></p>
         <el-input v-model="bpm" placeholder="BPM">
           <template #prepend>BPM</template>
@@ -39,7 +48,7 @@
         <el-input-number 
           v-model="noteHoldCount"
           :step="1"
-          :min="1"
+          :min="0"
           :max="8"/>
       </settings-pane>
       <settings-pane :title="'Music Settings'">
@@ -348,21 +357,26 @@
   import { useMusicStore } from '@/store/music-settings';
   import { useWeaveStore } from '@/store/weave-settings';
   import { storeToRefs } from 'pinia';
+  import midi from '~/lib/midi';
   const { $event } = useNuxtApp();
 
   const store = useStore();
   const musicStore = useMusicStore();
   const weaveStore = useWeaveStore();
-  const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store);
+  const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store);
   const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
   const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
 
   onMounted(() => {
+    store.getMidiOutputs();
     store.initializeWebAudioSynth();
   });
 
   watch(sequenceType, store.initNotes);
   watch(sineHarmonics, store.initNotes);
+  watch(midiOutputPort, (val) => {
+    midi.setOutput(val);
+  });
 
   // clock
   let timer = null;

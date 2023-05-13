@@ -10397,7 +10397,7 @@ const _plugins = [
   element_plus_injection_plugin_1RNPi6ogby,
   vuex_owYp5qnaH8
 ];
-const __nuxt_component_5 = /* @__PURE__ */ defineComponent({
+const __nuxt_component_3 = /* @__PURE__ */ defineComponent({
   name: "ClientOnly",
   inheritAttrs: false,
   // eslint-disable-next-line vue/require-prop-types
@@ -10472,6 +10472,9 @@ function noteOn(channel, note, velocity) {
   const status = 144 + channel - 1;
   if (!midiOutput)
     throw "error playing sequence: no MIDI output configured";
+  console.log("status", status);
+  console.log("velocity", velocity);
+  console.log("note", note);
   midiOutput && midiOutput.send([status, note, velocity]);
 }
 function noteOff(channel, note, velocity) {
@@ -10813,8 +10816,11 @@ const useStore = defineStore("main", {
       useWebAudio: true,
       midiInputPort: null,
       midiOutputPort: null,
+      midiInputPorts: [],
+      midiOutputPorts: [],
       isOn: false,
       bpm: 400,
+      noteHoldCount: 1,
       count: 0,
       showConfigurationEdit: true,
       webAudioSynth: null,
@@ -10830,7 +10836,7 @@ const useStore = defineStore("main", {
       const bpmInt = parseInt(state.bpm, 10);
       return 60 * (1e3 / bpmInt);
     },
-    noteLength: (state) => state.bpmInterval * 0.95,
+    noteLength: (state) => Math.max(10, state.noteHoldCount * state.bpmInterval * 0.95),
     gridItems: (state) => {
       const { noteGrid } = state;
       return _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
@@ -10891,6 +10897,16 @@ const useStore = defineStore("main", {
     }
   },
   actions: {
+    getMidiOutputs() {
+      midi.getPortNames().then(({ inputs: inputs2, outputs: outputs2 }) => {
+        this.midiInputPorts = inputs2;
+        this.midiOutputPorts = outputs2;
+        const [defaultOutput] = outputs2;
+        if (defaultOutput) {
+          this.midiOutputPort = defaultOutput;
+        }
+      });
+    },
     updateGridItemsKey() {
       this.gridItemsKey = Date.now();
     },
@@ -10943,30 +10959,6 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$8 = {
-  __name: "MidiDrivers",
-  __ssrInlineRender: true,
-  setup(__props) {
-    const store2 = useStore();
-    const { midiInputPort, midiOutputPort } = storeToRefs(store2);
-    watch(midiOutputPort, (val) => {
-      midi.setOutput(val);
-    });
-    return (_ctx, _push, _parent, _attrs) => {
-      const _component_client_only = __nuxt_component_5;
-      _push(`<section${ssrRenderAttrs(mergeProps({ class: "midi-drivers" }, _attrs))} data-v-836b8239><header data-v-836b8239>MIDI Settings</header><div class="drivers-wrapper" data-v-836b8239><div class="drivers-item output" data-v-836b8239><h4 data-v-836b8239>Select Output Port</h4>`);
-      _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
-      _push(`</div></div></section>`);
-    };
-  }
-};
-const _sfc_setup$8 = _sfc_main$8.setup;
-_sfc_main$8.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/MidiDrivers.vue");
-  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
-};
-const MidiDrivers = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-836b8239"]]);
 const _sfc_main$7 = {
   __name: "TopNav",
   __ssrInlineRender: true,
@@ -10975,12 +10967,18 @@ const _sfc_main$7 = {
     const { useWebAudio, isOn, errorMsg } = storeToRefs(store2);
     return (_ctx, _push, _parent, _attrs) => {
       const _component_el_switch = ElSwitch;
-      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-139a41d2><h1 data-v-139a41d2>Weaving Music</h1><div class="switches" data-v-139a41d2>`);
+      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-0214960e><h1 data-v-0214960e>Weaving Music</h1><div class="switches" data-v-0214960e>`);
       _push(ssrRenderComponent(_component_el_switch, {
         "active-text": "start",
         "inactive-text": "stop",
         modelValue: unref(isOn),
         "onUpdate:modelValue": ($event) => isRef(isOn) ? isOn.value = $event : null
+      }, null, _parent));
+      _push(ssrRenderComponent(_component_el_switch, {
+        modelValue: unref(useWebAudio),
+        "onUpdate:modelValue": ($event) => isRef(useWebAudio) ? useWebAudio.value = $event : null,
+        "active-text": "Use Web Audio",
+        "inactive-text": "Use External MIDI"
       }, null, _parent));
       _push(`</div></nav>`);
     };
@@ -10992,7 +10990,7 @@ _sfc_main$7.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
   return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-139a41d2"]]);
+const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-0214960e"]]);
 function buildString(level, arr, count, remainder) {
   if (level === -1) {
     arr.unshift(false);
@@ -11186,7 +11184,7 @@ const _sfc_main$4 = {
       }
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_client_only = __nuxt_component_5;
+      const _component_client_only = __nuxt_component_3;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "waveform" }, _attrs))}>`);
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       _push(`</div>`);
@@ -11242,16 +11240,18 @@ const _sfc_main$2 = {
     const store2 = useStore();
     const musicStore = useMusicStore();
     const weaveStore = useWeaveStore();
-    const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames, errorMsg } = storeToRefs(store2);
+    const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store2);
     const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
     const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
     watch(sequenceType, store2.initNotes);
     watch(sineHarmonics, store2.initNotes);
+    watch(midiOutputPort, (val) => {
+      midi.setOutput(val);
+    });
     let timer = null;
     function handleTimer() {
       clearInterval(timer);
       if (isOn.value) {
-        console.log("bpmInterval.value", bpmInterval.value);
         timer = setInterval(tick, bpmInterval.value);
       }
     }
@@ -11275,14 +11275,14 @@ const _sfc_main$2 = {
       const _component_el_alert = ElAlert;
       const _component_el_collapse = ElCollapse;
       const _component_el_collapse_item = ElCollapseItem;
-      const _component_el_input = ElInput;
-      const _component_el_slider = ElSlider;
-      const _component_client_only = __nuxt_component_5;
-      const _component_el_popover = ElPopover;
-      const _component_el_button = ElButton;
+      const _component_client_only = __nuxt_component_3;
       const _component_el_select = ElSelect;
       const _component_el_option = ElOption;
+      const _component_el_input = ElInput;
+      const _component_el_slider = ElSlider;
       const _component_el_input_number = ElInputNumber;
+      const _component_el_popover = ElPopover;
+      const _component_el_button = ElButton;
       _push(`<div${ssrRenderAttrs(mergeProps({ id: "wrapper" }, _attrs))}>`);
       _push(ssrRenderComponent(unref(TopNav), null, null, _parent));
       if (unref(errorMsg)) {
@@ -11411,11 +11411,39 @@ const _sfc_main$2 = {
       }, _parent));
       _push(`</section>`);
       if (!unref(useWebAudio)) {
-        _push(ssrRenderComponent(unref(MidiDrivers), { class: "config-section" }, null, _parent));
+        _push(ssrRenderComponent(unref(_sfc_main$5), { title: "MIDI Settings" }, {
+          default: withCtx((_2, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(`<p class="setting-description"${_scopeId}>Select Output Port</p>`);
+              _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
+            } else {
+              return [
+                createVNode("p", { class: "setting-description" }, "Select Output Port"),
+                createVNode(_component_client_only, null, {
+                  default: withCtx(() => [
+                    createVNode(_component_el_select, {
+                      modelValue: unref(midiOutputPort),
+                      "onUpdate:modelValue": ($event2) => isRef(midiOutputPort) ? midiOutputPort.value = $event2 : null
+                    }, {
+                      default: withCtx(() => [
+                        (openBlock(true), createBlock(Fragment, null, renderList(_ctx.outputPorts, (item) => {
+                          return openBlock(), createBlock(_component_el_option);
+                        }), 256))
+                      ]),
+                      _: 1
+                    }, 8, ["modelValue", "onUpdate:modelValue"])
+                  ]),
+                  _: 1
+                })
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
       } else {
         _push(`<!---->`);
       }
-      _push(ssrRenderComponent(unref(_sfc_main$5), { title: "Clock Settings" }, {
+      _push(ssrRenderComponent(unref(_sfc_main$5), { title: "Time Settings" }, {
         default: withCtx((_2, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(`<p class="settings-description"${_scopeId}>Change the BPM (beats per minute) to modify how fast we advance through the sequence controlled in <em${_scopeId}>Music Settings</em></p>`);
@@ -11443,6 +11471,14 @@ const _sfc_main$2 = {
               modelValue: unref(bpm),
               "onUpdate:modelValue": ($event2) => isRef(bpm) ? bpm.value = $event2 : null
             }, null, _parent2, _scopeId));
+            _push2(`<p class="setting-title"${_scopeId}>Note Duration</p>`);
+            _push2(ssrRenderComponent(_component_el_input_number, {
+              modelValue: unref(noteHoldCount),
+              "onUpdate:modelValue": ($event2) => isRef(noteHoldCount) ? noteHoldCount.value = $event2 : null,
+              step: 1,
+              min: 0,
+              max: 8
+            }, null, _parent2, _scopeId));
           } else {
             return [
               createVNode("p", { class: "settings-description" }, [
@@ -11466,6 +11502,14 @@ const _sfc_main$2 = {
                 step: 10,
                 modelValue: unref(bpm),
                 "onUpdate:modelValue": ($event2) => isRef(bpm) ? bpm.value = $event2 : null
+              }, null, 8, ["modelValue", "onUpdate:modelValue"]),
+              createVNode("p", { class: "setting-title" }, "Note Duration"),
+              createVNode(_component_el_input_number, {
+                modelValue: unref(noteHoldCount),
+                "onUpdate:modelValue": ($event2) => isRef(noteHoldCount) ? noteHoldCount.value = $event2 : null,
+                step: 1,
+                min: 0,
+                max: 8
               }, null, 8, ["modelValue", "onUpdate:modelValue"])
             ];
           }
@@ -11834,7 +11878,6 @@ const _sfc_main$2 = {
           if (_push2) {
             _push2(`<p class="settings-description"${_scopeId}> In weaving, <em${_scopeId}>warp</em> refers to the vertical lines and <em${_scopeId}>warp</em> refers to the horizontal lines, which are woven between the weft. In the swatch below, the warp (vertical) lines represent notes in the note sequence generated by the <em${_scopeId}>Music Settings</em>, and the weft (horizontal) lines represent individual voices that play the notes defined by the warp. To simplify the resulting tonality, the weft lines are handles as octaves, such that when more than one is played simultaneously, they alter the timbre of the voicing rather simply, as stacked octaves. This results in a translation of the weaving pattern that would be rather familiar to anyone who has previously used an MPC sequencer. </p><div${_scopeId}><p class="setting-title"${_scopeId}>Warp Count</p>`);
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
-            _push2(`<p class="setting-description"${_scopeId}></p>`);
             _push2(ssrRenderComponent(_component_el_input_number, {
               modelValue: unref(swatchWidth),
               "onUpdate:modelValue": ($event2) => isRef(swatchWidth) ? swatchWidth.value = $event2 : null,
@@ -11927,7 +11970,6 @@ const _sfc_main$2 = {
                   ]),
                   _: 1
                 }),
-                createVNode("p", { class: "setting-description" }),
                 createVNode(_component_el_input_number, {
                   modelValue: unref(swatchWidth),
                   "onUpdate:modelValue": ($event2) => isRef(swatchWidth) ? swatchWidth.value = $event2 : null,
