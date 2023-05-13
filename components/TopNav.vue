@@ -8,11 +8,11 @@
         inactive-text="stop"
         v-model="isOn"
       ></el-switch>
-      <!-- <el-switch 
+      <el-switch 
         v-model="useWebAudio"
         active-text="Use Web Audio"
         inactive-text="Use External MIDI"
-      ></el-switch> -->
+      ></el-switch>
     </div>
   </nav>
 </template>

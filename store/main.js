@@ -14,6 +14,7 @@ export const useStore = defineStore('main', {
       midiOutputPort: null,
       isOn: false,
       bpm: 400,
+      noteHoldCount: 1,
       count: 0,
       showConfigurationEdit: true,
       webAudioSynth: null,
@@ -30,7 +31,7 @@ export const useStore = defineStore('main', {
 
       return 60 * (1000 / bpmInt);
     },
-    noteLength: state => state.bpmInterval * .95,
+    noteLength: state => state.noteHoldCount * state.bpmInterval * .95,
     gridItems: state => {
       const { noteGrid } = state;
 

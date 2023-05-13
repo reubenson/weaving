@@ -35,6 +35,12 @@
           :step="10"
           v-model="bpm"
           ></el-slider>
+        <p class="setting-title">Note Duration</p>
+        <el-input-number 
+          v-model="noteHoldCount"
+          :step="1"
+          :min="1"
+          :max="8"/>
       </settings-pane>
       <settings-pane :title="'Music Settings'">
         <p class="settings-description">These settings modify the underlying sequence of notes played as we advance from left to right in the <em>Weaving Swatch</em> below.</p>
@@ -244,7 +250,6 @@
               </template>
             </el-popover>
           </client-only>
-          <p class="setting-description"></p>
           <el-input-number 
             v-model="swatchWidth"
             :step="1"
@@ -348,7 +353,7 @@
   const store = useStore();
   const musicStore = useMusicStore();
   const weaveStore = useWeaveStore();
-  const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames, errorMsg } = storeToRefs(store);
+  const { useWebAudio, bpm, bpmInterval, isOn, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store);
   const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
   const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
 
@@ -366,7 +371,6 @@
     // todo: https://incolumitas.com/2021/12/18/on-high-precision-javascript-timers/
     clearInterval(timer);
     if (isOn.value) {
-      console.log('bpmInterval.value', bpmInterval.value);
       timer = setInterval(tick, bpmInterval.value);
     }
   }
@@ -465,11 +469,23 @@
       border: none;
     }
 
+    a {
+      text-decoration: underline;
+      color: black;
+    }
+
+    p {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
     figure {
+      border: dotted black 2px;
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       margin: 15px auto;
+      padding: 10px;
       width: 100%;
       justify-content: space-between;
       

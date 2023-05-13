@@ -169,6 +169,7 @@ function handleEuclidean() {
 }
 function sendNote(channel, note, velocity) {
   try {
+    // console.log('store.noteLength', store.noteLength);
     audio.playNote(channel, note, store.noteLength, useWebAudio.value && webAudioSynth.value );
   } catch (error) {
     store.isOn = false;
