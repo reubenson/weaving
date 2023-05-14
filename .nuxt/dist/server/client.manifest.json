@@ -8,7 +8,7 @@
     "resourceType": "script",
     "module": true,
     "css": [],
-    "file": "error-404.8b5e9304.js",
+    "file": "error-404.6037e461.js",
     "imports": [
       "node_modules/nuxt/dist/app/entry.js"
     ],
@@ -28,7 +28,7 @@
     "resourceType": "script",
     "module": true,
     "css": [],
-    "file": "error-500.9e0edffb.js",
+    "file": "error-500.1b4c0206.js",
     "imports": [
       "node_modules/nuxt/dist/app/entry.js"
     ],
@@ -41,24 +41,24 @@
   },
   "node_modules/nuxt/dist/app/entry.css": {
     "resourceType": "style",
-    "file": "entry.6fc9d16f.css",
+    "file": "entry.838ca10f.css",
     "src": "node_modules/nuxt/dist/app/entry.css"
   },
   "node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "css": [
-      "entry.6fc9d16f.css"
+      "entry.838ca10f.css"
     ],
     "dynamicImports": [
       "virtual:nuxt:/Users/reubenson/Projects/weaving/.nuxt/error-component.mjs"
     ],
-    "file": "entry.eaf50008.js",
+    "file": "entry.458e07ef.js",
     "isEntry": true,
     "src": "node_modules/nuxt/dist/app/entry.js"
   },
-  "entry.6fc9d16f.css": {
-    "file": "entry.6fc9d16f.css",
+  "entry.838ca10f.css": {
+    "file": "entry.838ca10f.css",
     "resourceType": "style"
   },
   "virtual:nuxt:/Users/reubenson/Projects/weaving/.nuxt/error-component.mjs": {
@@ -68,7 +68,7 @@
       "node_modules/@nuxt/ui-templates/dist/templates/error-404.vue",
       "node_modules/@nuxt/ui-templates/dist/templates/error-500.vue"
     ],
-    "file": "error-component.75ee9ead.js",
+    "file": "error-component.cbab4b9b.js",
     "imports": [
       "node_modules/nuxt/dist/app/entry.js"
     ],

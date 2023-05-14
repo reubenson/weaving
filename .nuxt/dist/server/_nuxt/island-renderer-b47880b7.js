@@ -18,8 +18,8 @@ import "@vue/shared";
 import "vuex";
 import "vue/server-renderer";
 import "lodash-unified";
-import "@popperjs/core";
 import "@ctrl/tinycolor";
+import "@popperjs/core";
 import "lodash";
 import "tonal";
 import "lerp";
@@ -53,4 +53,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 export {
   islandRenderer as default
 };
-//# sourceMappingURL=island-renderer-b9909f46.js.map
+//# sourceMappingURL=island-renderer-b47880b7.js.map

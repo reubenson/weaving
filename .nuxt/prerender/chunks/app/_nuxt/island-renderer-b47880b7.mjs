@@ -13,8 +13,8 @@ import 'file:///Users/reubenson/Projects/weaving/node_modules/@vue/shared/index.
 import 'file:///Users/reubenson/Projects/weaving/node_modules/vue-devtools-stub/dist/index.mjs';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/vue/server-renderer/index.mjs';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/lodash-unified/import.js';
-import 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dist/index.mjs';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/@ctrl/tinycolor/dist/public_api.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/@popperjs/core/dist/index.mjs';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/lodash/lodash.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/tonal/dist/index.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/lerp/index.js';
@@ -57,4 +57,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 });
 
 export { islandRenderer as default };
-//# sourceMappingURL=island-renderer-b9909f46.mjs.map
+//# sourceMappingURL=island-renderer-b47880b7.mjs.map

@@ -19,8 +19,8 @@ import "@vueuse/core";
 import "@vue/shared";
 import "vuex";
 import "lodash-unified";
-import "@popperjs/core";
 import "@ctrl/tinycolor";
+import "@popperjs/core";
 import "lodash";
 import "tonal";
 import "lerp";
@@ -80,4 +80,4 @@ const error500 = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3
 export {
   error500 as default
 };
-//# sourceMappingURL=error-500-ee40991e.js.map
+//# sourceMappingURL=error-500-1451cbe9.js.map

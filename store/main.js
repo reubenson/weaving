@@ -7,6 +7,39 @@ import { webAudio } from '~/lib/webAudio';
 import { useMusicStore } from './music-settings';
 import { useWeaveStore } from './weave-settings';
 
+const presets = {
+  1: {
+    isOn: true,
+    bpm: 120,
+    noteHoldCount: 4,
+    sequenceType: 'random',
+    noteScale: 'maj7',
+    stackType: 'canon',
+    rangeMin: 4,
+    rangeMax: 6,
+    patternType: 'weave',
+    swatchDepth: 8,
+    swatchWidth: 16,
+    weaveX: 2,
+    weaveY: 4,
+  },
+  2: {
+    isOn: true,
+    bpm: 630,
+    noteHoldCount: 1,
+    sequenceType: 'sine',
+    sineHarmonics: 4.9,
+    noteScale: 'madd4',
+    stackType: 'octave',
+    rangeMin: 2,
+    rangeMax: 3,
+    patternType: 'euclidean',
+    swatchDepth: 8,
+    swatchWidth: 32,
+    euclideanCount: 17
+  }
+}
+
 export const useStore = defineStore('main', {
   state: () => {
     return {
@@ -124,6 +157,21 @@ export const useStore = defineStore('main', {
     }
   },
   actions: {
+    applyPreset(presetId) {
+      const preset = presets[presetId],
+        musicStore = useMusicStore(),
+        weaveStore = useWeaveStore();
+      
+      _.forEach(preset, (value, key) => {
+        if (this[key]) {
+          this[key] = value;
+        } else if (musicStore[key]) {
+          musicStore[key] = value;
+        } else if (weaveStore[key]) {
+          weaveStore[key] = value;
+        }
+      });
+    },
     getMidiOutputs() {
       midi.getPortNames()
         .then(({ inputs, outputs }) => {

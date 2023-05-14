@@ -4,8 +4,8 @@
     <el-alert v-if="errorMsg" :title="errorMsg" type="error" show-icon />
     <main>
       <section class="app-description">
-        <el-collapse>
-          <el-collapse-item title="About">
+        <el-collapse v-model="activeAccordion" accordion @change="handleAccordionChange">
+          <el-collapse-item title="About" name="#about">
             <p><strong><a href="/weaving">Weaving Music</a></strong> is an exploration of the materiality of sound through the metaphor of weaving, with the weaving loom re-imagined as a music sequencer. The seeds of this project were formed when first encountering grid notation for weaving patterns in Anni Albers' <em>On Weaving</em>, which gave the immediate impression of rhythmic music notation.</p>
             <figure>
               <img src="https://reubenson-portfolio.s3.us-east-1.amazonaws.com/assets/on-weaving.jpeg" alt="weaving notation from Anni Albers" class="">
@@ -19,6 +19,34 @@
             </figure>
             <p>In the end, this project attempts a fairly straightforward translation of weaving notation to music notation, in that patterns are read from left to right as columns along the warp (vertical threads hung on a a weaving loom). In the current version, there are two ways of interpreting how a column should be handled: as octaves (in octave mode) or as a canon (in canon mode). These different mode offer different expressions of the underlying harmonic structure, which this app leaves intentionally simplified (as a selection from a variety of chords), such that the resulting music is an expression of an underlying harmonic structure.</p>
             <p>In sharing this software, my hope is that you too may find it useful for harmonic and rhythmic research and discovery, sharing some similarity in intent to the historical <a href="https://till.com/articles/muse/">Triadex Muse</a>.</p>
+          </el-collapse-item>
+          <el-collapse-item title="Getting Started" class="presets" name="#presets">
+            <p>The following presets may be helpful for you to become familar with the inner workings of this app.</p>
+            <header>Preset #1</header>
+            <p>
+              This preset has the feelings of passing clouds, like a slower movement from one of Keith Fullerton Whitman's <a href="https://keithfullertonwhitman.com/generators"><i>Generators</i></a>. The slow BPM and usage of <i>canon</i> Stack Type allows for a gentle cycling across the <i>maj7</i> chord, arranged here over a two-octave register.
+            </p>
+            <p>    
+              To explore this preset further, try clicking <strong>Randomize note sequence</strong> to obtain a new random pattern for the given chord, and play with the <strong>Weave X</strong> and <strong>Weave Y</strong> parameters to change the sparseness of the voicings.
+            </p>
+            <el-button
+              class="border"
+              @click="store.applyPreset(1)"
+              >Apply Preset #1</el-button>
+            <header>Preset #2</header>
+            <p>
+              This preset is at the other of the spectrum, a frenetic arpeggiation of varying pipe organ tonalities, reminiscent of a section from Peter Hamel or Phillip Glass. The organ sonority comes from the use of <em>octave</em> <strong>Stack Type</strong>, which means that a column of notes is played as octaves.
+            </p>
+            <div class="spotify-embed">
+              <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4zsXWPvdt7GMoWGnxTfeKP?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+            <p>
+              To explore this preset further, try raising up the <strong>Euclidean Density</strong> setting to fill in the octave harmonic spectrum, or bring it down to 1 to hear each the notes playing in isolation across the octave registers. You may also play with the <strong>Sine Waveform</strong> to change the melody derived. Simpler waveforms closer to the middle range will allow you to easily hear how the pitch of the notes follows the contours of the waveform. This will also register visibly if you include the <strong>Euclidean Density</strong> to its maximum setting.
+            </p>
+            <el-button
+              class="border"
+              @click="store.applyPreset(2)"
+              >Apply Preset #2</el-button>
           </el-collapse-item>
         </el-collapse>
       </section>
@@ -224,9 +252,9 @@
           class="border"
           v-if="musicStore.sequenceType === 'random'"
             @click="musicStore.handleRandomize"
-          >Re-randomize note sequence</el-button>
+          >Randomize note sequence</el-button>
         <div v-if="musicStore.sequenceType === 'sine'">
-          <p>Change sine waveform</p>
+          <p class="setting-title">Sine Waveform</p>
           <p class="setting-description">This waveform is used to generate the note sequence. By adding negative or positive harmonics to a sine wave, this waveform can be transformed from a saw wave to a sine wave.</p>
           <el-slider
             :min="-8"
@@ -332,7 +360,7 @@
         ></el-slider>
         </div>
         <div v-if="patternType === 'euclidean'">
-          <p>Euclidean Sequence Density</p>
+          <p>Euclidean Density</p>
           <el-slider
             v-model="euclideanCount"
             :min="1"
@@ -366,8 +394,22 @@
   const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store);
   const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
   const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
+  let activeAccordion = ref('');
+
+  function handleAccordionChange(val) {
+    const { hash } = window.document.location;
+
+    history.pushState(null, null, val);
+  }
+
+  function setAccordion() {
+    const { hash } = window.document.location;
+
+    activeAccordion.value = hash;
+  }
 
   onMounted(() => {
+    setAccordion();
     store.initializeWebAudioSynth();
   });
 
@@ -378,7 +420,7 @@
   });
   watch(useWebAudio, val => {
     if (!val) store.getMidiOutputs();
-  })
+  });
 
   // clock
   let timer = null;
@@ -525,6 +567,12 @@
         text-align: center;
       }
     }
+  }
+
+  .presets header {
+    margin: 20px auto 10px;
+    font-size: 16px;
+    text-decoration: underline;
   }
 
   .config-section, .settings-pane {

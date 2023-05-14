@@ -19,8 +19,8 @@ import "@vueuse/core";
 import "@vue/shared";
 import "vuex";
 import "lodash-unified";
-import "@popperjs/core";
 import "@ctrl/tinycolor";
+import "@popperjs/core";
 import "lodash";
 import "tonal";
 import "lerp";
@@ -292,4 +292,4 @@ const error404 = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3
 export {
   error404 as default
 };
-//# sourceMappingURL=error-404-8fa59cef.js.map
+//# sourceMappingURL=error-404-25ad9a42.js.map
