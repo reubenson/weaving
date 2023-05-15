@@ -8,7 +8,8 @@ export default defineNuxtConfig({
       meta: [
         { name: 'description', content: 'weaving musical patterns'}
       ]
-    }
+    },
+    baseURL: '/weaving/'
   },
 
   // https://nuxt.com/docs/getting-started/introduction#server-side-rendering
@@ -31,9 +32,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@element-plus/nuxt'
   ],
-  app: {
-    baseURL: '/weaving/'
-  },
+  // app: {
+    // baseURL: '/weaving/'
+  // },
   plugins: [
     '~/plugins/mitt.client.js'
   ],

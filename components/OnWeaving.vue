@@ -24,8 +24,11 @@
             <p>The following presets may be helpful for you to become familar with the inner workings of this app.</p>
             <header>Preset #1</header>
             <p>
-              This preset has the feelings of passing clouds, like a slower movement from one of Keith Fullerton Whitman's <a href="https://keithfullertonwhitman.com/generators"><i>Generators</i></a>. The slow BPM and usage of <i>canon</i> Stack Type allows for a gentle cycling across the <i>maj7</i> chord, arranged here over a two-octave register.
+              This preset has the feelings of passing clouds, like a slower movement from one of Keith Fullerton Whitman's <a href="https://keithfullertonwhitman.com/generators"><i>Generators</i></a> or his <i>Playthroughs</i> album. The slow BPM and usage of <i>canon</i> Stack Type allows for a gentle cycling across the <i>maj7</i> chord, arranged here over a two-octave register.
             </p>
+            <div class="spotify-embed">
+              <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0jV5pkyZByn7pV12Rzbtuu?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
             <p>    
               To explore this preset further, try clicking <strong>Randomize note sequence</strong> to obtain a new random pattern for the given chord, and play with the <strong>Weave X</strong> and <strong>Weave Y</strong> parameters to change the sparseness of the voicings.
             </p>
@@ -369,6 +372,11 @@
           ></el-slider>
         </div>
       </settings-pane>
+      <midi-download></midi-download>
+      <!-- <div>
+        <el-icon><Download /></el-icon>
+        <a href="javascript:void(0)" download="data.txt" ref="downloadLink">Download MIDI file</a>
+      </div> -->
       <swatch></swatch>
     </main>
   </div>
@@ -381,6 +389,7 @@
   import SettingsPane from './SettingsPane';
   import Waveform from './Waveform';
   import Notation from './Notation';
+  import MidiDownload from './MidiDownload';
   import { useStore } from '@/store/main';
   import { useMusicStore } from '@/store/music-settings';
   import { useWeaveStore } from '@/store/weave-settings';
@@ -408,9 +417,24 @@
     activeAccordion.value = hash;
   }
 
+  function handleDownload(downloadLink) {
+    const blob = new Blob(
+      ['string'],
+      {
+        type: 'text/plain;charset=utf-8'
+      }
+    );
+    const downloadUrl = URL.createObjectURL(blob);
+
+    console.log('downloadUrl', downloadUrl);
+
+    downloadLink.setAttribute('href', downloadUrl);
+  }
+
   onMounted(() => {
     setAccordion();
     store.initializeWebAudioSynth();
+    // handleDownload(downloadLink.value);
   });
 
   watch(sequenceType, store.initNotes);

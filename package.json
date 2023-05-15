@@ -19,9 +19,11 @@
     "sass-loader": "^13.2.2"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "@pinia/nuxt": "^0.4.9",
     "abcjs": "^6.2.2",
     "colormap": "^2.3.2",
+    "midi-writer-js": "^2.1.4",
     "mitt": "^3.0.0",
     "mtof": "^1.0.2",
     "nanotimer": "^0.3.15",

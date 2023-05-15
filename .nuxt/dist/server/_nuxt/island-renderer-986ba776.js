@@ -27,6 +27,7 @@ import "mtof";
 import "tonal-chord";
 import "uplot";
 import "abcjs";
+import "midi-writer-js";
 const components_islands = {};
 const islandComponents = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -53,4 +54,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 export {
   islandRenderer as default
 };
-//# sourceMappingURL=island-renderer-b47880b7.js.map
+//# sourceMappingURL=island-renderer-986ba776.js.map

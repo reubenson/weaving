@@ -56,7 +56,7 @@ export const useStore = defineStore('main', {
       webAudioSynth: null,
       warpNotes: [],
       notes: [],
-      noteGrid: [],
+      swatchWeave: [],
       gridItemsKey: Date.now(),
       errorMsg: ''
     }
@@ -69,9 +69,9 @@ export const useStore = defineStore('main', {
     },
     noteLength: state => Math.max(10, state.noteHoldCount * state.bpmInterval * .95),
     gridItems: state => {
-      const { noteGrid } = state;
+      const { swatchWeave } = state;
 
-      return _.reduce(noteGrid, (acc, item) => _.concat(acc, item), []);
+      return _.reduce(swatchWeave, (acc, item) => _.concat(acc, item), []);
     },
     noteColors: () => {
       const musicStore = useMusicStore();

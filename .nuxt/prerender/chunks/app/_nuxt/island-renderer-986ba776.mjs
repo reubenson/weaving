@@ -21,6 +21,7 @@ import 'file:///Users/reubenson/Projects/weaving/node_modules/lerp/index.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/mtof/index.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/tonal-chord/build/es5.js';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/abcjs/index.js';
+import 'file:///Users/reubenson/Projects/weaving/node_modules/midi-writer-js/build/index.js';
 import '../../nitro/nitro-prerenderer.mjs';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/node-fetch-native/dist/polyfill.mjs';
 import 'file:///Users/reubenson/Projects/weaving/node_modules/destr/dist/index.mjs';
@@ -57,4 +58,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 });
 
 export { islandRenderer as default };
-//# sourceMappingURL=island-renderer-b47880b7.mjs.map
+//# sourceMappingURL=island-renderer-986ba776.mjs.map

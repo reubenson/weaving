@@ -94,7 +94,7 @@ function computeWeave() {
     length = pattern.reduce((acc, item) => acc += item);
   
   // to do: rename this, since it's more about the weave than the note
-  store.noteGrid = [];
+  store.swatchWeave = [];
   _.times(swatchDepth.value, (i) => {
     const row = [];
 
@@ -103,7 +103,7 @@ function computeWeave() {
       row.push( ( (i + swatchWidth.value - j) % length) < pattern[0] ? true : false );
     });
 
-    store.noteGrid.push(row);
+    store.swatchWeave.push(row);
   });
 }
 
@@ -160,11 +160,11 @@ function handleEuclidean() {
     });
   };
   
-  store.noteGrid = [];
+  store.swatchWeave = [];
   _.times(swatchDepth.value, (i) => {
     const shift = shiftPattern(pattern, i);
 
-    store.noteGrid.push(shift);
+    store.swatchWeave.push(shift);
   });
 }
 function sendNote(channel, note, velocity) {
@@ -205,7 +205,7 @@ function advanceStack() {
   
   _.times(rows, row => {
     const channel = row + 1;
-    const isActive = store.noteGrid[row][warpIndex];
+    const isActive = store.swatchWeave[row][warpIndex];
     
     noteValue = parseInt(store.swatchNotes[row][warpIndex]);
     
