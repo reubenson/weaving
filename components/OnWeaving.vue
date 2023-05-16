@@ -50,6 +50,17 @@
               class="border"
               @click="store.applyPreset(2)"
               >Apply Preset #2</el-button>
+              <header>Preset #3</header>
+            <p>
+              This preset takes on the more extreme high register, playing a cluster of notes that are close enough in frequency to produce audible difference tones, in the manner of <a href="https://caesuramag.org/posts/bret-schneider-groundwork-for-a-study-of-maryanne-amacher">Maryanne Amacher's explorations of Marvin Minksy's Triadex Muse</a>.
+            </p>
+            <p>
+              To bring this back into more traditionally musical territory, simply move the <strong>Lower Register</strong> value back down.
+            </p>
+            <el-button
+              class="border"
+              @click="store.applyPreset(3)"
+              >Apply Preset #3</el-button>
           </el-collapse-item>
         </el-collapse>
       </section>
@@ -194,7 +205,7 @@
           </client-only>
           <el-slider
             :min="0"
-            :max="8"
+            :max="upperRegisterMax"
             :step="1"
             show-stops
             v-model="rangeMin"
@@ -218,7 +229,7 @@
           </client-only>
           <el-slider
             :min="0"
-            :max="8"
+            :max="upperRegisterMax"
             :step="1"
             show-stops
             v-model="rangeMax"
@@ -372,24 +383,17 @@
           ></el-slider>
         </div>
       </settings-pane>
-      <midi-download></midi-download>
-      <!-- <div>
-        <el-icon><Download /></el-icon>
-        <a href="javascript:void(0)" download="data.txt" ref="downloadLink">Download MIDI file</a>
-      </div> -->
       <swatch></swatch>
     </main>
   </div>
 </template>
 
 <script setup>
-  import MidiDrivers from './MidiDrivers';
   import TopNav from './TopNav';
   import Swatch from './Swatch';
-  import SettingsPane from './SettingsPane';
+  import SettingsPane from './_SettingsPane';
   import Waveform from './Waveform';
   import Notation from './Notation';
-  import MidiDownload from './MidiDownload';
   import { useStore } from '@/store/main';
   import { useMusicStore } from '@/store/music-settings';
   import { useWeaveStore } from '@/store/weave-settings';
@@ -401,14 +405,15 @@
   const musicStore = useMusicStore();
   const weaveStore = useWeaveStore();
   const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store);
-  const { chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
+  const { upperRegisterMax, chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
   const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
   let activeAccordion = ref('');
 
   function handleAccordionChange(val) {
-    const { hash } = window.document.location;
+    const { origin, pathname} = window.document.location;
+    const baseURL = `${origin}${pathname}`;
 
-    history.pushState(null, null, val);
+    history.pushState(null, null, val || baseURL);
   }
 
   function setAccordion() {
@@ -417,24 +422,9 @@
     activeAccordion.value = hash;
   }
 
-  function handleDownload(downloadLink) {
-    const blob = new Blob(
-      ['string'],
-      {
-        type: 'text/plain;charset=utf-8'
-      }
-    );
-    const downloadUrl = URL.createObjectURL(blob);
-
-    console.log('downloadUrl', downloadUrl);
-
-    downloadLink.setAttribute('href', downloadUrl);
-  }
-
   onMounted(() => {
     setAccordion();
     store.initializeWebAudioSynth();
-    // handleDownload(downloadLink.value);
   });
 
   watch(sequenceType, store.initNotes);
@@ -597,6 +587,11 @@
     margin: 20px auto 10px;
     font-size: 16px;
     text-decoration: underline;
+  }
+
+  .spotify-embed {
+    margin: 20px auto;
+    max-width: 600px;
   }
 
   .config-section, .settings-pane {

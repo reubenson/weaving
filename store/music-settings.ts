@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as Chord from 'tonal-chord';
 import scale from '~/lib/scale';
 import { useStore } from '~/store/main';
+import { useWeaveStore } from './weave-settings';
 
 export const useMusicStore = defineStore('music-settings', {
   state: () => {
@@ -32,7 +33,8 @@ export const useMusicStore = defineStore('music-settings', {
 
       // if (props.mode === 'stack') {
         // if (props.type === 'warp') {
-      return (scale.noteSet(state.noteScale, tonic, state.rangeMin, range) || []);
+      const offset = -1; // offset to include 0-12 as lowest range of MIDI values
+      return (scale.noteSet(state.noteScale, tonic, state.rangeMin + offset, range) || []);
       // .map(num => `${num}`);
         // } else {
         //   // chord mode
@@ -44,6 +46,15 @@ export const useMusicStore = defineStore('music-settings', {
 
         // return;
       // }
+    },
+    upperRegisterMax: state => {
+      const { swatchDepth } = useWeaveStore();
+
+      if (state.stackType === 'canon') {
+        return 10;
+      } else if (state.stackType === 'octave') {
+        return 10 - swatchDepth + 1;
+      }
     },
     waveformFn: state => {
       return (x: number) => {

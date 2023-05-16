@@ -1,6 +1,7 @@
 <template>
   <section class="swatch">
     <header>Weaving Swatch</header>
+    <midi-download></midi-download>
     <div class="swatch-display">
       <div class="swatch-grid" 
         :style="{
@@ -22,7 +23,8 @@
 import { computed, onMounted, ref } from 'vue';
 import _ from 'lodash';
 import * as Chord from 'tonal-chord';
-import Woof from './woof';
+// import Woof from './woof';
+import MidiDownload from './MidiDownload';
 // import patterns from '../../../services/weaving/patterns';
 import scale from '../lib/scale';
 import midi from '../lib/midi';
@@ -93,7 +95,6 @@ function computeWeave() {
   const pattern = [weaveX.value, weaveY.value],
     length = pattern.reduce((acc, item) => acc += item);
   
-  // to do: rename this, since it's more about the weave than the note
   store.swatchWeave = [];
   _.times(swatchDepth.value, (i) => {
     const row = [];
@@ -209,9 +210,9 @@ function advanceStack() {
     
     noteValue = parseInt(store.swatchNotes[row][warpIndex]);
     
-    if (stackType.value === 'octave') {
-      noteValue += (12 * row);
-    }
+    // if (stackType.value === 'octave') {
+    //   noteValue += (12 * row);
+    // }
       
     if (isActive) {
       sendNote(row, noteValue, 127);

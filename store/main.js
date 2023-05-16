@@ -37,6 +37,22 @@ const presets = {
     swatchDepth: 8,
     swatchWidth: 32,
     euclideanCount: 17
+  },
+  3: {
+    isOn: true,
+    bpm: 550,
+    noteHoldCount: 4,
+    sequenceType: 'sine',
+    sineHarmonics: 3.3,
+    noteScale: 'madd4',
+    stackType: 'canon',
+    rangeMin: 8,
+    rangeMax: 9,
+    patternType: 'weave',
+    swatchDepth: 4,
+    swatchWidth: 16,
+    weaveX: 4,
+    weaveY: 4
   }
 }
 
@@ -73,9 +89,21 @@ export const useStore = defineStore('main', {
 
       return _.reduce(swatchWeave, (acc, item) => _.concat(acc, item), []);
     },
-    noteColors: () => {
-      const musicStore = useMusicStore();
-      const length = (musicStore.rangeMax - musicStore.rangeMin) * 12. + 1;
+    noteMin: state => {
+      return state.swatchNotes.reduce((acc, row) => {
+        return _.min([acc, _.min(row)]);
+      }, Infinity) || 0;
+      
+    },
+    noteMax: state => {
+      // console.log('state.swatchNotes', state.swatchNotes);
+      return state.swatchNotes.reduce((acc, row) => {
+        return _.max([acc, _.max(row)]);
+      }, -Infinity) || 0;
+    },
+    noteColors: state => {
+      // needs to be at least 2 for colormap
+      const length = Math.max(2, state.noteMax - state.noteMin + 1);
       
       return colormap({
         // https://github.com/bpostlethwaite/colormap
@@ -89,7 +117,7 @@ export const useStore = defineStore('main', {
     // array of arrays, building on notes
     swatchNotes: state => {
       const { swatchDepth } = useWeaveStore();
-      const { stackType } = useMusicStore();
+      const { stackType, rangeMin, rangeMax } = useMusicStore();
 
       /**
        * rotate array by one item
@@ -103,12 +131,22 @@ export const useStore = defineStore('main', {
         return arr;
       }
 
+      function applyOctave(arr) {
+        return arr.map(item => {
+          return item + 12;
+        });
+      }
+
       return _.times(swatchDepth).map((i) => {
         let row = _.clone(state.notes);
 
         if (stackType === 'canon') {
           for (let index = 0; index < i; index++) {
             row = rotateArray(row);
+          }
+        } else if (stackType === 'octave') {
+          for (let index = 0; index < i; index++) {
+            row = applyOctave(row);
           }
         }
         return row;
@@ -120,7 +158,7 @@ export const useStore = defineStore('main', {
 
       const noteColors = state.swatchNotes.map(row => {
         return row.map(note => {
-          const colorIndex = note - 12 - (rangeMin * 12);
+          const colorIndex = note - (rangeMin * 12);
 
           return state.noteColors[colorIndex];
         });
