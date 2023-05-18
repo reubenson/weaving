@@ -26,9 +26,9 @@
             <p>
               This preset has the feelings of passing clouds, like a slower movement from one of Keith Fullerton Whitman's <a href="https://keithfullertonwhitman.com/generators"><i>Generators</i></a> or his <i>Playthroughs</i> album. The slow BPM and usage of <i>canon</i> Stack Type allows for a gentle cycling across the <i>maj7</i> chord, arranged here over a two-octave register.
             </p>
-            <div class="spotify-embed">
+            <!-- <div class="spotify-embed">
               <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0jV5pkyZByn7pV12Rzbtuu?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            </div>
+            </div> -->
             <p>    
               To explore this preset further, try clicking <strong>Randomize note sequence</strong> to obtain a new random pattern for the given chord, and play with the <strong>Weave X</strong> and <strong>Weave Y</strong> parameters to change the sparseness of the voicings.
             </p>
@@ -40,9 +40,9 @@
             <p>
               This preset is at the other of the spectrum, a frenetic arpeggiation of varying pipe organ tonalities, reminiscent of a section from Peter Hamel or Phillip Glass. The organ sonority comes from the use of <em>octave</em> <strong>Stack Type</strong>, which means that a column of notes is played as octaves.
             </p>
-            <div class="spotify-embed">
+            <!-- <div class="spotify-embed">
               <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4zsXWPvdt7GMoWGnxTfeKP?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            </div>
+            </div> -->
             <p>
               To explore this preset further, try raising up the <strong>Euclidean Density</strong> setting to fill in the octave harmonic spectrum, or bring it down to 1 to hear each the notes playing in isolation across the octave registers. You may also play with the <strong>Sine Waveform</strong> to change the melody derived. Simpler waveforms closer to the middle range will allow you to easily hear how the pitch of the notes follows the contours of the waveform. This will also register visibly if you include the <strong>Euclidean Density</strong> to its maximum setting.
             </p>

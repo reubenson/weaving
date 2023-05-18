@@ -11163,7 +11163,7 @@ const _sfc_main$2 = {
             }, {
               default: withCtx((_3, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<p${_scopeId2}>The following presets may be helpful for you to become familar with the inner workings of this app.</p><header${_scopeId2}>Preset #1</header><p${_scopeId2}> This preset has the feelings of passing clouds, like a slower movement from one of Keith Fullerton Whitman&#39;s <a href="https://keithfullertonwhitman.com/generators"${_scopeId2}><i${_scopeId2}>Generators</i></a> or his <i${_scopeId2}>Playthroughs</i> album. The slow BPM and usage of <i${_scopeId2}>canon</i> Stack Type allows for a gentle cycling across the <i${_scopeId2}>maj7</i> chord, arranged here over a two-octave register. </p><div class="spotify-embed"${_scopeId2}><iframe style="${ssrRenderStyle({ "border-radius": "12px" })}" src="https://open.spotify.com/embed/track/0jV5pkyZByn7pV12Rzbtuu?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"${_scopeId2}></iframe></div><p${_scopeId2}> To explore this preset further, try clicking <strong${_scopeId2}>Randomize note sequence</strong> to obtain a new random pattern for the given chord, and play with the <strong${_scopeId2}>Weave X</strong> and <strong${_scopeId2}>Weave Y</strong> parameters to change the sparseness of the voicings. </p>`);
+                  _push3(`<p${_scopeId2}>The following presets may be helpful for you to become familar with the inner workings of this app.</p><header${_scopeId2}>Preset #1</header><p${_scopeId2}> This preset has the feelings of passing clouds, like a slower movement from one of Keith Fullerton Whitman&#39;s <a href="https://keithfullertonwhitman.com/generators"${_scopeId2}><i${_scopeId2}>Generators</i></a> or his <i${_scopeId2}>Playthroughs</i> album. The slow BPM and usage of <i${_scopeId2}>canon</i> Stack Type allows for a gentle cycling across the <i${_scopeId2}>maj7</i> chord, arranged here over a two-octave register. </p><p${_scopeId2}> To explore this preset further, try clicking <strong${_scopeId2}>Randomize note sequence</strong> to obtain a new random pattern for the given chord, and play with the <strong${_scopeId2}>Weave X</strong> and <strong${_scopeId2}>Weave Y</strong> parameters to change the sparseness of the voicings. </p>`);
                   _push3(ssrRenderComponent(_component_el_button, {
                     class: "border",
                     onClick: ($event2) => unref(store2).applyPreset(1)
@@ -11179,7 +11179,7 @@ const _sfc_main$2 = {
                     }),
                     _: 1
                   }, _parent3, _scopeId2));
-                  _push3(`<header${_scopeId2}>Preset #2</header><p${_scopeId2}> This preset is at the other of the spectrum, a frenetic arpeggiation of varying pipe organ tonalities, reminiscent of a section from Peter Hamel or Phillip Glass. The organ sonority comes from the use of <em${_scopeId2}>octave</em> <strong${_scopeId2}>Stack Type</strong>, which means that a column of notes is played as octaves. </p><div class="spotify-embed"${_scopeId2}><iframe style="${ssrRenderStyle({ "border-radius": "12px" })}" src="https://open.spotify.com/embed/track/4zsXWPvdt7GMoWGnxTfeKP?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"${_scopeId2}></iframe></div><p${_scopeId2}> To explore this preset further, try raising up the <strong${_scopeId2}>Euclidean Density</strong> setting to fill in the octave harmonic spectrum, or bring it down to 1 to hear each the notes playing in isolation across the octave registers. You may also play with the <strong${_scopeId2}>Sine Waveform</strong> to change the melody derived. Simpler waveforms closer to the middle range will allow you to easily hear how the pitch of the notes follows the contours of the waveform. This will also register visibly if you include the <strong${_scopeId2}>Euclidean Density</strong> to its maximum setting. </p>`);
+                  _push3(`<header${_scopeId2}>Preset #2</header><p${_scopeId2}> This preset is at the other of the spectrum, a frenetic arpeggiation of varying pipe organ tonalities, reminiscent of a section from Peter Hamel or Phillip Glass. The organ sonority comes from the use of <em${_scopeId2}>octave</em> <strong${_scopeId2}>Stack Type</strong>, which means that a column of notes is played as octaves. </p><p${_scopeId2}> To explore this preset further, try raising up the <strong${_scopeId2}>Euclidean Density</strong> setting to fill in the octave harmonic spectrum, or bring it down to 1 to hear each the notes playing in isolation across the octave registers. You may also play with the <strong${_scopeId2}>Sine Waveform</strong> to change the melody derived. Simpler waveforms closer to the middle range will allow you to easily hear how the pitch of the notes follows the contours of the waveform. This will also register visibly if you include the <strong${_scopeId2}>Euclidean Density</strong> to its maximum setting. </p>`);
                   _push3(ssrRenderComponent(_component_el_button, {
                     class: "border",
                     onClick: ($event2) => unref(store2).applyPreset(2)
@@ -11228,18 +11228,6 @@ const _sfc_main$2 = {
                       createVNode("i", null, "maj7"),
                       createTextVNode(" chord, arranged here over a two-octave register. ")
                     ]),
-                    createVNode("div", { class: "spotify-embed" }, [
-                      createVNode("iframe", {
-                        style: { "border-radius": "12px" },
-                        src: "https://open.spotify.com/embed/track/0jV5pkyZByn7pV12Rzbtuu?utm_source=generator",
-                        width: "100%",
-                        height: "152",
-                        frameBorder: "0",
-                        allowfullscreen: "",
-                        allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
-                        loading: "lazy"
-                      })
-                    ]),
                     createVNode("p", null, [
                       createTextVNode(" To explore this preset further, try clicking "),
                       createVNode("strong", null, "Randomize note sequence"),
@@ -11265,18 +11253,6 @@ const _sfc_main$2 = {
                       createTextVNode(),
                       createVNode("strong", null, "Stack Type"),
                       createTextVNode(", which means that a column of notes is played as octaves. ")
-                    ]),
-                    createVNode("div", { class: "spotify-embed" }, [
-                      createVNode("iframe", {
-                        style: { "border-radius": "12px" },
-                        src: "https://open.spotify.com/embed/track/4zsXWPvdt7GMoWGnxTfeKP?utm_source=generator",
-                        width: "100%",
-                        height: "152",
-                        frameBorder: "0",
-                        allowfullscreen: "",
-                        allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
-                        loading: "lazy"
-                      })
                     ]),
                     createVNode("p", null, [
                       createTextVNode(" To explore this preset further, try raising up the "),
@@ -11396,18 +11372,6 @@ const _sfc_main$2 = {
                     createVNode("i", null, "maj7"),
                     createTextVNode(" chord, arranged here over a two-octave register. ")
                   ]),
-                  createVNode("div", { class: "spotify-embed" }, [
-                    createVNode("iframe", {
-                      style: { "border-radius": "12px" },
-                      src: "https://open.spotify.com/embed/track/0jV5pkyZByn7pV12Rzbtuu?utm_source=generator",
-                      width: "100%",
-                      height: "152",
-                      frameBorder: "0",
-                      allowfullscreen: "",
-                      allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
-                      loading: "lazy"
-                    })
-                  ]),
                   createVNode("p", null, [
                     createTextVNode(" To explore this preset further, try clicking "),
                     createVNode("strong", null, "Randomize note sequence"),
@@ -11433,18 +11397,6 @@ const _sfc_main$2 = {
                     createTextVNode(),
                     createVNode("strong", null, "Stack Type"),
                     createTextVNode(", which means that a column of notes is played as octaves. ")
-                  ]),
-                  createVNode("div", { class: "spotify-embed" }, [
-                    createVNode("iframe", {
-                      style: { "border-radius": "12px" },
-                      src: "https://open.spotify.com/embed/track/4zsXWPvdt7GMoWGnxTfeKP?utm_source=generator",
-                      width: "100%",
-                      height: "152",
-                      frameBorder: "0",
-                      allowfullscreen: "",
-                      allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
-                      loading: "lazy"
-                    })
                   ]),
                   createVNode("p", null, [
                     createTextVNode(" To explore this preset further, try raising up the "),
