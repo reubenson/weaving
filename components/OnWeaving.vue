@@ -445,33 +445,33 @@
     if (!val) store.getMidiOutputs();
   });
 
-  // clock
-  let timer = null;
+  // // clock
+  // let timer = null;
 
-  function handleTimer() {
-    // todo: https://incolumitas.com/2021/12/18/on-high-precision-javascript-timers/
-    clearInterval(timer);
-    if (isOn.value) {
-      timer = setInterval(tick, bpmInterval.value);
-    }
-  }
+  // function handleTimer() {
+  //   // todo: https://incolumitas.com/2021/12/18/on-high-precision-javascript-timers/
+  //   clearInterval(timer);
+  //   if (isOn.value) {
+  //     timer = setInterval(tick, bpmInterval.value);
+  //   }
+  // }
 
-  function tick() {
-    $event('tick', 'clock.id');
-  }
+  // function tick() {
+  //   $event('tick', 'clock.id');
+  // }
 
-  watch(isOn, val => {
-    store.startSynth(); 
+  // watch(isOn, val => {
+  //   store.startSynth(); 
 
-    handleTimer();
-    if (val) {
-      // this.timer = setInterval(this.tick, this.intervalString);
-    } else {
-      clearInterval(timer);
-      // eventBus.emit('clock-off');
-      $event('clock-off');
-    }
-  });
+  //   handleTimer();
+  //   if (val) {
+  //     // this.timer = setInterval(this.tick, this.intervalString);
+  //   } else {
+  //     clearInterval(timer);
+  //     // eventBus.emit('clock-off');
+  //     $event('clock-off');
+  //   }
+  // });
   watch(bpm, () => {
     handleTimer();
   });
