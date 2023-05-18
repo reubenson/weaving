@@ -10398,7 +10398,7 @@ const _plugins = [
   element_plus_injection_plugin_1RNPi6ogby,
   vuex_owYp5qnaH8
 ];
-const __nuxt_component_4 = /* @__PURE__ */ defineComponent({
+const __nuxt_component_3 = /* @__PURE__ */ defineComponent({
   name: "ClientOnly",
   inheritAttrs: false,
   // eslint-disable-next-line vue/require-prop-types
@@ -10773,8 +10773,8 @@ const useMusicStore = defineStore("music-settings", {
     return {
       noteScale: "maj7",
       chordSizeFilter: 4,
-      rangeMin: 4,
-      rangeMax: 6,
+      rangeMin: 1,
+      rangeMax: 3,
       sequenceType: "random",
       sequenceTypeOptions: ["random", "sine"],
       sineHarmonics: 1,
@@ -10818,13 +10818,13 @@ const useMusicStore = defineStore("music-settings", {
   actions: {
     handleRandomize() {
       const store2 = useStore();
-      store2.initNotes();
+      store2.generateRandomSequence(true);
+      store2.calculateRandomNotes();
     }
   }
 });
 const presets = {
   1: {
-    isOn: true,
     bpm: 120,
     noteHoldCount: 4,
     sequenceType: "random",
@@ -10839,7 +10839,6 @@ const presets = {
     weaveY: 4
   },
   2: {
-    isOn: true,
     bpm: 630,
     noteHoldCount: 1,
     sequenceType: "sine",
@@ -10854,7 +10853,6 @@ const presets = {
     euclideanCount: 17
   },
   3: {
-    isOn: true,
     bpm: 550,
     noteHoldCount: 4,
     sequenceType: "sine",
@@ -10888,7 +10886,8 @@ const useStore = defineStore("main", {
       notes: [],
       swatchWeave: [],
       gridItemsKey: Date.now(),
-      errorMsg: ""
+      errorMsg: "",
+      randomSequence: []
     };
   },
   getters: {
@@ -10975,6 +10974,20 @@ const useStore = defineStore("main", {
     }
   },
   actions: {
+    generateRandomSequence(createNewSequence = false) {
+      const { swatchWidth } = useWeaveStore();
+      if (createNewSequence) {
+        this.randomSequence = _.times(swatchWidth, Math.random);
+      } else {
+        while (this.randomSequence.length !== swatchWidth) {
+          if (this.randomSequence.length > swatchWidth) {
+            this.randomSequence.pop();
+          } else {
+            this.randomSequence.push(Math.random());
+          }
+        }
+      }
+    },
     handleIsOn(val) {
       let timer = null;
       this.npmInterval;
@@ -10990,6 +11003,7 @@ const useStore = defineStore("main", {
     },
     applyPreset(presetId) {
       const preset = presets[presetId], musicStore = useMusicStore(), weaveStore = useWeaveStore();
+      this.isOn = false;
       _.forEach(preset, (value, key) => {
         if (this[key]) {
           this[key] = value;
@@ -10999,6 +11013,9 @@ const useStore = defineStore("main", {
           weaveStore[key] = value;
         }
       });
+      this.generateRandomSequence(true);
+      this.initNotes();
+      this.isOn = true;
     },
     getMidiOutputs() {
       midi.getPortNames().then(({ inputs: inputs2, outputs: outputs2 }) => {
@@ -11013,14 +11030,27 @@ const useStore = defineStore("main", {
     updateGridItemsKey() {
       this.gridItemsKey = Date.now();
     },
+    calculateRandomNotes() {
+      const { noteOptions } = useMusicStore();
+      const { swatchWidth } = useWeaveStore();
+      this.notes = [];
+      _.times(swatchWidth, (i) => {
+        const randomValue = this.randomSequence[i];
+        const noteMax = _.max(noteOptions);
+        const noteMin = _.min(noteOptions);
+        const noteRange = noteMax - noteMin;
+        const noteIndex = noteOptions.reduce((acc, item) => {
+          const normalizedNoteOption = (item - noteMin) / noteRange;
+          return Math.abs(normalizedNoteOption - randomValue) < Math.abs(acc - randomValue) ? normalizedNoteOption : acc;
+        }, 0) * noteRange + noteMin;
+        this.notes.push(noteIndex);
+      });
+    },
     initNotes() {
       const { sequenceType, noteOptions, waveformFn } = useMusicStore();
       const { swatchWidth } = useWeaveStore();
       if (sequenceType === "random") {
-        this.notes = _.times(swatchWidth, () => {
-          const value = _.random(0, noteOptions.length - 1);
-          return noteOptions[value];
-        });
+        this.calculateRandomNotes();
       } else if (sequenceType === "sine") {
         const steps = _.range(0, 2 * Math.PI, 0.1);
         const waveformData = _.times(steps.length).map((i) => waveformFn(i));
@@ -11041,8 +11071,6 @@ const useStore = defineStore("main", {
         });
       }
     },
-    relalculateNotes() {
-    },
     increment() {
       this.count++;
     },
@@ -11051,7 +11079,6 @@ const useStore = defineStore("main", {
     },
     startSynth() {
       var _a;
-      console.log("starting", this.webAudioSynth);
       (_a = this.webAudioSynth) == null ? void 0 : _a.start();
     }
   }
@@ -11068,10 +11095,11 @@ const _sfc_main$8 = {
   __ssrInlineRender: true,
   setup(__props) {
     const store2 = useStore();
-    const { useWebAudio, isOn, handleIsOn } = storeToRefs(store2);
+    const { useWebAudio, isOn, errorMsg } = storeToRefs(store2);
     return (_ctx, _push, _parent, _attrs) => {
       const _component_el_switch = ElSwitch;
-      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-25abbfbc><h1 data-v-25abbfbc>Weaving Music</h1><div class="switches" data-v-25abbfbc>`);
+      const _component_el_alert = ElAlert;
+      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-8c512fba><h1 data-v-8c512fba>Weaving Music</h1><div class="switches" data-v-8c512fba>`);
       _push(ssrRenderComponent(_component_el_switch, {
         "active-text": "start",
         "inactive-text": "stop",
@@ -11085,7 +11113,17 @@ const _sfc_main$8 = {
         "active-text": "Use Web Audio",
         "inactive-text": "Use External MIDI"
       }, null, _parent));
-      _push(`</div></nav>`);
+      _push(`</div>`);
+      if (unref(errorMsg)) {
+        _push(ssrRenderComponent(_component_el_alert, {
+          title: unref(errorMsg),
+          type: "error",
+          "show-icon": ""
+        }, null, _parent));
+      } else {
+        _push(`<!---->`);
+      }
+      _push(`</nav>`);
     };
   }
 };
@@ -11095,7 +11133,7 @@ _sfc_main$8.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-25abbfbc"]]);
+const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-8c512fba"]]);
 const _sfc_main$7 = {
   __name: "MidiDownload",
   __ssrInlineRender: true,
@@ -11264,6 +11302,7 @@ const _sfc_main$6 = {
       handlePatternChange();
     });
     watch(swatchWidth, () => {
+      store2.generateRandomSequence();
       handleUpdateLength();
     });
     watch(swatchDepth, () => {
@@ -11390,7 +11429,7 @@ const _sfc_main$4 = {
       }
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_client_only = __nuxt_component_4;
+      const _component_client_only = __nuxt_component_3;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "waveform" }, _attrs))}>`);
       _push(ssrRenderComponent(_component_client_only, null, {}, _parent));
       _push(`</div>`);
@@ -11446,7 +11485,7 @@ const _sfc_main$2 = {
     const store2 = useStore();
     const musicStore = useMusicStore();
     const weaveStore = useWeaveStore();
-    const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store2);
+    const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, noteHoldCount } = storeToRefs(store2);
     const { upperRegisterMax, chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
     const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
     let activeAccordion = ref("");
@@ -11475,6 +11514,7 @@ const _sfc_main$2 = {
       $event("tick", "clock.id");
     }
     watch(isOn, (val) => {
+      store2.startSynth();
       handleTimer();
       if (val)
         ;
@@ -11487,11 +11527,10 @@ const _sfc_main$2 = {
       handleTimer();
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_el_alert = ElAlert;
       const _component_el_collapse = ElCollapse;
       const _component_el_collapse_item = ElCollapseItem;
       const _component_el_button = ElButton;
-      const _component_client_only = __nuxt_component_4;
+      const _component_client_only = __nuxt_component_3;
       const _component_el_select = ElSelect;
       const _component_el_option = ElOption;
       const _component_el_input = ElInput;
@@ -11500,15 +11539,6 @@ const _sfc_main$2 = {
       const _component_el_popover = ElPopover;
       _push(`<div${ssrRenderAttrs(mergeProps({ id: "wrapper" }, _attrs))}>`);
       _push(ssrRenderComponent(unref(TopNav), null, null, _parent));
-      if (unref(errorMsg)) {
-        _push(ssrRenderComponent(_component_el_alert, {
-          title: unref(errorMsg),
-          type: "error",
-          "show-icon": ""
-        }, null, _parent));
-      } else {
-        _push(`<!---->`);
-      }
       _push(`<main><section class="app-description">`);
       _push(ssrRenderComponent(_component_el_collapse, {
         modelValue: unref(activeAccordion),
@@ -11583,7 +11613,7 @@ const _sfc_main$2 = {
             }, {
               default: withCtx((_3, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<p${_scopeId2}>The following presets may be helpful for you to become familar with the inner workings of this app.</p><header${_scopeId2}>Preset #1</header><p${_scopeId2}> This preset has the feelings of passing clouds, like a slower movement from one of Keith Fullerton Whitman&#39;s <a href="https://keithfullertonwhitman.com/generators"${_scopeId2}><i${_scopeId2}>Generators</i></a> or his <i${_scopeId2}>Playthroughs</i> album. The slow BPM and usage of <i${_scopeId2}>canon</i> Stack Type allows for a gentle cycling across the <i${_scopeId2}>maj7</i> chord, arranged here over a two-octave register. </p><p${_scopeId2}> To explore this preset further, try clicking <strong${_scopeId2}>Randomize note sequence</strong> to obtain a new random pattern for the given chord, and play with the <strong${_scopeId2}>Weave X</strong> and <strong${_scopeId2}>Weave Y</strong> parameters to change the sparseness of the voicings. </p>`);
+                  _push3(`<p${_scopeId2}>The following presets may be helpful for you to become familar with the inner workings of this app.</p><header${_scopeId2}>Preset #1</header><p${_scopeId2}> This preset has the feelings of passing clouds, like a slower movement from one of Keith Fullerton Whitman&#39;s <a href="https://keithfullertonwhitman.com/generators"${_scopeId2}><i${_scopeId2}>Generators</i></a> or his <i${_scopeId2}>Playthroughs</i> album. The slow BPM and usage of <i${_scopeId2}>canon</i> Stack Type allows for a gentle cycling across the <i${_scopeId2}>maj7</i> chord, arranged here over a two-octave register. </p><div class="spotify-embed"${_scopeId2}><iframe style="${ssrRenderStyle({ "border-radius": "12px" })}" src="https://open.spotify.com/embed/track/0jV5pkyZByn7pV12Rzbtuu?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"${_scopeId2}></iframe></div><p${_scopeId2}> To explore this preset further, try clicking <strong${_scopeId2}>Randomize note sequence</strong> to obtain a new random pattern for the given chord, and play with the <strong${_scopeId2}>Weave X</strong> and <strong${_scopeId2}>Weave Y</strong> parameters to change the sparseness of the voicings. </p>`);
                   _push3(ssrRenderComponent(_component_el_button, {
                     class: "border",
                     onClick: ($event2) => unref(store2).applyPreset(1)
@@ -11599,7 +11629,7 @@ const _sfc_main$2 = {
                     }),
                     _: 1
                   }, _parent3, _scopeId2));
-                  _push3(`<header${_scopeId2}>Preset #2</header><p${_scopeId2}> This preset is at the other of the spectrum, a frenetic arpeggiation of varying pipe organ tonalities, reminiscent of a section from Peter Hamel or Phillip Glass. The organ sonority comes from the use of <em${_scopeId2}>octave</em> <strong${_scopeId2}>Stack Type</strong>, which means that a column of notes is played as octaves. </p><p${_scopeId2}> To explore this preset further, try raising up the <strong${_scopeId2}>Euclidean Density</strong> setting to fill in the octave harmonic spectrum, or bring it down to 1 to hear each the notes playing in isolation across the octave registers. You may also play with the <strong${_scopeId2}>Sine Waveform</strong> to change the melody derived. Simpler waveforms closer to the middle range will allow you to easily hear how the pitch of the notes follows the contours of the waveform. This will also register visibly if you include the <strong${_scopeId2}>Euclidean Density</strong> to its maximum setting. </p>`);
+                  _push3(`<header${_scopeId2}>Preset #2</header><p${_scopeId2}> This preset is at the other of the spectrum, a frenetic arpeggiation of varying pipe organ tonalities, reminiscent of a section from Peter Hamel or Phillip Glass. The organ sonority comes from the use of <em${_scopeId2}>octave</em> <strong${_scopeId2}>Stack Type</strong>, which means that a column of notes is played as octaves. </p><div class="spotify-embed"${_scopeId2}><iframe style="${ssrRenderStyle({ "border-radius": "12px" })}" src="https://open.spotify.com/embed/track/4zsXWPvdt7GMoWGnxTfeKP?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"${_scopeId2}></iframe></div><p${_scopeId2}> To explore this preset further, try raising up the <strong${_scopeId2}>Euclidean Density</strong> setting to fill in the octave harmonic spectrum, or bring it down to 1 to hear each the notes playing in isolation across the octave registers. You may also play with the <strong${_scopeId2}>Sine Waveform</strong> to change the melody derived. Simpler waveforms closer to the middle range will allow you to easily hear how the pitch of the notes follows the contours of the waveform. This will also register visibly if you include the <strong${_scopeId2}>Euclidean Density</strong> to its maximum setting. </p>`);
                   _push3(ssrRenderComponent(_component_el_button, {
                     class: "border",
                     onClick: ($event2) => unref(store2).applyPreset(2)
@@ -11648,6 +11678,18 @@ const _sfc_main$2 = {
                       createVNode("i", null, "maj7"),
                       createTextVNode(" chord, arranged here over a two-octave register. ")
                     ]),
+                    createVNode("div", { class: "spotify-embed" }, [
+                      createVNode("iframe", {
+                        style: { "border-radius": "12px" },
+                        src: "https://open.spotify.com/embed/track/0jV5pkyZByn7pV12Rzbtuu?utm_source=generator",
+                        width: "100%",
+                        height: "152",
+                        frameBorder: "0",
+                        allowfullscreen: "",
+                        allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
+                        loading: "lazy"
+                      })
+                    ]),
                     createVNode("p", null, [
                       createTextVNode(" To explore this preset further, try clicking "),
                       createVNode("strong", null, "Randomize note sequence"),
@@ -11673,6 +11715,18 @@ const _sfc_main$2 = {
                       createTextVNode(),
                       createVNode("strong", null, "Stack Type"),
                       createTextVNode(", which means that a column of notes is played as octaves. ")
+                    ]),
+                    createVNode("div", { class: "spotify-embed" }, [
+                      createVNode("iframe", {
+                        style: { "border-radius": "12px" },
+                        src: "https://open.spotify.com/embed/track/4zsXWPvdt7GMoWGnxTfeKP?utm_source=generator",
+                        width: "100%",
+                        height: "152",
+                        frameBorder: "0",
+                        allowfullscreen: "",
+                        allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
+                        loading: "lazy"
+                      })
                     ]),
                     createVNode("p", null, [
                       createTextVNode(" To explore this preset further, try raising up the "),
@@ -11792,6 +11846,18 @@ const _sfc_main$2 = {
                     createVNode("i", null, "maj7"),
                     createTextVNode(" chord, arranged here over a two-octave register. ")
                   ]),
+                  createVNode("div", { class: "spotify-embed" }, [
+                    createVNode("iframe", {
+                      style: { "border-radius": "12px" },
+                      src: "https://open.spotify.com/embed/track/0jV5pkyZByn7pV12Rzbtuu?utm_source=generator",
+                      width: "100%",
+                      height: "152",
+                      frameBorder: "0",
+                      allowfullscreen: "",
+                      allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
+                      loading: "lazy"
+                    })
+                  ]),
                   createVNode("p", null, [
                     createTextVNode(" To explore this preset further, try clicking "),
                     createVNode("strong", null, "Randomize note sequence"),
@@ -11817,6 +11883,18 @@ const _sfc_main$2 = {
                     createTextVNode(),
                     createVNode("strong", null, "Stack Type"),
                     createTextVNode(", which means that a column of notes is played as octaves. ")
+                  ]),
+                  createVNode("div", { class: "spotify-embed" }, [
+                    createVNode("iframe", {
+                      style: { "border-radius": "12px" },
+                      src: "https://open.spotify.com/embed/track/4zsXWPvdt7GMoWGnxTfeKP?utm_source=generator",
+                      width: "100%",
+                      height: "152",
+                      frameBorder: "0",
+                      allowfullscreen: "",
+                      allow: "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
+                      loading: "lazy"
+                    })
                   ]),
                   createVNode("p", null, [
                     createTextVNode(" To explore this preset further, try raising up the "),

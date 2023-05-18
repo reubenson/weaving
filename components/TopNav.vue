@@ -14,6 +14,7 @@
         inactive-text="Use External MIDI"
       ></el-switch>
     </div>
+    <el-alert v-if="errorMsg" :title="errorMsg" type="error" show-icon />
   </nav>
 </template>
 
@@ -21,7 +22,7 @@
   import { useStore } from '~/store/main';
   import { storeToRefs } from 'pinia';
   const store = useStore();
-  const { useWebAudio, isOn, handleIsOn } = storeToRefs(store);
+  const { useWebAudio, isOn, errorMsg } = storeToRefs(store);
 </script>
 
 <style scoped lang="scss">

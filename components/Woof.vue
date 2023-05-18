@@ -29,12 +29,10 @@ import * as Chord from 'tonal-chord';
 import { Interval } from 'tonal';
 import _ from 'lodash';
 import scale from '../lib/scale';
-import midi from '../lib/midi';
 import { useStore } from '~/store/main';
 import { useMusicStore } from '~/store/music-settings';
 import { storeToRefs } from 'pinia';
 
-const { $event } = useNuxtApp();
 const store = useStore();
 const musicStore = useMusicStore();
 const { noteScale, rangeMin, rangeMax } = storeToRefs(musicStore);
@@ -69,8 +67,6 @@ const noteOptions = computed({
 
       return semitones.map(num => `${num}`);
     }
-
-    return;
   }
 });
 
@@ -80,91 +76,12 @@ const columnsLength = computed({
   }
 });
 
-// function getNextNoteInChord() {
-//   const intervals = Chord.intervals(props.chord);
-//   const semitones = intervals.map(interval => Interval.semitones(interval));
-//   const baseNote = parseInt(noteOptions.value[0]);
-
-//   console.log('baseNote', baseNote);
-
-//   const note = baseNote + semitones[chordIndex % semitones.length];
-
-//   console.log('note', note);
-
-//   chordIndex += 1;
-
-//   return note;
-// }
-function getInterval(index) {
-
-      return props.type === 'weft' ? data.notes[index] : 0;
-    }
 function initNotes() {
   store.initNotes();
 
   data.notes = store.notes;
-
-  return;
-
-  data.notes = [];
-
-  if (props.mode === 'stack' && props.type === 'weft') {
-    _.times (props.length, i => {
-      const value = noteOptions.value[i % noteOptions.value.length];
-
-      data.notes[i] = value;
-    });
-
-    return;
-  }
-
-  _.times(props.length, i => {
-    data.notes = store.notes;
-    // get random note
-    // const value = _.random(0, noteOptions.value.length - 1);
-
-  // const note = baseNote + semitones[chordIndex % semitones.length];
-  // console.log('note', note);
-    // const value = this.noteOptions[i % (this.noteOptions.length - 1)];
-    // console.log('value', value);
-    // console.log('index', index);
-    
-    // console.log('index', index);
-    // console.log('this.noteOptions', this.noteOptions);
-    // Vue.set(this.notes, i, '' + this.noteOptions[value]);
-    // data.notes[i] = noteOptions.value[value];
-    // Vue.set(this.notes, i, '' + note);
-
-    // console.log('this.noteOptions', this.noteOptions);
-    // if (this.type === 'weft') {
-    //   this.intervals = Chord.intervals(this.chord).map(interval => Chord.semitones(interval));
-    // }
-    // return this.noteOptions[index];
-
-  });
-
-  store.updateGridItemsKey();
-  if (props.type === 'warp') {
-    store.warpNotes = data.notes;
-  }
 }
-// function getNote(index) {
-//   return data.notes[index];
-// }
 
-// function getNotes() {
-//   return data.notes;
-// }
-
-// function getBaseNote() {
-//   return data.notes[0];
-// }
-// function handleInput(i, val) {
-//   data.notes[i] = val;
-// }
-// function updateLength(val) {
-//   this.$bus.$emit('update-length', { type: this.type, length: val} );
-// }
 watch(() => noteScale.value, (xx) => {
   initNotes();
 });
@@ -177,10 +94,10 @@ watch(() => rangeMin.value, () => {
 watch(() => rangeMax.value, () => {
   initNotes();
 });
-  // },
-onMounted(() => {
-  initNotes();
-});
+
+// onMounted(() => {
+//   initNotes();
+// });
 </script>
 
 <style lang="scss">

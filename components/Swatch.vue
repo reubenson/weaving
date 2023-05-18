@@ -20,10 +20,9 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import _ from 'lodash';
 import * as Chord from 'tonal-chord';
-// import Woof from './woof';
 import MidiDownload from './MidiDownload';
 // import patterns from '../../../services/weaving/patterns';
 import scale from '../lib/scale';
@@ -67,6 +66,7 @@ watch(euclideanCount, () => {
   handlePatternChange();
 });
 watch(swatchWidth, () => {
+  store.generateRandomSequence();
   handleUpdateLength();
 });
 watch(swatchDepth, () => {
@@ -165,28 +165,16 @@ function handleEuclidean() {
     store.swatchWeave.push(shift);
   });
 }
-function sendNote(channel, note, velocity) {
+function sendNote(channel, note) {
   try {
-    // console.log('store.noteLength', store.noteLength);
     audio.playNote(channel, note, store.noteLength, useWebAudio.value && webAudioSynth.value );
   } catch (error) {
-    store.isOn = false;
-    errorMsg.value = error;
+    // to do: debug and uncomment the following lines
+    // store.isOn = false;
+    // errorMsg.value = error;
     console.error(error);
+    console.log('store.notes.value', store.notes.value);
   }
-
-  // return;
-  // channel = 1;
-  // midi.noteOn(channel, note, velocity);
-  // console.log('channel', channel);
-  // console.log('note', note);
-
-  // if (noteLength) {
-  //   // only send noteOff if noteLength > 0
-  //   setTimeout(() => {
-  //     midi.noteOff(channel, note, velocity);
-  //   }, noteLength);
-  // }
 }
 
 function advanceStack() {
@@ -231,6 +219,7 @@ function handleClockOff() {
 }
 
 onMounted(() => {
+  store.generateRandomSequence();
   store.initNotes();
   handlePatternChange();
   $listen('tick', () => handleTick('internal'));

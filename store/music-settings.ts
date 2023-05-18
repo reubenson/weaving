@@ -10,8 +10,8 @@ export const useMusicStore = defineStore('music-settings', {
     return {
       noteScale: 'maj7',
       chordSizeFilter: 4,
-      rangeMin: 4,
-      rangeMax: 6,
+      rangeMin: 1,
+      rangeMax: 3,
       sequenceType: 'random',
       sequenceTypeOptions: ['random', 'sine'],
       sineHarmonics: 1,
@@ -87,7 +87,8 @@ export const useMusicStore = defineStore('music-settings', {
     handleRandomize() {
       const store = useStore();
 
-      store.initNotes();
+      store.generateRandomSequence(true);
+      store.calculateRandomNotes();
     }
   },
 });

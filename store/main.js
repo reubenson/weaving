@@ -9,7 +9,6 @@ import { useWeaveStore } from './weave-settings';
 
 const presets = {
   1: {
-    isOn: true,
     bpm: 120,
     noteHoldCount: 4,
     sequenceType: 'random',
@@ -24,7 +23,6 @@ const presets = {
     weaveY: 4,
   },
   2: {
-    isOn: true,
     bpm: 630,
     noteHoldCount: 1,
     sequenceType: 'sine',
@@ -39,7 +37,6 @@ const presets = {
     euclideanCount: 17
   },
   3: {
-    isOn: true,
     bpm: 550,
     noteHoldCount: 4,
     sequenceType: 'sine',
@@ -74,7 +71,8 @@ export const useStore = defineStore('main', {
       notes: [],
       swatchWeave: [],
       gridItemsKey: Date.now(),
-      errorMsg: ''
+      errorMsg: '',
+      randomSequence: []
     }
   },
   getters: {
@@ -96,7 +94,6 @@ export const useStore = defineStore('main', {
       
     },
     noteMax: state => {
-      // console.log('state.swatchNotes', state.swatchNotes);
       return state.swatchNotes.reduce((acc, row) => {
         return _.max([acc, _.max(row)]);
       }, -Infinity) || 0;
@@ -195,6 +192,23 @@ export const useStore = defineStore('main', {
     }
   },
   actions: {
+    generateRandomSequence(createNewSequence = false) {
+      const { swatchWidth } = useWeaveStore();
+
+      if (createNewSequence) {
+        this.randomSequence = _.times(swatchWidth, Math.random);
+      } else {
+        // add or remove elements to match swatchWidth
+        while (this.randomSequence.length !== swatchWidth) {
+          if (this.randomSequence.length > swatchWidth) {
+            this.randomSequence.pop();
+          } else {
+            this.randomSequence.push(Math.random());
+          }
+        }
+      }
+    },
+
     handleIsOn(val) {
       // clock
       let timer = null;
@@ -229,6 +243,8 @@ export const useStore = defineStore('main', {
       const preset = presets[presetId],
         musicStore = useMusicStore(),
         weaveStore = useWeaveStore();
+
+      this.isOn = false;
       
       _.forEach(preset, (value, key) => {
         if (this[key]) {
@@ -239,6 +255,10 @@ export const useStore = defineStore('main', {
           weaveStore[key] = value;
         }
       });
+
+      this.generateRandomSequence(true);
+      this.initNotes();
+      this.isOn = true;
     },
     getMidiOutputs() {
       midi.getPortNames()
@@ -256,23 +276,42 @@ export const useStore = defineStore('main', {
           if (defaultOutput) {
             this.midiOutputPort = defaultOutput;
           }
-          // midi.setOutput(defaultOutput);
-          // }
         });
     },
     updateGridItemsKey() {
       this.gridItemsKey = Date.now();
     },
+
+    calculateRandomNotes() {
+      const { noteOptions } = useMusicStore();
+      const { swatchWidth } = useWeaveStore();
+
+      this.notes = [];
+
+      _.times(swatchWidth, i => {
+        // quantize values in randomSequence to their nearest notes in noteOptions
+        const randomValue = this.randomSequence[i]; // value between 0 and 1
+        const noteMax = _.max(noteOptions);
+        const noteMin = _.min(noteOptions);
+        const noteRange = noteMax - noteMin;
+        const noteIndex = noteOptions.reduce((acc, item) => {
+          const normalizedNoteOption = (item - noteMin) / noteRange;
+
+          return Math.abs(normalizedNoteOption - randomValue) < Math.abs(acc - randomValue)
+            ? normalizedNoteOption
+            : acc
+        }, 0) * noteRange + noteMin;
+
+        this.notes.push(noteIndex);
+      });
+    },
+
     initNotes() {
       const { sequenceType, noteOptions, waveformFn } = useMusicStore();
       const { swatchWidth } = useWeaveStore();
 
       if (sequenceType === 'random') {
-        this.notes = _.times(swatchWidth, () => {
-          const value = _.random(0, noteOptions.length - 1);
-
-          return noteOptions[value];
-        });
+        this.calculateRandomNotes();
       } else if (sequenceType === 'sine') {
         const steps = _.range(0, 2 * Math.PI, 0.1);
         const waveformData = _.times(steps.length).map(i => waveformFn(i));
@@ -318,9 +357,6 @@ export const useStore = defineStore('main', {
     //     this.notes[i] = noteOptions.value[value];
     //   }
     },
-    relalculateNotes() {
-
-    },
     increment() {
       this.count++;
     },
@@ -328,7 +364,6 @@ export const useStore = defineStore('main', {
       this.webAudioSynth = new webAudio(this.numberOfVoices);
     },
     startSynth() {
-      console.log('starting', this.webAudioSynth);
       this.webAudioSynth?.start();
     }
   }
