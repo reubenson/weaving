@@ -59,6 +59,7 @@ export class webAudio {
     const attack = noteLength * 0.5;
     const decay = noteLength - attack;
     const currentTime = this.audioCtx.currentTime;
+    voice.oscillatorNode.start();
 
     voice?.oscillatorNode?.frequency?.setValueAtTime(frequency, currentTime);
     // set up simple envelope VCA

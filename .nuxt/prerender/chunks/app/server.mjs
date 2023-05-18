@@ -10701,6 +10701,7 @@ class webAudio {
     const attack = noteLength * 0.5;
     const decay = noteLength - attack;
     const currentTime = this.audioCtx.currentTime;
+    voice.oscillatorNode.start();
     (_b = (_a = voice == null ? void 0 : voice.oscillatorNode) == null ? void 0 : _a.frequency) == null ? void 0 : _b.setValueAtTime(frequency, currentTime);
     voice.gainNode.gain.linearRampToValueAtTime(0.3, currentTime + attack / 1e3);
     voice.gainNode.gain.linearRampToValueAtTime(0, currentTime + attack / 1e3 + decay / 1e3);
