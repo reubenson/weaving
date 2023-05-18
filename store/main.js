@@ -298,6 +298,7 @@ export const useStore = defineStore('main', {
       this.webAudioSynth = new webAudio(this.numberOfVoices);
     },
     startSynth() {
+      console.log('starting', this.webAudioSynth);
       this.webAudioSynth?.start();
     }
   }

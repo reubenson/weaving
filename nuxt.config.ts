@@ -38,9 +38,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@element-plus/nuxt'
   ],
-  // app: {
-    // baseURL: '/weaving/'
-  // },
   plugins: [
     '~/plugins/mitt.client.js'
   ],

@@ -1,6 +1,3 @@
 <template>
-  <head></head>
-  <div>
-    <OnWeaving />
-  </div>
+  <OnWeaving />
 </template>

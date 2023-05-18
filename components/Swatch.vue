@@ -81,9 +81,6 @@ watch(weaveY, () => {
 watch(() => noteScale.value, () => {
   store.initNotes();
 });
-// watch(() => props.length, () => {
-//   store.initNotes();
-// });
 watch(() => rangeMin.value, () => {
   store.initNotes();
 });

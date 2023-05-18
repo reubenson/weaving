@@ -11031,6 +11031,7 @@ const useStore = defineStore("main", {
     },
     startSynth() {
       var _a;
+      console.log("starting", this.webAudioSynth);
       (_a = this.webAudioSynth) == null ? void 0 : _a.start();
     }
   }
@@ -12538,9 +12539,7 @@ const __nuxt_component_0 = _sfc_main$2;
 const _sfc_main$1 = {};
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs) {
   const _component_OnWeaving = __nuxt_component_0;
-  _push(`<!--[--><head></head><div>`);
-  _push(ssrRenderComponent(_component_OnWeaving, null, null, _parent));
-  _push(`</div><!--]-->`);
+  _push(ssrRenderComponent(_component_OnWeaving, _attrs, null, _parent));
 }
 const _sfc_setup$1 = _sfc_main$1.setup;
 _sfc_main$1.setup = (props, ctx) => {
