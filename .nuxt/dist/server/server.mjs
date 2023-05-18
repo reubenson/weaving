@@ -6360,7 +6360,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
             onClick: _cache[0] || (_cache[0] = (...args) => unref(handleHeaderClick) && unref(handleHeaderClick)(...args)),
             onKeypress: _cache[1] || (_cache[1] = withKeys(withModifiers((...args) => unref(handleEnterClick) && unref(handleEnterClick)(...args), ["stop", "prevent"]), ["space", "enter"])),
             onFocus: _cache[2] || (_cache[2] = (...args) => unref(handleFocus) && unref(handleFocus)(...args)),
-            onBlur: _cache[3] || (_cache[3] = ($event2) => focusing.value = false)
+            onBlur: _cache[3] || (_cache[3] = ($event) => focusing.value = false)
           }, [
             renderSlot(_ctx.$slots, "title", {}, () => [
               createTextVNode(toDisplayString(_ctx.title), 1)
@@ -8195,8 +8195,8 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
       default: withCtx(() => [
         createElementVNode("div", {
           class: "select-trigger",
-          onMouseenter: _cache[19] || (_cache[19] = ($event2) => _ctx.inputHovering = true),
-          onMouseleave: _cache[20] || (_cache[20] = ($event2) => _ctx.inputHovering = false)
+          onMouseenter: _cache[19] || (_cache[19] = ($event) => _ctx.inputHovering = true),
+          onMouseleave: _cache[20] || (_cache[20] = ($event) => _ctx.inputHovering = false)
         }, [
           _ctx.multiple ? (openBlock(), createElementBlock("div", {
             key: 0,
@@ -8226,7 +8226,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
                       hit: item.hitState,
                       type: _ctx.tagType,
                       "disable-transitions": "",
-                      onClose: ($event2) => _ctx.deleteTag($event2, item)
+                      onClose: ($event) => _ctx.deleteTag($event, item)
                     }, {
                       default: withCtx(() => [
                         createElementVNode("span", {
@@ -8275,7 +8275,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
                                   type: _ctx.tagType,
                                   "disable-transitions": "",
                                   style: { margin: "2px" },
-                                  onClose: ($event2) => _ctx.deleteTag($event2, item)
+                                  onClose: ($event) => _ctx.deleteTag($event, item)
                                 }, {
                                   default: withCtx(() => [
                                     createElementVNode("span", {
@@ -8322,7 +8322,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
                       hit: item.hitState,
                       type: _ctx.tagType,
                       "disable-transitions": "",
-                      onClose: ($event2) => _ctx.deleteTag($event2, item)
+                      onClose: ($event) => _ctx.deleteTag($event, item)
                     }, {
                       default: withCtx(() => [
                         createElementVNode("span", {
@@ -8340,7 +8340,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
             _ctx.filterable ? withDirectives((openBlock(), createElementBlock("input", {
               key: 2,
               ref: "input",
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event2) => _ctx.query = $event2),
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.query = $event),
               type: "text",
               class: normalizeClass([
                 _ctx.nsSelect.e("input"),
@@ -8360,12 +8360,12 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
               onKeyup: _cache[3] || (_cache[3] = (...args) => _ctx.managePlaceholder && _ctx.managePlaceholder(...args)),
               onKeydown: [
                 _cache[4] || (_cache[4] = (...args) => _ctx.resetInputState && _ctx.resetInputState(...args)),
-                _cache[5] || (_cache[5] = withKeys(withModifiers(($event2) => _ctx.navigateOptions("next"), ["prevent"]), ["down"])),
-                _cache[6] || (_cache[6] = withKeys(withModifiers(($event2) => _ctx.navigateOptions("prev"), ["prevent"]), ["up"])),
+                _cache[5] || (_cache[5] = withKeys(withModifiers(($event) => _ctx.navigateOptions("next"), ["prevent"]), ["down"])),
+                _cache[6] || (_cache[6] = withKeys(withModifiers(($event) => _ctx.navigateOptions("prev"), ["prevent"]), ["up"])),
                 _cache[7] || (_cache[7] = withKeys((...args) => _ctx.handleKeydownEscape && _ctx.handleKeydownEscape(...args), ["esc"])),
                 _cache[8] || (_cache[8] = withKeys(withModifiers((...args) => _ctx.selectOption && _ctx.selectOption(...args), ["stop", "prevent"]), ["enter"])),
                 _cache[9] || (_cache[9] = withKeys((...args) => _ctx.deletePrevTag && _ctx.deletePrevTag(...args), ["delete"])),
-                _cache[10] || (_cache[10] = withKeys(($event2) => _ctx.visible = false, ["tab"]))
+                _cache[10] || (_cache[10] = withKeys(($event) => _ctx.visible = false, ["tab"]))
               ],
               onCompositionstart: _cache[11] || (_cache[11] = (...args) => _ctx.handleComposition && _ctx.handleComposition(...args)),
               onCompositionupdate: _cache[12] || (_cache[12] = (...args) => _ctx.handleComposition && _ctx.handleComposition(...args)),
@@ -8391,7 +8391,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
             id: _ctx.id,
             ref: "reference",
             modelValue: _ctx.selectedLabel,
-            "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event2) => _ctx.selectedLabel = $event2),
+            "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => _ctx.selectedLabel = $event),
             type: "text",
             placeholder: typeof _ctx.currentPlaceholder === "function" ? _ctx.currentPlaceholder() : _ctx.currentPlaceholder,
             name: _ctx.name,
@@ -8410,11 +8410,11 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
             onCompositionupdate: _ctx.handleComposition,
             onCompositionend: _ctx.handleComposition,
             onKeydown: [
-              _cache[16] || (_cache[16] = withKeys(withModifiers(($event2) => _ctx.navigateOptions("next"), ["stop", "prevent"]), ["down"])),
-              _cache[17] || (_cache[17] = withKeys(withModifiers(($event2) => _ctx.navigateOptions("prev"), ["stop", "prevent"]), ["up"])),
+              _cache[16] || (_cache[16] = withKeys(withModifiers(($event) => _ctx.navigateOptions("next"), ["stop", "prevent"]), ["down"])),
+              _cache[17] || (_cache[17] = withKeys(withModifiers(($event) => _ctx.navigateOptions("prev"), ["stop", "prevent"]), ["up"])),
               withKeys(withModifiers(_ctx.selectOption, ["stop", "prevent"]), ["enter"]),
               withKeys(_ctx.handleKeydownEscape, ["esc"]),
-              _cache[18] || (_cache[18] = withKeys(($event2) => _ctx.visible = false, ["tab"]))
+              _cache[18] || (_cache[18] = withKeys(($event) => _ctx.visible = false, ["tab"]))
             ]
           }, createSlots({
             suffix: withCtx(() => [
@@ -9947,7 +9947,7 @@ const ElSwitch = withInstall(Switch);
 const element_plus_injection_plugin_1RNPi6ogby = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.provide(ID_INJECTION_KEY, { "prefix": 1024, "current": 0 });
 });
-const store$1 = createStore({
+const store = createStore({
   state() {
     return {
       count: 0
@@ -9960,7 +9960,7 @@ const store$1 = createStore({
   }
 });
 const vuex_owYp5qnaH8 = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(store$1);
+  nuxtApp.vueApp.use(store);
 });
 const _plugins = [
   plugin,
@@ -10560,24 +10560,21 @@ const useStore = defineStore("main", {
   actions: {
     handleIsOn(val) {
       let timer = null;
-      function handleTimer2() {
+      const bpmInterval = this.npmInterval;
+      function handleTimer() {
         clearInterval(timer);
-        if (isOn.value) {
-          timer = setInterval(tick, bpmInterval.value);
+        if (val) {
+          timer = setInterval(tick, bpmInterval);
         }
-      }
-      function tick() {
-        $event("tick", "clock.id");
       }
       console.log("val", val);
       if (val) {
-        store.startSynth();
-        handleTimer2();
+        this.startSynth();
+        handleTimer();
         if (val)
           ;
         else {
           clearInterval(timer);
-          $event("clock-off");
         }
       }
     },
@@ -10649,7 +10646,7 @@ const useStore = defineStore("main", {
     }
   }
 });
-const TopNav_vue_vue_type_style_index_0_scoped_5e08f961_lang = "";
+const TopNav_vue_vue_type_style_index_0_scoped_25abbfbc_lang = "";
 const _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -10662,20 +10659,20 @@ const _sfc_main$8 = {
   __ssrInlineRender: true,
   setup(__props) {
     const store2 = useStore();
-    const { useWebAudio, isOn: isOn2, handleIsOn } = storeToRefs(store2);
+    const { useWebAudio, isOn, handleIsOn } = storeToRefs(store2);
     return (_ctx, _push, _parent, _attrs) => {
       const _component_el_switch = ElSwitch;
-      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-5e08f961><h1 data-v-5e08f961>Weaving Music</h1><div class="switches" data-v-5e08f961>`);
+      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-25abbfbc><h1 data-v-25abbfbc>Weaving Music</h1><div class="switches" data-v-25abbfbc>`);
       _push(ssrRenderComponent(_component_el_switch, {
         "active-text": "start",
         "inactive-text": "stop",
-        modelValue: unref(isOn2),
-        "onUpdate:modelValue": ($event2) => isRef(isOn2) ? isOn2.value = $event2 : null,
-        onChange: unref(handleIsOn)
+        modelValue: unref(isOn),
+        "onUpdate:modelValue": ($event) => isRef(isOn) ? isOn.value = $event : null,
+        onChange: unref(store2).handleIsOn
       }, null, _parent));
       _push(ssrRenderComponent(_component_el_switch, {
         modelValue: unref(useWebAudio),
-        "onUpdate:modelValue": ($event2) => isRef(useWebAudio) ? useWebAudio.value = $event2 : null,
+        "onUpdate:modelValue": ($event) => isRef(useWebAudio) ? useWebAudio.value = $event : null,
         "active-text": "Use Web Audio",
         "inactive-text": "Use External MIDI"
       }, null, _parent));
@@ -10689,7 +10686,7 @@ _sfc_main$8.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-5e08f961"]]);
+const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-25abbfbc"]]);
 const MidiDownload_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$7 = {
   __name: "MidiDownload",
@@ -11042,11 +11039,11 @@ const _sfc_main$2 = {
   __name: "OnWeaving",
   __ssrInlineRender: true,
   setup(__props) {
-    useNuxtApp();
+    const { $event } = useNuxtApp();
     const store2 = useStore();
     const musicStore = useMusicStore();
     const weaveStore = useWeaveStore();
-    const { useWebAudio, midiOutputPort, bpm, bpmInterval: bpmInterval2, isOn: isOn2, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store2);
+    const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, notesAsNames, errorMsg, noteHoldCount } = storeToRefs(store2);
     const { upperRegisterMax, chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
     const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
     let activeAccordion = ref("");
@@ -11063,6 +11060,25 @@ const _sfc_main$2 = {
     watch(useWebAudio, (val) => {
       if (!val)
         store2.getMidiOutputs();
+    });
+    let timer = null;
+    function handleTimer() {
+      clearInterval(timer);
+      if (isOn.value) {
+        timer = setInterval(tick2, bpmInterval.value);
+      }
+    }
+    function tick2() {
+      $event("tick", "clock.id");
+    }
+    watch(isOn, (val) => {
+      handleTimer();
+      if (val)
+        ;
+      else {
+        clearInterval(timer);
+        $event("clock-off");
+      }
     });
     watch(bpm, () => {
       handleTimer();

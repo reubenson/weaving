@@ -6,7 +6,7 @@
         active-text="start"
         inactive-text="stop"
         v-model="isOn"
-        @change="handleIsOn"
+        @change="store.handleIsOn"
       ></el-switch>
       <el-switch 
         v-model="useWebAudio"
@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-  import { useStore } from '@/store/main';
+  import { useStore } from '~/store/main';
   import { storeToRefs } from 'pinia';
   const store = useStore();
   const { useWebAudio, isOn, handleIsOn } = storeToRefs(store);
