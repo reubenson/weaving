@@ -9,7 +9,11 @@ function playNote(channel: number, note: number, noteLength: number, webSynth: a
 
   if (webSynth) {
     // play via web audio
-    webSynth.playNote(channel, note, noteLength);
+    try {
+      webSynth.playNote(channel, note, noteLength);
+    } catch (error) {
+      console.error(error);
+    }
   } else {
     // play via external midi
     channel = 1;

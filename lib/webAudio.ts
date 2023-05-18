@@ -18,9 +18,9 @@ export class webAudio {
     this.audioCtx = audioContext;
     this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
-    this.reverbNode = this.audioCtx.createConvolver()
-    this.reverbNode.connect(audioContext.destination);
-    this.configureReverb();
+    // this.reverbNode = this.audioCtx.createConvolver()
+    // this.reverbNode.connect(audioContext.destination);
+    // this.configureReverb();
 
     this.voices = _.times(numberOfVoices).map(() => {
       return {
@@ -35,7 +35,7 @@ export class webAudio {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
       voice.gainNode.connect(voice.panNode);
-      voice.panNode.connect(this.reverbNode);
+      // voice.panNode.connect(this.reverbNode);
       voice.panNode.connect(audioContext.destination);
 
       voice.oscillatorNode.type = type;
