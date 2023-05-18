@@ -215,7 +215,7 @@ export const useStore = defineStore('main', {
       console.log('val', val);
       if (val) {
         this.startSynth(); 
-        handleTimer();
+        // handleTimer();
         if (val) {
           // this.timer = setInterval(this.tick, this.intervalString);
         } else {

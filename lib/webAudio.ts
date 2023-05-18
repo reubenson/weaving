@@ -9,6 +9,42 @@ export class webAudio {
   reverbNode: ConvolverNode;
 
   constructor(numberOfVoices: number) {
+    this.numberOfVoices = numberOfVoices;
+    // const audioContext = new AudioContext();
+    // const destination = audioContext.destination;
+    // const type = 'sine';
+
+    // console.log('destination', destination);
+
+    // this.audioCtx = audioContext;
+    // this.numberOfVoices = numberOfVoices;
+    // this.hasStarted = false;
+    // this.reverbNode = this.audioCtx.createConvolver()
+    // this.reverbNode.connect(audioContext.destination);
+    // this.configureReverb();
+
+    // this.voices = _.times(numberOfVoices).map(() => {
+    //   return {
+    //     ctx: audioContext,
+    //     oscillatorNode: audioContext.createOscillator(),
+    //     gainNode: audioContext.createGain(),
+    //     panNode: audioContext.createStereoPanner()
+    //   }
+    // });
+
+    // this.voices.forEach((voice, i) => {
+    //   voice.gainNode.gain.setValueAtTime(0, 0);
+    //   voice.oscillatorNode.connect(voice.gainNode);
+    //   voice.gainNode.connect(voice.panNode);
+    //   // voice.panNode.connect(this.reverbNode);
+    //   voice.panNode.connect(audioContext.destination);
+
+    //   voice.oscillatorNode.type = type;
+    //   voice.panNode.pan.setValueAtTime(-1 + i * (2 / (numberOfVoices - 1)), 0);
+    // });
+  }
+
+  private async construct() {
     const audioContext = new AudioContext();
     const destination = audioContext.destination;
     const type = 'sine';
@@ -16,13 +52,13 @@ export class webAudio {
     console.log('destination', destination);
 
     this.audioCtx = audioContext;
-    this.numberOfVoices = numberOfVoices;
+    // this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
-    // this.reverbNode = this.audioCtx.createConvolver()
-    // this.reverbNode.connect(audioContext.destination);
-    // this.configureReverb();
+    this.reverbNode = this.audioCtx.createConvolver()
+    this.reverbNode.connect(audioContext.destination);
+    await this.configureReverb();
 
-    this.voices = _.times(numberOfVoices).map(() => {
+    this.voices = _.times(this.numberOfVoices).map(() => {
       return {
         ctx: audioContext,
         oscillatorNode: audioContext.createOscillator(),
@@ -35,11 +71,11 @@ export class webAudio {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
       voice.gainNode.connect(voice.panNode);
-      // voice.panNode.connect(this.reverbNode);
+      voice.panNode.connect(this.reverbNode);
       voice.panNode.connect(audioContext.destination);
 
       voice.oscillatorNode.type = type;
-      voice.panNode.pan.setValueAtTime(-1 + i * (2 / (numberOfVoices - 1)), 0);
+      voice.panNode.pan.setValueAtTime(-1 + i * (2 / (this.numberOfVoices - 1)), 0);
     });
   }
 
@@ -66,9 +102,10 @@ export class webAudio {
     voice.gainNode.gain.linearRampToValueAtTime(0, currentTime + attack/1000. + decay/1000.);
   }
 
-  public start() {
+  public async start() {
     if (this.hasStarted) return;
 
+    await this.construct();
     this.audioCtx.resume();
 
     this.voices.forEach(voice => {

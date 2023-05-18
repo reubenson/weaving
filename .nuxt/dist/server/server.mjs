@@ -10254,14 +10254,19 @@ class webAudio {
     __publicField(this, "hasStarted");
     __publicField(this, "audioCtx");
     __publicField(this, "reverbNode");
+    this.numberOfVoices = numberOfVoices;
+  }
+  async construct() {
     const audioContext = new AudioContext();
     const destination = audioContext.destination;
     const type = "sine";
     console.log("destination", destination);
     this.audioCtx = audioContext;
-    this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
-    this.voices = _.times(numberOfVoices).map(() => {
+    this.reverbNode = this.audioCtx.createConvolver();
+    this.reverbNode.connect(audioContext.destination);
+    await this.configureReverb();
+    this.voices = _.times(this.numberOfVoices).map(() => {
       return {
         ctx: audioContext,
         oscillatorNode: audioContext.createOscillator(),
@@ -10273,9 +10278,10 @@ class webAudio {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
       voice.gainNode.connect(voice.panNode);
+      voice.panNode.connect(this.reverbNode);
       voice.panNode.connect(audioContext.destination);
       voice.oscillatorNode.type = type;
-      voice.panNode.pan.setValueAtTime(-1 + i * (2 / (numberOfVoices - 1)), 0);
+      voice.panNode.pan.setValueAtTime(-1 + i * (2 / (this.numberOfVoices - 1)), 0);
     });
   }
   async configureReverb() {
@@ -10295,9 +10301,10 @@ class webAudio {
     voice.gainNode.gain.linearRampToValueAtTime(0.3, currentTime + attack / 1e3);
     voice.gainNode.gain.linearRampToValueAtTime(0, currentTime + attack / 1e3 + decay / 1e3);
   }
-  start() {
+  async start() {
     if (this.hasStarted)
       return;
+    await this.construct();
     this.audioCtx.resume();
     this.voices.forEach((voice) => {
       voice.oscillatorNode.start();
@@ -10560,17 +10567,10 @@ const useStore = defineStore("main", {
   actions: {
     handleIsOn(val) {
       let timer = null;
-      const bpmInterval = this.npmInterval;
-      function handleTimer() {
-        clearInterval(timer);
-        if (val) {
-          timer = setInterval(tick, bpmInterval);
-        }
-      }
+      this.npmInterval;
       console.log("val", val);
       if (val) {
         this.startSynth();
-        handleTimer();
         if (val)
           ;
         else {
@@ -11065,10 +11065,10 @@ const _sfc_main$2 = {
     function handleTimer() {
       clearInterval(timer);
       if (isOn.value) {
-        timer = setInterval(tick2, bpmInterval.value);
+        timer = setInterval(tick, bpmInterval.value);
       }
     }
-    function tick2() {
+    function tick() {
       $event("tick", "clock.id");
     }
     watch(isOn, (val) => {
