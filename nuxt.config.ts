@@ -7,6 +7,12 @@ export default defineNuxtConfig({
       title: 'Weaving Music',
       meta: [
         { name: 'description', content: 'weaving musical patterns'}
+      ],
+      script: [
+        {
+          src: 'https://www.googletagmanager.com/gtag/js?id=UA-120208217-1',
+          async: true
+        }
       ]
     },
     baseURL: '/weaving/'

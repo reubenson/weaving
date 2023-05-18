@@ -422,9 +422,18 @@
     activeAccordion.value = hash;
   }
 
+  function pingGA() {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-120208217-1');
+  }
+
   onMounted(() => {
     setAccordion();
     store.initializeWebAudioSynth();
+    pingGA();
   });
 
   watch(sequenceType, store.initNotes);

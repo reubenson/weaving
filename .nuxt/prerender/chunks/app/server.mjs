@@ -2035,7 +2035,7 @@ const createError = (err) => {
   _err.__nuxt_error = true;
   return _err;
 };
-const appHead = { "meta": [{ "name": "viewport", "content": "width=device-width, initial-scale=1" }, { "charset": "utf-8" }, { "name": "description", "content": "weaving musical patterns" }], "link": [], "style": [], "script": [], "noscript": [], "charset": "utf-8", "viewport": "width=device-width, initial-scale=1", "title": "Weaving Music" };
+const appHead = { "meta": [{ "name": "viewport", "content": "width=device-width, initial-scale=1" }, { "charset": "utf-8" }, { "name": "description", "content": "weaving musical patterns" }], "link": [], "style": [], "script": [{ "src": "https://www.googletagmanager.com/gtag/js?id=UA-120208217-1", "async": true }], "noscript": [], "charset": "utf-8", "viewport": "width=device-width, initial-scale=1", "title": "Weaving Music" };
 const plugin = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
   const pinia = createPinia();
   nuxtApp.vueApp.use(pinia);
@@ -10665,14 +10665,15 @@ class webAudio {
     __publicField(this, "audioCtx");
     __publicField(this, "reverbNode");
     const audioContext = new AudioContext();
+    const destination = audioContext.destination;
     const type = "sine";
+    console.log("destination", destination);
     this.audioCtx = audioContext;
     this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
     this.reverbNode = this.audioCtx.createConvolver();
     this.reverbNode.connect(audioContext.destination);
     this.configureReverb();
-    this.reverbNode.connect(this.audioCtx.destination);
     this.voices = _.times(numberOfVoices).map(() => {
       return {
         ctx: audioContext,
@@ -10699,9 +10700,7 @@ class webAudio {
   playNote(voiceIndex, note, noteLength) {
     var _a, _b;
     const voice = this.voices[voiceIndex];
-    console.log("voiceIndex", voiceIndex);
     console.log("note", note);
-    console.log("voice", voice);
     let frequency = mtof(note);
     const attack = noteLength * 0.5;
     const decay = noteLength - attack;

@@ -10,7 +10,10 @@ export class webAudio {
 
   constructor(numberOfVoices: number) {
     const audioContext = new AudioContext();
+    const destination = audioContext.destination;
     const type = 'sine';
+
+    console.log('destination', destination);
 
     this.audioCtx = audioContext;
     this.numberOfVoices = numberOfVoices;
@@ -18,7 +21,6 @@ export class webAudio {
     this.reverbNode = this.audioCtx.createConvolver()
     this.reverbNode.connect(audioContext.destination);
     this.configureReverb();
-    this.reverbNode.connect(this.audioCtx.destination);
 
     this.voices = _.times(numberOfVoices).map(() => {
       return {
@@ -51,9 +53,7 @@ export class webAudio {
   public playNote(voiceIndex: number, note: number, noteLength: number) {
     const voice = this.voices[voiceIndex];
 
-    console.log('voiceIndex', voiceIndex);
     console.log('note', note);
-    console.log('voice', voice);
 
     let frequency = mtof(note);
     const attack = noteLength * 0.5;
