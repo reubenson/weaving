@@ -126,9 +126,35 @@
           </client-only>
         </div>
         <div>
+          <p class="setting-title">Root Note</p>
+          <client-only>
+            <el-popover
+              class="settings-info"
+              placement="top-start"
+              title="Root Note"
+              :width="200"
+              trigger="click"
+              content="Root note (tonic) of the selected chord"
+            >
+              <template #reference>
+                <el-button class="m-2">&#9432;</el-button>
+              </template>
+            </el-popover>
+          </client-only>
+          <client-only>
+            <el-select
+              v-model="rootNote"
+            >
+              <el-option
+                v-for="item in tonicOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </client-only>
           <p class="setting-title">Chord Name</p>
           <client-only>
-
             <el-popover
               class="settings-info"
               placement="top-start"
@@ -398,13 +424,15 @@
   import { useWeaveStore } from '@/store/weave-settings';
   import { storeToRefs } from 'pinia';
   import midi from '~/lib/midi';
+  import hotkeys from 'hotkeys-js';
+  import _ from 'lodash';
   const { $event } = useNuxtApp();
 
   const store = useStore();
   const musicStore = useMusicStore();
   const weaveStore = useWeaveStore();
   const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, noteHoldCount } = storeToRefs(store);
-  const { upperRegisterMax, chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
+  const { upperRegisterMax, chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions, rootNote, tonicOptions } = storeToRefs(musicStore);
   const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
   let activeAccordion = ref('');
 
@@ -429,12 +457,81 @@
     gtag('config', 'UA-120208217-1');
   }
 
+  function setupHotKeys() {
+    // configure command+up/down to control chord selecttion
+    hotkeys('command+*', event => {
+      const { code } = event;
+
+      if (code === 'ArrowDown') {
+        // move down a chordOption
+        const currentOptionIndex = _.findIndex(chordOptions.value, item => item.toLowerCase() === noteScale.value.toLowerCase());
+
+        noteScale.value = chordOptions.value[(currentOptionIndex + 1) % chordOptions.value.length];
+        event.preventDefault(); // Prevent the default refresh event under WINDOWS system
+      } else if (code === 'ArrowUp') {
+        // move up a chordOption
+        const currentOptionIndex = _.findIndex(chordOptions.value, item => item.toLowerCase() === noteScale.value.toLowerCase());
+
+        noteScale.value = chordOptions.value[(currentOptionIndex - 1 + chordOptions.value.length) % chordOptions.value.length];
+        event.preventDefault(); // Prevent the default refresh event under WINDOWS system
+      }
+    
+    });
+
+    // allow computer keyboard to play notes like in Ableton
+    // https://sonicbloom.net/ableton-live-tutorial-computer-keyboard-as-midi-controller/
+    hotkeys('*', event => {
+      switch (event.code.replace('Key', '')) {
+        case 'A':
+          rootNote.value = 'C';
+          break;
+        case 'W':
+          rootNote.value = 'C#';
+          break;  
+        case 'S':
+          rootNote.value = 'D';
+          break;
+        case 'E':
+          rootNote.value = 'D#';
+        case 'D':
+          rootNote.value = 'E';
+          break;
+        case 'F':
+          rootNote.value = 'F';
+          break;
+        case 'T':
+          rootNote.value = 'F#';
+          break;
+        case 'G':
+          rootNote.value = 'G';
+          break;
+        case 'Y':
+          rootNote.value = 'G#';
+          break;
+        case 'H':
+          rootNote.value = 'A';
+          break;
+        case 'U':
+          rootNote.value = 'A#';
+        case 'J':
+          rootNote.value = 'B';
+          break;
+        case 'K':
+          rootNote.value = 'C';
+        default:
+          break;
+      }
+    });
+  }
+
   onMounted(() => {
     setAccordion();
     store.initializeWebAudioSynth();
+    setupHotKeys();
     pingGA();
   });
 
+  watch(rootNote, store.initNotes);
   watch(sequenceType, store.initNotes);
   watch(sineHarmonics, store.initNotes);
   watch(midiOutputPort, (val) => {

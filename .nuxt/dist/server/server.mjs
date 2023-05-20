@@ -26,13 +26,14 @@ import { fromPairs, get, isNil, isUndefined as isUndefined$1, castArray, isEqual
 import { TinyColor } from "@ctrl/tinycolor";
 import { createPopper, placements } from "@popperjs/core";
 import _ from "lodash";
-import { Scale, Note, Midi } from "tonal";
+import { Scale, Note, Midi, Chord as Chord$1, AbcNotation } from "tonal";
 import require$$1 from "lerp";
 import mtof from "mtof";
 import * as Chord from "tonal-chord";
 import MidiWriter from "midi-writer-js";
 import "uplot";
 import abcjs from "abcjs";
+import "hotkeys-js";
 const appConfig = useRuntimeConfig$1().app;
 const baseURL = () => appConfig.baseURL;
 const nuxtAppCtx = /* @__PURE__ */ getContext("nuxt-app");
@@ -10361,7 +10362,8 @@ const useWeaveStore = defineStore("weave-settings", {
 const useMusicStore = defineStore("music-settings", {
   state: () => {
     return {
-      noteScale: "maj7",
+      rootNote: "C",
+      noteScale: "Maj7",
       chordSizeFilter: 4,
       rangeMin: 1,
       rangeMax: 3,
@@ -10379,8 +10381,11 @@ const useMusicStore = defineStore("music-settings", {
         return Chord.notes(`C4${name}`).length === state.chordSizeFilter;
       });
     },
+    tonicOptions: () => {
+      return Note.names([]);
+    },
     noteOptions: (state) => {
-      const tonic = "C";
+      const tonic = state.rootNote;
       const range = Math.max(state.rangeMax - state.rangeMin, 0);
       const offset = -1;
       return scale.noteSet(state.noteScale, tonic, state.rangeMin + offset, range) || [];
@@ -10418,7 +10423,7 @@ const presets = {
     bpm: 120,
     noteHoldCount: 4,
     sequenceType: "random",
-    noteScale: "maj7",
+    noteScale: "Maj7",
     stackType: "canon",
     rangeMin: 4,
     rangeMax: 6,
@@ -11037,32 +11042,29 @@ _sfc_main$4.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Waveform.vue");
   return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const Notation_vue_vue_type_style_index_0_scoped_f46ec0eb_lang = "";
+const Notation_vue_vue_type_style_index_0_scoped_e8f44050_lang = "";
 const _sfc_main$3 = {
   __name: "Notation",
   __ssrInlineRender: true,
   setup(__props) {
     const store2 = useMusicStore();
-    const { noteScale } = storeToRefs(store2);
+    const { noteScale, rootNote } = storeToRefs(store2);
+    let chordNotes = ref([]);
+    watch(rootNote, renderChord);
     watch(noteScale, renderChord);
-    const chordNotes = computed({
-      get: () => {
-        return Chord.notes("C" + noteScale.value);
-      }
-    });
     function renderChord() {
-      const notes = Chord.notes("C" + noteScale.value).reduce((acc, note) => {
-        note = note.replace(/[A-G]b/, "_$&").replace("b", "");
-        note = note.replace(/[A-G]#/, "^$&").replace("#", "");
-        note = note.replace(/[0-9]/, "");
-        return `${acc} ${note}`;
+      const { notes } = Chord$1.getChord(noteScale.value, `${rootNote.value}4`);
+      const chord = notes.reduce((acc, note) => {
+        note = AbcNotation.scientificToAbcNotation(note);
+        return `${acc} ${note}2`;
       }, "");
       abcjs.renderAbc("paper", `X:1
 K
-|[${notes}]|`);
+|[${chord}]|`);
+      chordNotes.value = Chord$1.getChord(noteScale.value, rootNote.value).notes;
     }
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "notation" }, _attrs))} data-v-f46ec0eb><div id="paper" data-v-f46ec0eb></div><p data-v-f46ec0eb>${ssrInterpolate(unref(chordNotes).join(", "))}</p></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "notation" }, _attrs))} data-v-e8f44050><div id="paper" data-v-e8f44050></div><p data-v-e8f44050>${ssrInterpolate(unref(chordNotes).join(", "))}</p></div>`);
     };
   }
 };
@@ -11072,7 +11074,7 @@ _sfc_main$3.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Notation.vue");
   return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
 };
-const Notation = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-f46ec0eb"]]);
+const Notation = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-e8f44050"]]);
 const OnWeaving_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$2 = {
   __name: "OnWeaving",
@@ -11083,7 +11085,7 @@ const _sfc_main$2 = {
     const musicStore = useMusicStore();
     const weaveStore = useWeaveStore();
     const { useWebAudio, midiOutputPort, bpm, bpmInterval, isOn, noteHoldCount } = storeToRefs(store2);
-    const { upperRegisterMax, chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions } = storeToRefs(musicStore);
+    const { upperRegisterMax, chordOptions, noteScale, chordSizeFilter, rangeMin, rangeMax, sequenceType, sequenceTypeOptions, sineHarmonics, stackType, stackTypeOptions, rootNote, tonicOptions } = storeToRefs(musicStore);
     const { swatchWidth, swatchDepth, patternOptions, patternType, weaveX, weaveY, euclideanCount } = storeToRefs(weaveStore);
     let activeAccordion = ref("");
     function handleAccordionChange(val) {
@@ -11091,6 +11093,7 @@ const _sfc_main$2 = {
       const baseURL2 = `${origin}${pathname}`;
       history.pushState(null, null, val || baseURL2);
     }
+    watch(rootNote, store2.initNotes);
     watch(sequenceType, store2.initNotes);
     watch(sineHarmonics, store2.initNotes);
     watch(midiOutputPort, (val) => {
@@ -11652,7 +11655,10 @@ const _sfc_main$2 = {
             _push2(`<p class="settings-description"${_scopeId}>These settings modify the underlying sequence of notes played as we advance from left to right in the <em${_scopeId}>Weaving Swatch</em> below.</p><div${_scopeId}><p class="setting-title"${_scopeId}>Sequence Type</p>`);
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
-            _push2(`</div><div${_scopeId}><p class="setting-title"${_scopeId}>Chord Name</p>`);
+            _push2(`</div><div${_scopeId}><p class="setting-title"${_scopeId}>Root Note</p>`);
+            _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
+            _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
+            _push2(`<p class="setting-title"${_scopeId}>Chord Name</p>`);
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
             _push2(ssrRenderComponent(unref(Notation), null, null, _parent2, _scopeId));
@@ -11769,6 +11775,50 @@ const _sfc_main$2 = {
                 })
               ]),
               createVNode("div", null, [
+                createVNode("p", { class: "setting-title" }, "Root Note"),
+                createVNode(_component_client_only, null, {
+                  default: withCtx(() => [
+                    createVNode(_component_el_popover, {
+                      class: "settings-info",
+                      placement: "top-start",
+                      title: "Root Note",
+                      width: 200,
+                      trigger: "click",
+                      content: "Root note (tonic) of the selected chord"
+                    }, {
+                      reference: withCtx(() => [
+                        createVNode(_component_el_button, { class: "m-2" }, {
+                          default: withCtx(() => [
+                            createTextVNode("ⓘ")
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    })
+                  ]),
+                  _: 1
+                }),
+                createVNode(_component_client_only, null, {
+                  default: withCtx(() => [
+                    createVNode(_component_el_select, {
+                      modelValue: unref(rootNote),
+                      "onUpdate:modelValue": ($event2) => isRef(rootNote) ? rootNote.value = $event2 : null
+                    }, {
+                      default: withCtx(() => [
+                        (openBlock(true), createBlock(Fragment, null, renderList(unref(tonicOptions), (item) => {
+                          return openBlock(), createBlock(_component_el_option, {
+                            key: item,
+                            label: item,
+                            value: item
+                          }, null, 8, ["label", "value"]);
+                        }), 128))
+                      ]),
+                      _: 1
+                    }, 8, ["modelValue", "onUpdate:modelValue"])
+                  ]),
+                  _: 1
+                }),
                 createVNode("p", { class: "setting-title" }, "Chord Name"),
                 createVNode(_component_client_only, null, {
                   default: withCtx(() => [
@@ -12247,8 +12297,8 @@ const _sfc_main = {
   __name: "nuxt-root",
   __ssrInlineRender: true,
   setup(__props) {
-    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/error-component-a4edc65f.js").then((r) => r.default || r));
-    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/island-renderer-068be6d8.js").then((r) => r.default || r));
+    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/error-component-9681f730.js").then((r) => r.default || r));
+    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/island-renderer-772a2728.js").then((r) => r.default || r));
     const nuxtApp = useNuxtApp();
     nuxtApp.deferHydration();
     nuxtApp.ssrContext.url;

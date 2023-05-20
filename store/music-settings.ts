@@ -4,11 +4,13 @@ import * as Chord from 'tonal-chord';
 import scale from '~/lib/scale';
 import { useStore } from '~/store/main';
 import { useWeaveStore } from './weave-settings';
+import { Note } from 'tonal';
 
 export const useMusicStore = defineStore('music-settings', {
   state: () => {
     return {
-      noteScale: 'maj7',
+      rootNote: 'C',
+      noteScale: 'Maj7',
       chordSizeFilter: 4,
       rangeMin: 1,
       rangeMax: 3,
@@ -27,8 +29,11 @@ export const useMusicStore = defineStore('music-settings', {
         return Chord.notes(`C4${name}`).length === state.chordSizeFilter;
       });
     },
+    tonicOptions: () => {
+      return Note.names([]);
+    },
     noteOptions: state => {
-      const tonic = 'C';
+      const tonic = state.rootNote;
       const range = Math.max(state.rangeMax - state.rangeMin, 0);
 
       // if (props.mode === 'stack') {

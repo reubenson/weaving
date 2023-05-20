@@ -28,6 +28,7 @@ import "tonal-chord";
 import "midi-writer-js";
 import "uplot";
 import "abcjs";
+import "hotkeys-js";
 const components_islands = {};
 const islandComponents = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -54,4 +55,4 @@ const islandRenderer = /* @__PURE__ */ defineComponent({
 export {
   islandRenderer as default
 };
-//# sourceMappingURL=island-renderer-068be6d8.js.map
+//# sourceMappingURL=island-renderer-772a2728.js.map

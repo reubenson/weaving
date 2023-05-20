@@ -9,34 +9,33 @@
   
   <script setup>
     import abcjs from 'abcjs';
-    import * as Chord from 'tonal-chord';
+    import { Chord, AbcNotation } from 'tonal';
     import { useMusicStore } from '~/store/music-settings';
     import { storeToRefs } from 'pinia';
 
     const store = useMusicStore();
-    const { noteScale } = storeToRefs(store);
+    const { noteScale, rootNote } = storeToRefs(store);
+    let chordNotes = ref([]);
 
+    watch(rootNote, renderChord);
     watch(noteScale, renderChord);
-    const chordNotes = computed({
-      get: () => {
-        return Chord.notes('C' + noteScale.value);
-      }
-    });
     
     onMounted(() => {
       renderChord();
     });
     
     function renderChord() {
-      const notes = Chord.notes('C' + noteScale.value).reduce((acc, note) => {
-        note = note.replace(/[A-G]b/, '_$&').replace('b', '');
-        note = note.replace(/[A-G]#/, '^$&').replace('#', '');
-        note = note.replace(/[0-9]/, '');
+      const { notes } = Chord.getChord(noteScale.value, `${rootNote.value}4`);
 
-        return `${acc} ${note}`;
+      const chord = notes.reduce((acc, note) => {
+        note = AbcNotation.scientificToAbcNotation(note);
+
+        return `${acc} ${note}2`;
       }, '');
   
-      abcjs.renderAbc("paper", `X:1\nK\n|[${notes}]|`);
+      abcjs.renderAbc("paper", `X:1\nK\n|[${chord}]|`);
+
+      chordNotes.value = Chord.getChord(noteScale.value, rootNote.value).notes;
     }
 
   </script>

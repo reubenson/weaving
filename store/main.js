@@ -12,7 +12,7 @@ const presets = {
     bpm: 120,
     noteHoldCount: 4,
     sequenceType: 'random',
-    noteScale: 'maj7',
+    noteScale: 'Maj7',
     stackType: 'canon',
     rangeMin: 4,
     rangeMax: 6,

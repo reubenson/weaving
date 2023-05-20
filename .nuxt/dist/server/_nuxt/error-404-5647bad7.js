@@ -29,6 +29,7 @@ import "tonal-chord";
 import "midi-writer-js";
 import "uplot";
 import "abcjs";
+import "hotkeys-js";
 const firstNonUndefined = (...args) => args.find((arg) => arg !== void 0);
 const DEFAULT_EXTERNAL_REL_ATTRIBUTE = "noopener noreferrer";
 function defineNuxtLink(options) {
@@ -293,4 +294,4 @@ const error404 = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3
 export {
   error404 as default
 };
-//# sourceMappingURL=error-404-ce1e531b.js.map
+//# sourceMappingURL=error-404-5647bad7.js.map

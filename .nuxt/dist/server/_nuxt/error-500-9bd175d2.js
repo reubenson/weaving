@@ -29,6 +29,7 @@ import "tonal-chord";
 import "midi-writer-js";
 import "uplot";
 import "abcjs";
+import "hotkeys-js";
 const error500_vue_vue_type_style_index_0_scoped_32388612_lang = "";
 const _sfc_main = {
   __name: "error-500",
@@ -81,4 +82,4 @@ const error500 = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-3
 export {
   error500 as default
 };
-//# sourceMappingURL=error-500-693e2af4.js.map
+//# sourceMappingURL=error-500-9bd175d2.js.map
