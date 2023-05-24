@@ -182,7 +182,7 @@
           </client-only>
           <notation />
         </div>
-        <div>
+        <!-- <div>
           <p class="setting-title">Filter chord by number of notes</p>
           <client-only>
             <el-popover
@@ -211,7 +211,7 @@
               />
             </el-select>
           </client-only>
-        </div>
+        </div> -->
         <div>
           <p class="setting-title">Lower Register</p>
           <client-only>
@@ -557,15 +557,12 @@
   }
 
   watch(isOn, val => {
-    // to do: determine if this is neccessary
-    store.startSynth(); 
-
+    
     handleTimer();
     if (val) {
-      // this.timer = setInterval(this.tick, this.intervalString);
+      store.startSynth(); 
     } else {
       clearInterval(timer);
-      // eventBus.emit('clock-off');
       $event('clock-off');
     }
   });
@@ -626,7 +623,7 @@
     }
 
     .el-collapse-item__content {
-      border: dotted black 2px;
+      // border: dotted black 2px;
       font-size: 14px;
       line-height: 16px;
       margin: auto auto 20px;
@@ -637,14 +634,20 @@
     .el-collapse {
       background-color: none;
       border: none;
-      border-bottom: solid black 2px;
+      // border-bottom: solid black 2px;
       font-size: 12px;
       margin: 0 10px;
     }
 
-    .el-collapse-item__header, .el-collapse-item__wrap {
+    .el-collapse-item__header {
       background: none;
-      border: none;
+      border-bottom: solid black 2px;
+    }
+
+    .el-collapse-item__wrap {
+      background: none;
+      border: solid black 2px;
+      margin-top: -2px;
     }
 
     a {

@@ -25,9 +25,11 @@ export const useMusicStore = defineStore('music-settings', {
     chordOptions: state => {
       const names = Chord.names();
 
-      return names.filter(name => {
-        return Chord.notes(`C4${name}`).length === state.chordSizeFilter;
-      });
+      return names;
+
+      // return names.filter(name => {
+      //   return Chord.notes(`C4${name}`).length === state.chordSizeFilter;
+      // });
     },
     tonicOptions: () => {
       return Note.names([]);

@@ -52,7 +52,6 @@ export class webAudio {
     console.log('destination', destination);
 
     this.audioCtx = audioContext;
-    // this.numberOfVoices = numberOfVoices;
     this.hasStarted = false;
     this.reverbNode = this.audioCtx.createConvolver()
     this.reverbNode.connect(audioContext.destination);
@@ -71,9 +70,17 @@ export class webAudio {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
       voice.gainNode.connect(voice.panNode);
-      voice.panNode.connect(this.reverbNode);
       voice.panNode.connect(audioContext.destination);
+      try {
+        voice.panNode.connect(this.reverbNode);
+      } catch (error) {
+        console.log('voice index', i);
+        console.log('this.audioCtx', this.audioCtx);
+        console.log('error', error);
 
+        throw Error(error);
+      }
+      
       voice.oscillatorNode.type = type;
       voice.panNode.pan.setValueAtTime(-1 + i * (2 / (this.numberOfVoices - 1)), 0);
     });
@@ -104,6 +111,8 @@ export class webAudio {
 
   public async start() {
     if (this.hasStarted) return;
+
+    console.log('hitting start');
 
     await this.construct();
     this.audioCtx.resume();

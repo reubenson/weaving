@@ -208,37 +208,6 @@ export const useStore = defineStore('main', {
         }
       }
     },
-
-    handleIsOn(val) {
-      // clock
-      let timer = null;
-      const bpmInterval = this.npmInterval;
-
-      function handleTimer() {
-        // todo: https://incolumitas.com/2021/12/18/on-high-precision-javascript-timers/
-        clearInterval(timer);
-        if (val) {
-          timer = setInterval(tick, bpmInterval);
-        }
-      }
-
-      // function tick() {
-      //   $event('tick', 'clock.id');
-      // }
-
-      console.log('val', val);
-      if (val) {
-        this.startSynth(); 
-        // handleTimer();
-        if (val) {
-          // this.timer = setInterval(this.tick, this.intervalString);
-        } else {
-          clearInterval(timer);
-          // eventBus.emit('clock-off');
-          // $event('clock-off');
-        }
-      }
-    },
     applyPreset(presetId) {
       const preset = presets[presetId],
         musicStore = useMusicStore(),

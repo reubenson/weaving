@@ -10688,8 +10688,15 @@ class webAudio {
       voice.gainNode.gain.setValueAtTime(0, 0);
       voice.oscillatorNode.connect(voice.gainNode);
       voice.gainNode.connect(voice.panNode);
-      voice.panNode.connect(this.reverbNode);
       voice.panNode.connect(audioContext.destination);
+      try {
+        voice.panNode.connect(this.reverbNode);
+      } catch (error) {
+        console.log("voice index", i);
+        console.log("this.audioCtx", this.audioCtx);
+        console.log("error", error);
+        throw Error(error);
+      }
       voice.oscillatorNode.type = type;
       voice.panNode.pan.setValueAtTime(-1 + i * (2 / (this.numberOfVoices - 1)), 0);
     });
@@ -10714,6 +10721,7 @@ class webAudio {
   async start() {
     if (this.hasStarted)
       return;
+    console.log("hitting start");
     await this.construct();
     this.audioCtx.resume();
     this.voices.forEach((voice) => {
@@ -10786,9 +10794,7 @@ const useMusicStore = defineStore("music-settings", {
   getters: {
     chordOptions: (state) => {
       const names = Chord.names();
-      return names.filter((name) => {
-        return Chord.notes(`C4${name}`).length === state.chordSizeFilter;
-      });
+      return names;
     },
     tonicOptions: () => {
       return Note.names([]);
@@ -10992,19 +10998,6 @@ const useStore = defineStore("main", {
         }
       }
     },
-    handleIsOn(val) {
-      let timer = null;
-      this.npmInterval;
-      console.log("val", val);
-      if (val) {
-        this.startSynth();
-        if (val)
-          ;
-        else {
-          clearInterval(timer);
-        }
-      }
-    },
     applyPreset(presetId) {
       const preset = presets[presetId], musicStore = useMusicStore(), weaveStore = useWeaveStore();
       this.isOn = false;
@@ -11103,13 +11096,12 @@ const _sfc_main$8 = {
     return (_ctx, _push, _parent, _attrs) => {
       const _component_el_switch = ElSwitch;
       const _component_el_alert = ElAlert;
-      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-8c512fba><h1 data-v-8c512fba>Weaving Music</h1><div class="switches" data-v-8c512fba>`);
+      _push(`<nav${ssrRenderAttrs(mergeProps({ class: "top-nav" }, _attrs))} data-v-53fdfcf0><h1 data-v-53fdfcf0>Weaving Music</h1><div class="switches" data-v-53fdfcf0>`);
       _push(ssrRenderComponent(_component_el_switch, {
         "active-text": "start",
         "inactive-text": "stop",
         modelValue: unref(isOn),
-        "onUpdate:modelValue": ($event) => isRef(isOn) ? isOn.value = $event : null,
-        onChange: unref(store2).handleIsOn
+        "onUpdate:modelValue": ($event) => isRef(isOn) ? isOn.value = $event : null
       }, null, _parent));
       _push(ssrRenderComponent(_component_el_switch, {
         modelValue: unref(useWebAudio),
@@ -11137,7 +11129,7 @@ _sfc_main$8.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/TopNav.vue");
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-8c512fba"]]);
+const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-53fdfcf0"]]);
 const _sfc_main$7 = {
   __name: "MidiDownload",
   __ssrInlineRender: true,
@@ -11516,11 +11508,10 @@ const _sfc_main$2 = {
       $event("tick", "clock.id");
     }
     watch(isOn, (val) => {
-      store2.startSynth();
       handleTimer();
-      if (val)
-        ;
-      else {
+      if (val) {
+        store2.startSynth();
+      } else {
         clearInterval(timer);
         $event("clock-off");
       }
@@ -12064,9 +12055,6 @@ const _sfc_main$2 = {
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
             _push2(ssrRenderComponent(unref(Notation), null, null, _parent2, _scopeId));
-            _push2(`</div><div${_scopeId}><p class="setting-title"${_scopeId}>Filter chord by number of notes</p>`);
-            _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
-            _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
             _push2(`</div><div${_scopeId}><p class="setting-title"${_scopeId}>Lower Register</p>`);
             _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
             _push2(ssrRenderComponent(_component_el_slider, {
@@ -12266,53 +12254,6 @@ const _sfc_main$2 = {
                   _: 1
                 }),
                 createVNode(unref(Notation))
-              ]),
-              createVNode("div", null, [
-                createVNode("p", { class: "setting-title" }, "Filter chord by number of notes"),
-                createVNode(_component_client_only, null, {
-                  default: withCtx(() => [
-                    createVNode(_component_el_popover, {
-                      class: "settings-info",
-                      placement: "top-start",
-                      title: "Chord Name",
-                      width: 200,
-                      trigger: "click",
-                      content: "Select lower values to filter the chord options with fewer notes"
-                    }, {
-                      reference: withCtx(() => [
-                        createVNode(_component_el_button, { class: "m-2" }, {
-                          default: withCtx(() => [
-                            createTextVNode("ⓘ")
-                          ]),
-                          _: 1
-                        })
-                      ]),
-                      _: 1
-                    })
-                  ]),
-                  _: 1
-                }),
-                createVNode(_component_client_only, null, {
-                  default: withCtx(() => [
-                    createVNode(_component_el_select, {
-                      label: "Filter chord selector by number of notes",
-                      modelValue: unref(chordSizeFilter),
-                      "onUpdate:modelValue": ($event2) => isRef(chordSizeFilter) ? chordSizeFilter.value = $event2 : null
-                    }, {
-                      default: withCtx(() => [
-                        (openBlock(), createBlock(Fragment, null, renderList([3, 4, 5, 6, 7], (item) => {
-                          return createVNode(_component_el_option, {
-                            key: item,
-                            label: item,
-                            value: item
-                          }, null, 8, ["label", "value"]);
-                        }), 64))
-                      ]),
-                      _: 1
-                    }, 8, ["modelValue", "onUpdate:modelValue"])
-                  ]),
-                  _: 1
-                })
               ]),
               createVNode("div", null, [
                 createVNode("p", { class: "setting-title" }, "Lower Register"),

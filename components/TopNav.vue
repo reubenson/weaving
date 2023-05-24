@@ -6,7 +6,6 @@
         active-text="start"
         inactive-text="stop"
         v-model="isOn"
-        @change="store.handleIsOn"
       ></el-switch>
       <el-switch 
         v-model="useWebAudio"
@@ -28,7 +27,7 @@
 <style scoped lang="scss">
   .top-nav {
     background-color: white;
-    border-bottom: solid black 1px;
+    border-bottom: solid black 2px;
     position: sticky;
     height: 70px;
     left: 0;
@@ -39,7 +38,6 @@
 
     h1 {
       line-height: 1em;
-      // position: absolute;
       left: 20px;
     }
 
