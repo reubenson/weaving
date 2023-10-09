@@ -40,3 +40,7 @@ npm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
+# References
+- [Chords - Music Theory](https://en.wikibooks.org/wiki/Music_Theory/Complete_List_of_Chord_Patterns)

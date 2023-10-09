@@ -10323,7 +10323,9 @@ class webAudio {
 }
 const tonics = ["Ab", "A", "Bb", "B", "C", "C#", "Db", "D", "Eb", "E", "F", "F#", "G", "G#"];
 function noteSet(chordName, tonic, octave, range) {
-  const notes = Chord.notes(`${tonic}${chordName}`);
+  let notes = Chord.notes(`${tonic}${chordName}`);
+  if (!notes.length)
+    throw new Error("no notes defined for selected chord");
   let noteSet2 = [];
   range = Math.max(range, 0);
   if (range === 0) {
@@ -10388,7 +10390,7 @@ const useMusicStore = defineStore("music-settings", {
       return names;
     },
     tonicOptions: () => {
-      return Note.names([]);
+      return Note.names();
     },
     noteOptions: (state) => {
       const tonic = state.rootNote;
@@ -10729,8 +10731,10 @@ const _sfc_main$7 = {
   setup(__props) {
     const store2 = useStore();
     const weaveStore = useWeaveStore();
+    const musicStore = useMusicStore();
     const { swatchNotes, swatchWeave, bpm } = storeToRefs(store2);
     const { swatchWidth } = storeToRefs(weaveStore);
+    const { noteScale, rootNote } = storeToRefs(musicStore);
     const downloadLinkHref = computed({
       get: () => {
         return handleDownload(false);
@@ -10740,6 +10744,9 @@ const _sfc_main$7 = {
       get: () => {
         return handleDownload(true);
       }
+    });
+    const downloadFilename = computed({
+      get: () => `${rootNote == null ? void 0 : rootNote.value} - ${noteScale == null ? void 0 : noteScale.value}`
     });
     function handleDownload(combineRows = false) {
       const tracks = [];
@@ -10812,7 +10819,7 @@ const _sfc_main$7 = {
       return downloadUrl;
     }
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "midi-download" }, _attrs))}><p>You can download a MIDI file for your swatch in two formats:</p><ul><li><a${ssrRenderAttr("href", unref(downloadLinkHref))} download="swatch.mid">Download MIDI file</a> (with each row as a separate track) </li><li><a${ssrRenderAttr("href", unref(downloadLinkHref_combined))} download="swatch.mid">Download MIDI file</a> (with all rows combined onto a single track) </li></ul></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "midi-download" }, _attrs))}><p>You can download a MIDI file for your swatch in two formats:</p><ul><li><a${ssrRenderAttr("href", unref(downloadLinkHref))}${ssrRenderAttr("download", `$swatch - {downloadFilename}.mid`)}>Download MIDI file</a> (with each row as a separate track) </li><li><a${ssrRenderAttr("href", unref(downloadLinkHref_combined))}${ssrRenderAttr("download", `swatch - ${unref(downloadFilename)}_combined.mid`)}>Download MIDI file</a> (with all rows combined onto a single track) </li></ul></div>`);
     };
   }
 };
@@ -11034,7 +11041,7 @@ _sfc_main$4.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Waveform.vue");
   return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const Notation_vue_vue_type_style_index_0_scoped_e8f44050_lang = "";
+const Notation_vue_vue_type_style_index_0_scoped_821ef629_lang = "";
 const _sfc_main$3 = {
   __name: "Notation",
   __ssrInlineRender: true,
@@ -11046,6 +11053,7 @@ const _sfc_main$3 = {
     watch(noteScale, renderChord);
     function renderChord() {
       const { notes } = Chord$1.getChord(noteScale.value, `${rootNote.value}4`);
+      console.log("notes in renderchord", notes);
       const chord = notes.reduce((acc, note) => {
         note = AbcNotation.scientificToAbcNotation(note);
         return `${acc} ${note}2`;
@@ -11056,7 +11064,7 @@ K
       chordNotes.value = Chord$1.getChord(noteScale.value, rootNote.value).notes;
     }
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "notation" }, _attrs))} data-v-e8f44050><div id="paper" data-v-e8f44050></div><p data-v-e8f44050>${ssrInterpolate(unref(chordNotes).join(", "))}</p></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "notation" }, _attrs))} data-v-821ef629><div id="paper" data-v-821ef629></div><p data-v-821ef629>${ssrInterpolate(unref(chordNotes).join(", "))}</p></div>`);
     };
   }
 };
@@ -11066,7 +11074,7 @@ _sfc_main$3.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Notation.vue");
   return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
 };
-const Notation = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-e8f44050"]]);
+const Notation = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-821ef629"]]);
 const OnWeaving_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$2 = {
   __name: "OnWeaving",

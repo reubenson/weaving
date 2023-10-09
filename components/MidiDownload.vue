@@ -3,10 +3,10 @@
     <p>You can download a MIDI file for your swatch in two formats:</p>
     <ul>
       <li>
-        <a :href="downloadLinkHref" download="swatch.mid">Download MIDI file</a> (with each row as a separate track)
+        <a :href="downloadLinkHref" :download="`$swatch - {downloadFilename}.mid`">Download MIDI file</a> (with each row as a separate track)
       </li>
       <li>
-        <a :href="downloadLinkHref_combined" download="swatch.mid">Download MIDI file</a> (with all rows combined onto a single track)
+        <a :href="downloadLinkHref_combined" :download="`swatch - ${downloadFilename}_combined.mid`">Download MIDI file</a> (with all rows combined onto a single track)
       </li>
     </ul>
   </div>
@@ -17,12 +17,15 @@
   import MidiWriter from 'midi-writer-js';
   import { useStore } from '~/store/main';
   import { useWeaveStore } from '~/store/weave-settings';
+  import { useMusicStore } from '~/store/music-settings';
   import { storeToRefs } from 'pinia';
 
   const store = useStore();
   const weaveStore = useWeaveStore();
+  const musicStore = useMusicStore();
   const { swatchNotes, swatchWeave, bpm } = storeToRefs(store);
   const { swatchWidth } = storeToRefs(weaveStore);
+  const { noteScale, rootNote } = storeToRefs(musicStore);
 
   const downloadLinkHref = computed({
     get: () => {
@@ -34,6 +37,10 @@
     get: () => {
       return handleDownload(true);
     }
+  });
+
+  const downloadFilename = computed({
+    get: () => `${rootNote?.value} - ${noteScale?.value}`
   });
 
   function handleDownload(combineRows = false) {

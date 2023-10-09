@@ -27,6 +27,8 @@
     function renderChord() {
       const { notes } = Chord.getChord(noteScale.value, `${rootNote.value}4`);
 
+      console.log('notes in renderchord', notes);
+
       const chord = notes.reduce((acc, note) => {
         note = AbcNotation.scientificToAbcNotation(note);
 
