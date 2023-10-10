@@ -10819,7 +10819,7 @@ const _sfc_main$7 = {
       return downloadUrl;
     }
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "midi-download" }, _attrs))}><p>You can download a MIDI file for your swatch in two formats:</p><ul><li><a${ssrRenderAttr("href", unref(downloadLinkHref))}${ssrRenderAttr("download", `$swatch - ${unref(downloadFilename)}.mid`)}>Download MIDI file</a> (with each row as a separate track) </li><li><a${ssrRenderAttr("href", unref(downloadLinkHref_combined))}${ssrRenderAttr("download", `swatch - ${unref(downloadFilename)}_combined.mid`)}>Download MIDI file</a> (with all rows combined onto a single track) </li></ul></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "midi-download" }, _attrs))}><p>You can download a MIDI file for your swatch in two formats:</p><ul><li><a${ssrRenderAttr("href", unref(downloadLinkHref))}${ssrRenderAttr("download", `swatch - ${unref(downloadFilename)}.mid`)}>Download MIDI file</a> (with each row as a separate track) </li><li><a${ssrRenderAttr("href", unref(downloadLinkHref_combined))}${ssrRenderAttr("download", `swatch - ${unref(downloadFilename)}_combined.mid`)}>Download MIDI file</a> (with all rows combined onto a single track) </li></ul></div>`);
     };
   }
 };

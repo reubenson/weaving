@@ -3,7 +3,7 @@
     <p>You can download a MIDI file for your swatch in two formats:</p>
     <ul>
       <li>
-        <a :href="downloadLinkHref" :download="`$swatch - ${downloadFilename}.mid`">Download MIDI file</a> (with each row as a separate track)
+        <a :href="downloadLinkHref" :download="`swatch - ${downloadFilename}.mid`">Download MIDI file</a> (with each row as a separate track)
       </li>
       <li>
         <a :href="downloadLinkHref_combined" :download="`swatch - ${downloadFilename}_combined.mid`">Download MIDI file</a> (with all rows combined onto a single track)
