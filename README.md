@@ -1,6 +1,10 @@
-# Nuxt 3 Minimal Starter
+# Weaving
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Weaving Music is an exploration of the materiality of sound through the metaphor of weaving, with the weaving loom re-imagined as a music sequencer. The seeds of this project were formed when first encountering grid notation for weaving patterns in Anni Albers' On Weaving, which gave the immediate impression of rhythmic music notation.
+
+This project is built with [Nuxt 3](https://nuxt.com/docs/getting-started/introduction) and Vue.js.
+
+Visit [https://reubenson.com/weaving/](https://reubenson.com/weaving/) to weave some music!
 
 ## Setup
 
