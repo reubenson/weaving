@@ -64,14 +64,15 @@
         </el-collapse>
       </section>
       <settings-pane :title="'MIDI Settings'" v-if="!useWebAudio">
-        <p class="setting-description">Select Output Port</p>
-          <client-only>
-            <el-select v-model="midiOutputPort">
-              <el-option
-                v-for="item in outputPorts"
-              />
-            </el-select>
+        <p class="setting-description">Select MIDI Device</p>
+        <client-only>
+          <el-select v-model="midiOutputPort">
+            <el-option
+            v-for="item in outputPorts"
+            />
+          </el-select>
         </client-only>
+        <p class="setting-description">Note: MIDI event data will be transmitted from Channel 1</p>
       </settings-pane>
       <settings-pane :title="'Time Settings'">
         <p class="settings-description">Change the BPM (beats per minute) to modify how fast we advance through the sequence controlled in <em>Music Settings</em></p>

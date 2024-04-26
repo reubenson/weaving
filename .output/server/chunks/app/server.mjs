@@ -1,39 +1,991 @@
+import { watch, reactive, version, ref, defineComponent, computed, openBlock, createElementBlock, mergeProps, unref, renderSlot, useSlots, createBlock, Transition, withCtx, withDirectives, createElementVNode, normalizeClass, resolveDynamicComponent, createCommentVNode, createTextVNode, toDisplayString, Fragment, createVNode, vShow, useAttrs as useAttrs$1, shallowRef, nextTick, toRef, withModifiers, normalizeStyle, provide, onUpdated, inject, Teleport, readonly, toHandlers, withKeys, toRefs, renderList, getCurrentInstance, watchEffect, warn, onUnmounted, cloneVNode, Text, Comment, triggerRef, toRaw, h, useSSRContext, createApp, isRef, markRaw, effectScope, isReactive, resolveComponent, resolveDirective, vModelText, createSlots, onErrorCaptured, onServerPrefetch, getCurrentScope, onScopeDispose, isReadonly, defineAsyncComponent } from 'vue';
+import { $fetch } from 'ofetch';
+import { createHooks } from 'hookable';
+import { getContext } from 'unctx';
+import { renderSSRHead } from '@unhead/ssr';
+import { getActiveHead, createServerHead as createServerHead$1 } from 'unhead';
+import { defineHeadPlugin } from '@unhead/shared';
+import { hasProtocol, parseURL, joinURL, isEqual as isEqual$1, stringifyParsedURL, stringifyQuery, parseQuery } from 'ufo';
+import { createError as createError$1, sanitizeStatusCode } from 'h3';
+import { useResizeObserver, useEventListener, isClient, isIOS, onClickOutside, tryOnScopeDispose, unrefElement } from '@vueuse/core';
+import { NOOP, isString, isObject as isObject$1, hasOwn, isFunction, toRawType, isPromise as isPromise$1, isArray } from '@vue/shared';
+import { setupDevtoolsPlugin } from 'vue-devtools-stub';
+import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderSuspense, ssrRenderVNode, ssrRenderStyle, ssrRenderList, ssrRenderClass, ssrRenderSlot, ssrRenderAttr } from 'vue/server-renderer';
+import { isNil, fromPairs, isUndefined as isUndefined$1, castArray, isEqual, get, debounce } from 'lodash-unified';
+import { TinyColor } from '@ctrl/tinycolor';
+import { placements, createPopper } from '@popperjs/core';
+import _ from 'lodash';
+import { Scale, Note, Chord as Chord$1, AbcNotation, Midi } from 'tonal';
+import require$$1 from 'lerp';
+import mtof from 'mtof';
+import * as Chord from 'tonal-chord';
+import MidiWriter from 'midi-writer-js';
+import abcjs from 'abcjs';
+import { a as useRuntimeConfig$1 } from '../nitro/node-server.mjs';
+import 'node-fetch-native/polyfill';
+import 'node:http';
+import 'node:https';
+import 'destr';
+import 'unenv/runtime/fetch/index';
+import 'scule';
+import 'defu';
+import 'ohash';
+import 'unstorage';
+import 'radix3';
+import 'node:fs';
+import 'node:url';
+import 'pathe';
+
+/*!
+ * vuex v4.0.2
+ * (c) 2021 Evan You
+ * @license MIT
+ */
+
+var storeKey = 'store';
+
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function partial (fn, arg) {
+  return function () {
+    return fn(arg)
+  }
+}
+
+function genericSubscribe (fn, subs, options) {
+  if (subs.indexOf(fn) < 0) {
+    options && options.prepend
+      ? subs.unshift(fn)
+      : subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+}
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset state
+  resetStoreState(store, state, hot);
+}
+
+function resetStoreState (store, state, hot) {
+  var oldState = store._state;
+
+  // bind store public getters
+  store.getters = {};
+  // reset local getters cache
+  store._makeLocalGettersCache = Object.create(null);
+  var wrappedGetters = store._wrappedGetters;
+  var computedObj = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    // direct inline function use will lead to closure preserving oldState.
+    // using partial to return function with only arguments preserved in closure environment.
+    computedObj[key] = partial(fn, store);
+    Object.defineProperty(store.getters, key, {
+      // TODO: use `computed` when it's possible. at the moment we can't due to
+      // https://github.com/vuejs/vuex/pull/1883
+      get: function () { return computedObj[key](); },
+      enumerable: true // for local getters
+    });
+  });
+
+  store._state = reactive({
+    data: state
+  });
+
+  // enable strict mode for new state
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldState) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldState.data = null;
+      });
+    }
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    if (store._modulesNamespaceMap[namespace] && ("production" !== 'production')) {
+      console.error(("[vuex] duplicate namespace " + namespace + " for the namespaced module " + (path.join('/'))));
+    }
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      parentState[moduleName] = module.state;
+    });
+  }
+
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var type = action.root ? key : namespace + key;
+    var handler = action.handler || action;
+    registerAction(store, type, handler, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by state update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  if (!store._makeLocalGettersCache[namespace]) {
+    var gettersProxy = {};
+    var splitPos = namespace.length;
+    Object.keys(store.getters).forEach(function (type) {
+      // skip if the target getter is not match this namespace
+      if (type.slice(0, splitPos) !== namespace) { return }
+
+      // extract local getter type
+      var localType = type.slice(splitPos);
+
+      // Add a port to the getters proxy.
+      // Define as getter property because
+      // we do not want to evaluate the getters in this time.
+      Object.defineProperty(gettersProxy, localType, {
+        get: function () { return store.getters[type]; },
+        enumerable: true
+      });
+    });
+    store._makeLocalGettersCache[namespace] = gettersProxy;
+  }
+
+  return store._makeLocalGettersCache[namespace]
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler.call(store, local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload) {
+    var res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  watch(function () { return store._state.data; }, function () {
+  }, { deep: true, flush: 'sync' });
+}
+
+function getNestedState (state, path) {
+  return path.reduce(function (state, key) { return state[key]; }, state)
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  return { type: type, payload: payload, options: options }
+}
+
+var LABEL_VUEX_BINDINGS = 'vuex bindings';
+var MUTATIONS_LAYER_ID = 'vuex:mutations';
+var ACTIONS_LAYER_ID = 'vuex:actions';
+var INSPECTOR_ID = 'vuex';
+
+var actionId = 0;
+
+function addDevtools (app, store) {
+  setupDevtoolsPlugin(
+    {
+      id: 'org.vuejs.vuex',
+      app: app,
+      label: 'Vuex',
+      homepage: 'https://next.vuex.vuejs.org/',
+      logo: 'https://vuejs.org/images/icons/favicon-96x96.png',
+      packageName: 'vuex',
+      componentStateTypes: [LABEL_VUEX_BINDINGS]
+    },
+    function (api) {
+      api.addTimelineLayer({
+        id: MUTATIONS_LAYER_ID,
+        label: 'Vuex Mutations',
+        color: COLOR_LIME_500
+      });
+
+      api.addTimelineLayer({
+        id: ACTIONS_LAYER_ID,
+        label: 'Vuex Actions',
+        color: COLOR_LIME_500
+      });
+
+      api.addInspector({
+        id: INSPECTOR_ID,
+        label: 'Vuex',
+        icon: 'storage',
+        treeFilterPlaceholder: 'Filter stores...'
+      });
+
+      api.on.getInspectorTree(function (payload) {
+        if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
+          if (payload.filter) {
+            var nodes = [];
+            flattenStoreForInspectorTree(nodes, store._modules.root, payload.filter, '');
+            payload.rootNodes = nodes;
+          } else {
+            payload.rootNodes = [
+              formatStoreForInspectorTree(store._modules.root, '')
+            ];
+          }
+        }
+      });
+
+      api.on.getInspectorState(function (payload) {
+        if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
+          var modulePath = payload.nodeId;
+          makeLocalGetters(store, modulePath);
+          payload.state = formatStoreForInspectorState(
+            getStoreModule(store._modules, modulePath),
+            modulePath === 'root' ? store.getters : store._makeLocalGettersCache,
+            modulePath
+          );
+        }
+      });
+
+      api.on.editInspectorState(function (payload) {
+        if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
+          var modulePath = payload.nodeId;
+          var path = payload.path;
+          if (modulePath !== 'root') {
+            path = modulePath.split('/').filter(Boolean).concat( path);
+          }
+          store._withCommit(function () {
+            payload.set(store._state.data, path, payload.state.value);
+          });
+        }
+      });
+
+      store.subscribe(function (mutation, state) {
+        var data = {};
+
+        if (mutation.payload) {
+          data.payload = mutation.payload;
+        }
+
+        data.state = state;
+
+        api.notifyComponentUpdate();
+        api.sendInspectorTree(INSPECTOR_ID);
+        api.sendInspectorState(INSPECTOR_ID);
+
+        api.addTimelineEvent({
+          layerId: MUTATIONS_LAYER_ID,
+          event: {
+            time: Date.now(),
+            title: mutation.type,
+            data: data
+          }
+        });
+      });
+
+      store.subscribeAction({
+        before: function (action, state) {
+          var data = {};
+          if (action.payload) {
+            data.payload = action.payload;
+          }
+          action._id = actionId++;
+          action._time = Date.now();
+          data.state = state;
+
+          api.addTimelineEvent({
+            layerId: ACTIONS_LAYER_ID,
+            event: {
+              time: action._time,
+              title: action.type,
+              groupId: action._id,
+              subtitle: 'start',
+              data: data
+            }
+          });
+        },
+        after: function (action, state) {
+          var data = {};
+          var duration = Date.now() - action._time;
+          data.duration = {
+            _custom: {
+              type: 'duration',
+              display: (duration + "ms"),
+              tooltip: 'Action duration',
+              value: duration
+            }
+          };
+          if (action.payload) {
+            data.payload = action.payload;
+          }
+          data.state = state;
+
+          api.addTimelineEvent({
+            layerId: ACTIONS_LAYER_ID,
+            event: {
+              time: Date.now(),
+              title: action.type,
+              groupId: action._id,
+              subtitle: 'end',
+              data: data
+            }
+          });
+        }
+      });
+    }
+  );
+}
+
+// extracted from tailwind palette
+var COLOR_LIME_500 = 0x84cc16;
+var COLOR_DARK = 0x666666;
+var COLOR_WHITE = 0xffffff;
+
+var TAG_NAMESPACED = {
+  label: 'namespaced',
+  textColor: COLOR_WHITE,
+  backgroundColor: COLOR_DARK
+};
+
+/**
+ * @param {string} path
+ */
+function extractNameFromPath (path) {
+  return path && path !== 'root' ? path.split('/').slice(-2, -1)[0] : 'Root'
+}
+
+/**
+ * @param {*} module
+ * @return {import('@vue/devtools-api').CustomInspectorNode}
+ */
+function formatStoreForInspectorTree (module, path) {
+  return {
+    id: path || 'root',
+    // all modules end with a `/`, we want the last segment only
+    // cart/ -> cart
+    // nested/cart/ -> cart
+    label: extractNameFromPath(path),
+    tags: module.namespaced ? [TAG_NAMESPACED] : [],
+    children: Object.keys(module._children).map(function (moduleName) { return formatStoreForInspectorTree(
+        module._children[moduleName],
+        path + moduleName + '/'
+      ); }
+    )
+  }
+}
+
+/**
+ * @param {import('@vue/devtools-api').CustomInspectorNode[]} result
+ * @param {*} module
+ * @param {string} filter
+ * @param {string} path
+ */
+function flattenStoreForInspectorTree (result, module, filter, path) {
+  if (path.includes(filter)) {
+    result.push({
+      id: path || 'root',
+      label: path.endsWith('/') ? path.slice(0, path.length - 1) : path || 'Root',
+      tags: module.namespaced ? [TAG_NAMESPACED] : []
+    });
+  }
+  Object.keys(module._children).forEach(function (moduleName) {
+    flattenStoreForInspectorTree(result, module._children[moduleName], filter, path + moduleName + '/');
+  });
+}
+
+/**
+ * @param {*} module
+ * @return {import('@vue/devtools-api').CustomInspectorState}
+ */
+function formatStoreForInspectorState (module, getters, path) {
+  getters = path === 'root' ? getters : getters[path];
+  var gettersKeys = Object.keys(getters);
+  var storeState = {
+    state: Object.keys(module.state).map(function (key) { return ({
+      key: key,
+      editable: true,
+      value: module.state[key]
+    }); })
+  };
+
+  if (gettersKeys.length) {
+    var tree = transformPathsToObjectTree(getters);
+    storeState.getters = Object.keys(tree).map(function (key) { return ({
+      key: key.endsWith('/') ? extractNameFromPath(key) : key,
+      editable: false,
+      value: canThrow(function () { return tree[key]; })
+    }); });
+  }
+
+  return storeState
+}
+
+function transformPathsToObjectTree (getters) {
+  var result = {};
+  Object.keys(getters).forEach(function (key) {
+    var path = key.split('/');
+    if (path.length > 1) {
+      var target = result;
+      var leafKey = path.pop();
+      path.forEach(function (p) {
+        if (!target[p]) {
+          target[p] = {
+            _custom: {
+              value: {},
+              display: p,
+              tooltip: 'Module',
+              abstract: true
+            }
+          };
+        }
+        target = target[p]._custom.value;
+      });
+      target[leafKey] = canThrow(function () { return getters[key]; });
+    } else {
+      result[key] = canThrow(function () { return getters[key]; });
+    }
+  });
+  return result
+}
+
+function getStoreModule (moduleMap, path) {
+  var names = path.split('/').filter(function (n) { return n; });
+  return names.reduce(
+    function (module, moduleName, i) {
+      var child = module[moduleName];
+      if (!child) {
+        throw new Error(("Missing module \"" + moduleName + "\" for path \"" + path + "\"."))
+      }
+      return i === names.length - 1 ? child : child._children
+    },
+    path === 'root' ? moduleMap : moduleMap.root._children
+  )
+}
+
+function canThrow (cb) {
+  try {
+    return cb()
+  } catch (e) {
+    return e
+  }
+}
+
+// Base data struct for store's module, package with some attribute and method
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  // Store some children item
+  this._children = Object.create(null);
+  // Store the origin module object which passed by programmer
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+
+  // Store the origin module's state
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors$1 = { namespaced: { configurable: true } };
+
+prototypeAccessors$1.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.hasChild = function hasChild (key) {
+  return key in this._children
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors$1 );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  // register root module (Vuex.Store options)
+  this.register([], rawRootModule, false);
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update([], this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  var newModule = new Module(rawModule, runtime);
+  if (path.length === 0) {
+    this.root = newModule;
+  } else {
+    var parent = this.get(path.slice(0, -1));
+    parent.addChild(path[path.length - 1], newModule);
+  }
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  var child = parent.getChild(key);
+
+  if (!child) {
+    return
+  }
+
+  if (!child.runtime) {
+    return
+  }
+
+  parent.removeChild(key);
+};
+
+ModuleCollection.prototype.isRegistered = function isRegistered (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+
+  if (parent) {
+    return parent.hasChild(key)
+  }
+
+  return false
+};
+
+function update (path, targetModule, newModule) {
+
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        return
+      }
+      update(
+        path.concat(key),
+        targetModule.getChild(key),
+        newModule.modules[key]
+      );
+    }
+  }
+}
+
+function createStore (options) {
+  return new Store(options)
+}
+
+var Store = function Store (options) {
+  var this$1$1 = this;
+  if ( options === void 0 ) options = {};
+
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+  var devtools = options.devtools;
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._actionSubscribers = [];
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._makeLocalGettersCache = Object.create(null);
+  this._devtools = devtools;
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  var state = this._modules.root.state;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store state, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreState(this, state);
+
+  // apply plugins
+  plugins.forEach(function (plugin) { return plugin(this$1$1); });
+};
+
+var prototypeAccessors = { state: { configurable: true } };
+
+Store.prototype.install = function install (app, injectKey) {
+  app.provide(injectKey || storeKey, this);
+  app.config.globalProperties.$store = this;
+
+  var useDevtools = this._devtools !== undefined
+    ? this._devtools
+    : false;
+
+  if (useDevtools) {
+    addDevtools(app, this);
+  }
+};
+
+prototypeAccessors.state.get = function () {
+  return this._state.data
+};
+
+prototypeAccessors.state.set = function (v) {
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+
+  this._subscribers
+    .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+    .forEach(function (sub) { return sub(mutation, this$1$1.state); });
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+    var this$1$1 = this;
+
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var action = { type: type, payload: payload };
+  var entry = this._actions[type];
+  if (!entry) {
+    return
+  }
+
+  try {
+    this._actionSubscribers
+      .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+      .filter(function (sub) { return sub.before; })
+      .forEach(function (sub) { return sub.before(action, this$1$1.state); });
+  } catch (e) {
+  }
+
+  var result = entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload);
+
+  return new Promise(function (resolve, reject) {
+    result.then(function (res) {
+      try {
+        this$1$1._actionSubscribers
+          .filter(function (sub) { return sub.after; })
+          .forEach(function (sub) { return sub.after(action, this$1$1.state); });
+      } catch (e) {
+      }
+      resolve(res);
+    }, function (error) {
+      try {
+        this$1$1._actionSubscribers
+          .filter(function (sub) { return sub.error; })
+          .forEach(function (sub) { return sub.error(action, this$1$1.state, error); });
+      } catch (e) {
+      }
+      reject(error);
+    });
+  })
+};
+
+Store.prototype.subscribe = function subscribe (fn, options) {
+  return genericSubscribe(fn, this._subscribers, options)
+};
+
+Store.prototype.subscribeAction = function subscribeAction (fn, options) {
+  var subs = typeof fn === 'function' ? { before: fn } : fn;
+  return genericSubscribe(subs, this._actionSubscribers, options)
+};
+
+Store.prototype.watch = function watch$1 (getter, cb, options) {
+    var this$1$1 = this;
+  return watch(function () { return getter(this$1$1.state, this$1$1.getters); }, cb, Object.assign({}, options))
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1$1 = this;
+
+  this._withCommit(function () {
+    this$1$1._state.data = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule, options) {
+    if ( options === void 0 ) options = {};
+
+  if (typeof path === 'string') { path = [path]; }
+
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
+  // reset store to update getters...
+  resetStoreState(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1$1.state, path.slice(0, -1));
+    delete parentState[path[path.length - 1]];
+  });
+  resetStore(this);
+};
+
+Store.prototype.hasModule = function hasModule (path) {
+  if (typeof path === 'string') { path = [path]; }
+
+  return this._modules.isRegistered(path)
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors );
+
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-import { reactive, getCurrentInstance, effectScope, ref, markRaw, toRaw, watch, unref, isRef, isReactive, toRef, inject, nextTick, computed, getCurrentScope, onScopeDispose, toRefs, version, watchEffect, h, isReadonly, openBlock, createElementBlock, createElementVNode, warn, shallowRef, provide, defineComponent, mergeProps, renderSlot, useSlots, createBlock, Transition, withCtx, withDirectives, normalizeClass, resolveDynamicComponent, createCommentVNode, createTextVNode, toDisplayString, Fragment, createVNode, vShow, onUnmounted, useAttrs as useAttrs$1, withModifiers, normalizeStyle, onUpdated, cloneVNode, Text, Comment, Teleport, readonly, toHandlers, withKeys, triggerRef, resolveComponent, resolveDirective, renderList, vModelText, createSlots, useSSRContext, onErrorCaptured, onServerPrefetch, defineAsyncComponent, createApp } from "vue";
-import { $fetch } from "ofetch";
-import { useRuntimeConfig as useRuntimeConfig$1 } from "#internal/nitro";
-import { createHooks } from "hookable";
-import { getContext } from "unctx";
-import { setupDevtoolsPlugin } from "@vue/devtools-api";
-import "destr";
-import "devalue";
-import "klona";
-import { renderSSRHead } from "@unhead/ssr";
-import { createServerHead as createServerHead$1, getActiveHead } from "unhead";
-import { defineHeadPlugin } from "@unhead/shared";
-import { hasProtocol, parseURL, joinURL, isEqual, stringifyParsedURL, stringifyQuery, parseQuery } from "ufo";
-import { sanitizeStatusCode, createError as createError$1 } from "h3";
-import { isClient, tryOnScopeDispose, useResizeObserver, useEventListener, unrefElement, onClickOutside, isIOS } from "@vueuse/core";
-import { isString, isObject, hasOwn, NOOP, isFunction, isArray, toRawType, isPromise } from "@vue/shared";
-import { createStore } from "vuex";
-import { ssrRenderAttrs, ssrRenderComponent, ssrRenderAttr, ssrRenderStyle, ssrRenderList, ssrRenderClass, ssrInterpolate, ssrRenderSlot, ssrRenderSuspense, ssrRenderVNode } from "vue/server-renderer";
-import { fromPairs, get, isNil, isUndefined as isUndefined$1, castArray, isEqual as isEqual$1, debounce } from "lodash-unified";
-import { TinyColor } from "@ctrl/tinycolor";
-import { createPopper, placements } from "@popperjs/core";
-import _ from "lodash";
-import { Scale, Note, Midi, Chord as Chord$1, AbcNotation } from "tonal";
-import require$$1 from "lerp";
-import mtof from "mtof";
-import * as Chord from "tonal-chord";
-import MidiWriter from "midi-writer-js";
-import "uplot";
-import abcjs from "abcjs";
-import "hotkeys-js";
 const appConfig = useRuntimeConfig$1().app;
 const baseURL = () => appConfig.baseURL;
 const nuxtAppCtx = /* @__PURE__ */ getContext("nuxt-app");
@@ -221,22 +1173,6 @@ function useRuntimeConfig() {
 function defineGetter(obj, key, val) {
   Object.defineProperty(obj, key, { get: () => val });
 }
-function set(target, key, val) {
-  if (Array.isArray(target)) {
-    target.length = Math.max(target.length, key);
-    target.splice(key, 1, val);
-    return val;
-  }
-  target[key] = val;
-  return val;
-}
-function del(target, key) {
-  if (Array.isArray(target)) {
-    target.splice(key, 1);
-    return;
-  }
-  delete target[key];
-}
 const isVue2 = false;
 /*!
   * pinia v2.0.35
@@ -245,7 +1181,7 @@ const isVue2 = false;
   */
 let activePinia;
 const setActivePinia = (pinia) => activePinia = pinia;
-const piniaSymbol = process.env.NODE_ENV !== "production" ? Symbol("pinia") : (
+const piniaSymbol = (
   /* istanbul ignore next */
   Symbol()
 );
@@ -258,617 +1194,6 @@ var MutationType;
   MutationType2["patchObject"] = "patch object";
   MutationType2["patchFunction"] = "patch function";
 })(MutationType || (MutationType = {}));
-const IS_CLIENT = false;
-const USE_DEVTOOLS = (process.env.NODE_ENV !== "production" || false) && !(process.env.NODE_ENV === "test") && IS_CLIENT;
-const saveAs = () => {
-};
-function toastMessage(message, type) {
-  const piniaMessage = "🍍 " + message;
-  if (typeof __VUE_DEVTOOLS_TOAST__ === "function") {
-    __VUE_DEVTOOLS_TOAST__(piniaMessage, type);
-  } else if (type === "error") {
-    console.error(piniaMessage);
-  } else if (type === "warn") {
-    console.warn(piniaMessage);
-  } else {
-    console.log(piniaMessage);
-  }
-}
-function isPinia(o) {
-  return "_a" in o && "install" in o;
-}
-function checkClipboardAccess() {
-  if (!("clipboard" in navigator)) {
-    toastMessage(`Your browser doesn't support the Clipboard API`, "error");
-    return true;
-  }
-}
-function checkNotFocusedError(error) {
-  if (error instanceof Error && error.message.toLowerCase().includes("document is not focused")) {
-    toastMessage('You need to activate the "Emulate a focused page" setting in the "Rendering" panel of devtools.', "warn");
-    return true;
-  }
-  return false;
-}
-async function actionGlobalCopyState(pinia) {
-  if (checkClipboardAccess())
-    return;
-  try {
-    await navigator.clipboard.writeText(JSON.stringify(pinia.state.value));
-    toastMessage("Global state copied to clipboard.");
-  } catch (error) {
-    if (checkNotFocusedError(error))
-      return;
-    toastMessage(`Failed to serialize the state. Check the console for more details.`, "error");
-    console.error(error);
-  }
-}
-async function actionGlobalPasteState(pinia) {
-  if (checkClipboardAccess())
-    return;
-  try {
-    pinia.state.value = JSON.parse(await navigator.clipboard.readText());
-    toastMessage("Global state pasted from clipboard.");
-  } catch (error) {
-    if (checkNotFocusedError(error))
-      return;
-    toastMessage(`Failed to deserialize the state from clipboard. Check the console for more details.`, "error");
-    console.error(error);
-  }
-}
-async function actionGlobalSaveState(pinia) {
-  try {
-    saveAs(new Blob([JSON.stringify(pinia.state.value)], {
-      type: "text/plain;charset=utf-8"
-    }), "pinia-state.json");
-  } catch (error) {
-    toastMessage(`Failed to export the state as JSON. Check the console for more details.`, "error");
-    console.error(error);
-  }
-}
-let fileInput;
-function getFileOpener() {
-  if (!fileInput) {
-    fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = ".json";
-  }
-  function openFile() {
-    return new Promise((resolve, reject) => {
-      fileInput.onchange = async () => {
-        const files = fileInput.files;
-        if (!files)
-          return resolve(null);
-        const file = files.item(0);
-        if (!file)
-          return resolve(null);
-        return resolve({ text: await file.text(), file });
-      };
-      fileInput.oncancel = () => resolve(null);
-      fileInput.onerror = reject;
-      fileInput.click();
-    });
-  }
-  return openFile;
-}
-async function actionGlobalOpenStateFile(pinia) {
-  try {
-    const open = await getFileOpener();
-    const result = await open();
-    if (!result)
-      return;
-    const { text, file } = result;
-    pinia.state.value = JSON.parse(text);
-    toastMessage(`Global state imported from "${file.name}".`);
-  } catch (error) {
-    toastMessage(`Failed to export the state as JSON. Check the console for more details.`, "error");
-    console.error(error);
-  }
-}
-function formatDisplay(display) {
-  return {
-    _custom: {
-      display
-    }
-  };
-}
-const PINIA_ROOT_LABEL = "🍍 Pinia (root)";
-const PINIA_ROOT_ID = "_root";
-function formatStoreForInspectorTree(store2) {
-  return isPinia(store2) ? {
-    id: PINIA_ROOT_ID,
-    label: PINIA_ROOT_LABEL
-  } : {
-    id: store2.$id,
-    label: store2.$id
-  };
-}
-function formatStoreForInspectorState(store2) {
-  if (isPinia(store2)) {
-    const storeNames = Array.from(store2._s.keys());
-    const storeMap = store2._s;
-    const state2 = {
-      state: storeNames.map((storeId) => ({
-        editable: true,
-        key: storeId,
-        value: store2.state.value[storeId]
-      })),
-      getters: storeNames.filter((id) => storeMap.get(id)._getters).map((id) => {
-        const store3 = storeMap.get(id);
-        return {
-          editable: false,
-          key: id,
-          value: store3._getters.reduce((getters, key) => {
-            getters[key] = store3[key];
-            return getters;
-          }, {})
-        };
-      })
-    };
-    return state2;
-  }
-  const state = {
-    state: Object.keys(store2.$state).map((key) => ({
-      editable: true,
-      key,
-      value: store2.$state[key]
-    }))
-  };
-  if (store2._getters && store2._getters.length) {
-    state.getters = store2._getters.map((getterName) => ({
-      editable: false,
-      key: getterName,
-      value: store2[getterName]
-    }));
-  }
-  if (store2._customProperties.size) {
-    state.customProperties = Array.from(store2._customProperties).map((key) => ({
-      editable: true,
-      key,
-      value: store2[key]
-    }));
-  }
-  return state;
-}
-function formatEventData(events) {
-  if (!events)
-    return {};
-  if (Array.isArray(events)) {
-    return events.reduce((data, event) => {
-      data.keys.push(event.key);
-      data.operations.push(event.type);
-      data.oldValue[event.key] = event.oldValue;
-      data.newValue[event.key] = event.newValue;
-      return data;
-    }, {
-      oldValue: {},
-      keys: [],
-      operations: [],
-      newValue: {}
-    });
-  } else {
-    return {
-      operation: formatDisplay(events.type),
-      key: formatDisplay(events.key),
-      oldValue: events.oldValue,
-      newValue: events.newValue
-    };
-  }
-}
-function formatMutationType(type) {
-  switch (type) {
-    case MutationType.direct:
-      return "mutation";
-    case MutationType.patchFunction:
-      return "$patch";
-    case MutationType.patchObject:
-      return "$patch";
-    default:
-      return "unknown";
-  }
-}
-let isTimelineActive = true;
-const componentStateTypes = [];
-const MUTATIONS_LAYER_ID = "pinia:mutations";
-const INSPECTOR_ID = "pinia";
-const { assign: assign$1 } = Object;
-const getStoreType = (id) => "🍍 " + id;
-function registerPiniaDevtools(app, pinia) {
-  setupDevtoolsPlugin({
-    id: "dev.esm.pinia",
-    label: "Pinia 🍍",
-    logo: "https://pinia.vuejs.org/logo.svg",
-    packageName: "pinia",
-    homepage: "https://pinia.vuejs.org",
-    componentStateTypes,
-    app
-  }, (api) => {
-    if (typeof api.now !== "function") {
-      toastMessage("You seem to be using an outdated version of Vue Devtools. Are you still using the Beta release instead of the stable one? You can find the links at https://devtools.vuejs.org/guide/installation.html.");
-    }
-    api.addTimelineLayer({
-      id: MUTATIONS_LAYER_ID,
-      label: `Pinia 🍍`,
-      color: 15064968
-    });
-    api.addInspector({
-      id: INSPECTOR_ID,
-      label: "Pinia 🍍",
-      icon: "storage",
-      treeFilterPlaceholder: "Search stores",
-      actions: [
-        {
-          icon: "content_copy",
-          action: () => {
-            actionGlobalCopyState(pinia);
-          },
-          tooltip: "Serialize and copy the state"
-        },
-        {
-          icon: "content_paste",
-          action: async () => {
-            await actionGlobalPasteState(pinia);
-            api.sendInspectorTree(INSPECTOR_ID);
-            api.sendInspectorState(INSPECTOR_ID);
-          },
-          tooltip: "Replace the state with the content of your clipboard"
-        },
-        {
-          icon: "save",
-          action: () => {
-            actionGlobalSaveState(pinia);
-          },
-          tooltip: "Save the state as a JSON file"
-        },
-        {
-          icon: "folder_open",
-          action: async () => {
-            await actionGlobalOpenStateFile(pinia);
-            api.sendInspectorTree(INSPECTOR_ID);
-            api.sendInspectorState(INSPECTOR_ID);
-          },
-          tooltip: "Import the state from a JSON file"
-        }
-      ],
-      nodeActions: [
-        {
-          icon: "restore",
-          tooltip: "Reset the state (option store only)",
-          action: (nodeId) => {
-            const store2 = pinia._s.get(nodeId);
-            if (!store2) {
-              toastMessage(`Cannot reset "${nodeId}" store because it wasn't found.`, "warn");
-            } else if (!store2._isOptionsAPI) {
-              toastMessage(`Cannot reset "${nodeId}" store because it's a setup store.`, "warn");
-            } else {
-              store2.$reset();
-              toastMessage(`Store "${nodeId}" reset.`);
-            }
-          }
-        }
-      ]
-    });
-    api.on.inspectComponent((payload, ctx) => {
-      const proxy = payload.componentInstance && payload.componentInstance.proxy;
-      if (proxy && proxy._pStores) {
-        const piniaStores = payload.componentInstance.proxy._pStores;
-        Object.values(piniaStores).forEach((store2) => {
-          payload.instanceData.state.push({
-            type: getStoreType(store2.$id),
-            key: "state",
-            editable: true,
-            value: store2._isOptionsAPI ? {
-              _custom: {
-                value: toRaw(store2.$state),
-                actions: [
-                  {
-                    icon: "restore",
-                    tooltip: "Reset the state of this store",
-                    action: () => store2.$reset()
-                  }
-                ]
-              }
-            } : (
-              // NOTE: workaround to unwrap transferred refs
-              Object.keys(store2.$state).reduce((state, key) => {
-                state[key] = store2.$state[key];
-                return state;
-              }, {})
-            )
-          });
-          if (store2._getters && store2._getters.length) {
-            payload.instanceData.state.push({
-              type: getStoreType(store2.$id),
-              key: "getters",
-              editable: false,
-              value: store2._getters.reduce((getters, key) => {
-                try {
-                  getters[key] = store2[key];
-                } catch (error) {
-                  getters[key] = error;
-                }
-                return getters;
-              }, {})
-            });
-          }
-        });
-      }
-    });
-    api.on.getInspectorTree((payload) => {
-      if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
-        let stores = [pinia];
-        stores = stores.concat(Array.from(pinia._s.values()));
-        payload.rootNodes = (payload.filter ? stores.filter((store2) => "$id" in store2 ? store2.$id.toLowerCase().includes(payload.filter.toLowerCase()) : PINIA_ROOT_LABEL.toLowerCase().includes(payload.filter.toLowerCase())) : stores).map(formatStoreForInspectorTree);
-      }
-    });
-    api.on.getInspectorState((payload) => {
-      if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
-        const inspectedStore = payload.nodeId === PINIA_ROOT_ID ? pinia : pinia._s.get(payload.nodeId);
-        if (!inspectedStore) {
-          return;
-        }
-        if (inspectedStore) {
-          payload.state = formatStoreForInspectorState(inspectedStore);
-        }
-      }
-    });
-    api.on.editInspectorState((payload, ctx) => {
-      if (payload.app === app && payload.inspectorId === INSPECTOR_ID) {
-        const inspectedStore = payload.nodeId === PINIA_ROOT_ID ? pinia : pinia._s.get(payload.nodeId);
-        if (!inspectedStore) {
-          return toastMessage(`store "${payload.nodeId}" not found`, "error");
-        }
-        const { path } = payload;
-        if (!isPinia(inspectedStore)) {
-          if (path.length !== 1 || !inspectedStore._customProperties.has(path[0]) || path[0] in inspectedStore.$state) {
-            path.unshift("$state");
-          }
-        } else {
-          path.unshift("state");
-        }
-        isTimelineActive = false;
-        payload.set(inspectedStore, path, payload.state.value);
-        isTimelineActive = true;
-      }
-    });
-    api.on.editComponentState((payload) => {
-      if (payload.type.startsWith("🍍")) {
-        const storeId = payload.type.replace(/^🍍\s*/, "");
-        const store2 = pinia._s.get(storeId);
-        if (!store2) {
-          return toastMessage(`store "${storeId}" not found`, "error");
-        }
-        const { path } = payload;
-        if (path[0] !== "state") {
-          return toastMessage(`Invalid path for store "${storeId}":
-${path}
-Only state can be modified.`);
-        }
-        path[0] = "$state";
-        isTimelineActive = false;
-        payload.set(store2, path, payload.state.value);
-        isTimelineActive = true;
-      }
-    });
-  });
-}
-function addStoreToDevtools(app, store2) {
-  if (!componentStateTypes.includes(getStoreType(store2.$id))) {
-    componentStateTypes.push(getStoreType(store2.$id));
-  }
-  setupDevtoolsPlugin({
-    id: "dev.esm.pinia",
-    label: "Pinia 🍍",
-    logo: "https://pinia.vuejs.org/logo.svg",
-    packageName: "pinia",
-    homepage: "https://pinia.vuejs.org",
-    componentStateTypes,
-    app,
-    settings: {
-      logStoreChanges: {
-        label: "Notify about new/deleted stores",
-        type: "boolean",
-        defaultValue: true
-      }
-      // useEmojis: {
-      //   label: 'Use emojis in messages ⚡️',
-      //   type: 'boolean',
-      //   defaultValue: true,
-      // },
-    }
-  }, (api) => {
-    const now = typeof api.now === "function" ? api.now.bind(api) : Date.now;
-    store2.$onAction(({ after, onError, name, args }) => {
-      const groupId = runningActionId++;
-      api.addTimelineEvent({
-        layerId: MUTATIONS_LAYER_ID,
-        event: {
-          time: now(),
-          title: "🛫 " + name,
-          subtitle: "start",
-          data: {
-            store: formatDisplay(store2.$id),
-            action: formatDisplay(name),
-            args
-          },
-          groupId
-        }
-      });
-      after((result) => {
-        activeAction = void 0;
-        api.addTimelineEvent({
-          layerId: MUTATIONS_LAYER_ID,
-          event: {
-            time: now(),
-            title: "🛬 " + name,
-            subtitle: "end",
-            data: {
-              store: formatDisplay(store2.$id),
-              action: formatDisplay(name),
-              args,
-              result
-            },
-            groupId
-          }
-        });
-      });
-      onError((error) => {
-        activeAction = void 0;
-        api.addTimelineEvent({
-          layerId: MUTATIONS_LAYER_ID,
-          event: {
-            time: now(),
-            logType: "error",
-            title: "💥 " + name,
-            subtitle: "end",
-            data: {
-              store: formatDisplay(store2.$id),
-              action: formatDisplay(name),
-              args,
-              error
-            },
-            groupId
-          }
-        });
-      });
-    }, true);
-    store2._customProperties.forEach((name) => {
-      watch(() => unref(store2[name]), (newValue, oldValue) => {
-        api.notifyComponentUpdate();
-        api.sendInspectorState(INSPECTOR_ID);
-        if (isTimelineActive) {
-          api.addTimelineEvent({
-            layerId: MUTATIONS_LAYER_ID,
-            event: {
-              time: now(),
-              title: "Change",
-              subtitle: name,
-              data: {
-                newValue,
-                oldValue
-              },
-              groupId: activeAction
-            }
-          });
-        }
-      }, { deep: true });
-    });
-    store2.$subscribe(({ events, type }, state) => {
-      api.notifyComponentUpdate();
-      api.sendInspectorState(INSPECTOR_ID);
-      if (!isTimelineActive)
-        return;
-      const eventData = {
-        time: now(),
-        title: formatMutationType(type),
-        data: assign$1({ store: formatDisplay(store2.$id) }, formatEventData(events)),
-        groupId: activeAction
-      };
-      activeAction = void 0;
-      if (type === MutationType.patchFunction) {
-        eventData.subtitle = "⤵️";
-      } else if (type === MutationType.patchObject) {
-        eventData.subtitle = "🧩";
-      } else if (events && !Array.isArray(events)) {
-        eventData.subtitle = events.type;
-      }
-      if (events) {
-        eventData.data["rawEvent(s)"] = {
-          _custom: {
-            display: "DebuggerEvent",
-            type: "object",
-            tooltip: "raw DebuggerEvent[]",
-            value: events
-          }
-        };
-      }
-      api.addTimelineEvent({
-        layerId: MUTATIONS_LAYER_ID,
-        event: eventData
-      });
-    }, { detached: true, flush: "sync" });
-    const hotUpdate = store2._hotUpdate;
-    store2._hotUpdate = markRaw((newStore) => {
-      hotUpdate(newStore);
-      api.addTimelineEvent({
-        layerId: MUTATIONS_LAYER_ID,
-        event: {
-          time: now(),
-          title: "🔥 " + store2.$id,
-          subtitle: "HMR update",
-          data: {
-            store: formatDisplay(store2.$id),
-            info: formatDisplay(`HMR update`)
-          }
-        }
-      });
-      api.notifyComponentUpdate();
-      api.sendInspectorTree(INSPECTOR_ID);
-      api.sendInspectorState(INSPECTOR_ID);
-    });
-    const { $dispose } = store2;
-    store2.$dispose = () => {
-      $dispose();
-      api.notifyComponentUpdate();
-      api.sendInspectorTree(INSPECTOR_ID);
-      api.sendInspectorState(INSPECTOR_ID);
-      api.getSettings().logStoreChanges && toastMessage(`Disposed "${store2.$id}" store 🗑`);
-    };
-    api.notifyComponentUpdate();
-    api.sendInspectorTree(INSPECTOR_ID);
-    api.sendInspectorState(INSPECTOR_ID);
-    api.getSettings().logStoreChanges && toastMessage(`"${store2.$id}" store installed 🆕`);
-  });
-}
-let runningActionId = 0;
-let activeAction;
-function patchActionForGrouping(store2, actionNames) {
-  const actions = actionNames.reduce((storeActions, actionName) => {
-    storeActions[actionName] = toRaw(store2)[actionName];
-    return storeActions;
-  }, {});
-  for (const actionName in actions) {
-    store2[actionName] = function() {
-      const _actionId = runningActionId;
-      const trackedStore = new Proxy(store2, {
-        get(...args) {
-          activeAction = _actionId;
-          return Reflect.get(...args);
-        },
-        set(...args) {
-          activeAction = _actionId;
-          return Reflect.set(...args);
-        }
-      });
-      return actions[actionName].apply(trackedStore, arguments);
-    };
-  }
-}
-function devtoolsPlugin({ app, store: store2, options }) {
-  if (store2.$id.startsWith("__hot:")) {
-    return;
-  }
-  if (options.state) {
-    store2._isOptionsAPI = true;
-  }
-  if (typeof options.state === "function") {
-    patchActionForGrouping(
-      // @ts-expect-error: can cast the store...
-      store2,
-      Object.keys(options.actions)
-    );
-    const originalHotUpdate = store2._hotUpdate;
-    toRaw(store2)._hotUpdate = function(newStore) {
-      originalHotUpdate.apply(this, arguments);
-      patchActionForGrouping(store2, Object.keys(newStore._hmrPayload.actions));
-    };
-  }
-  addStoreToDevtools(
-    app,
-    // FIXME: is there a way to allow the assignment from Store<Id, S, G, A> to StoreGeneric?
-    store2
-  );
-}
 function createPinia() {
   const scope = effectScope(true);
   const state = scope.run(() => ref({}));
@@ -881,9 +1206,6 @@ function createPinia() {
         pinia._a = app;
         app.provide(piniaSymbol, pinia);
         app.config.globalProperties.$pinia = pinia;
-        if (USE_DEVTOOLS) {
-          registerPiniaDevtools(app, pinia);
-        }
         toBeInstalled.forEach((plugin2) => _p.push(plugin2));
         toBeInstalled = [];
       }
@@ -904,27 +1226,7 @@ function createPinia() {
     _s: /* @__PURE__ */ new Map(),
     state
   });
-  if (USE_DEVTOOLS && typeof Proxy !== "undefined") {
-    pinia.use(devtoolsPlugin);
-  }
   return pinia;
-}
-function patchObject(newState, oldState) {
-  for (const key in oldState) {
-    const subPatch = oldState[key];
-    if (!(key in newState)) {
-      continue;
-    }
-    const targetValue = newState[key];
-    if (isPlainObject(targetValue) && isPlainObject(subPatch) && !isRef(subPatch) && !isReactive(subPatch)) {
-      newState[key] = patchObject(targetValue, subPatch);
-    } else {
-      {
-        newState[key] = subPatch;
-      }
-    }
-  }
-  return newState;
 }
 const noop = () => {
 };
@@ -967,7 +1269,7 @@ function mergeReactiveObjects(target, patchToApply) {
   }
   return target;
 }
-const skipHydrateSymbol = process.env.NODE_ENV !== "production" ? Symbol("pinia:skipHydration") : (
+const skipHydrateSymbol = (
   /* istanbul ignore next */
   Symbol()
 );
@@ -983,19 +1285,13 @@ function createOptionsStore(id, options, pinia, hot) {
   const initialState = pinia.state.value[id];
   let store2;
   function setup() {
-    if (!initialState && (!(process.env.NODE_ENV !== "production") || !hot)) {
+    if (!initialState && (!("production" !== "production") )) {
       {
         pinia.state.value[id] = state ? state() : {};
       }
     }
-    const localState = process.env.NODE_ENV !== "production" && hot ? (
-      // use ref() to unwrap refs inside state TODO: check if this is still necessary
-      toRefs(ref(state ? state() : {}).value)
-    ) : toRefs(pinia.state.value[id]);
+    const localState = toRefs(pinia.state.value[id]);
     return assign(localState, actions, Object.keys(getters || {}).reduce((computedGetters, name) => {
-      if (process.env.NODE_ENV !== "production" && name in localState) {
-        console.warn(`[🍍]: A getter cannot have the same name as another state property. Rename one of them. Found with "${name}" in store "${id}".`);
-      }
       computedGetters[name] = markRaw(computed(() => {
         setActivePinia(pinia);
         const store3 = pinia._s.get(id);
@@ -1010,45 +1306,26 @@ function createOptionsStore(id, options, pinia, hot) {
 function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) {
   let scope;
   const optionsForPlugin = assign({ actions: {} }, options);
-  if (process.env.NODE_ENV !== "production" && !pinia._e.active) {
-    throw new Error("Pinia destroyed");
-  }
   const $subscribeOptions = {
     deep: true
     // flush: 'post',
   };
-  if (process.env.NODE_ENV !== "production" && !isVue2) {
-    $subscribeOptions.onTrigger = (event) => {
-      if (isListening) {
-        debuggerEvents = event;
-      } else if (isListening == false && !store2._hotUpdating) {
-        if (Array.isArray(debuggerEvents)) {
-          debuggerEvents.push(event);
-        } else {
-          console.error("🍍 debuggerEvents should be an array. This is most likely an internal Pinia bug.");
-        }
-      }
-    };
-  }
   let isListening;
   let isSyncListening;
   let subscriptions = markRaw([]);
   let actionSubscriptions = markRaw([]);
   let debuggerEvents;
   const initialState = pinia.state.value[$id];
-  if (!isOptionsStore && !initialState && (!(process.env.NODE_ENV !== "production") || !hot)) {
+  if (!isOptionsStore && !initialState && (!("production" !== "production") )) {
     {
       pinia.state.value[$id] = {};
     }
   }
-  const hotState = ref({});
+  ref({});
   let activeListener;
   function $patch(partialStateOrMutator) {
     let subscriptionMutation;
     isListening = isSyncListening = false;
-    if (process.env.NODE_ENV !== "production") {
-      debuggerEvents = [];
-    }
     if (typeof partialStateOrMutator === "function") {
       partialStateOrMutator(pinia.state.value[$id]);
       subscriptionMutation = {
@@ -1082,9 +1359,7 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
     });
   } : (
     /* istanbul ignore next */
-    process.env.NODE_ENV !== "production" ? () => {
-      throw new Error(`🍍: Store "${$id}" is built using the setup syntax and does not implement $reset().`);
-    } : noop
+    noop
   );
   function $dispose() {
     scope.stop();
@@ -1131,12 +1406,6 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
       return ret;
     };
   }
-  const _hmrPayload = /* @__PURE__ */ markRaw({
-    actions: {},
-    getters: {},
-    state: [],
-    hotState
-  });
   const partialStore = {
     _p: pinia,
     // _s: scope,
@@ -1159,16 +1428,7 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
     },
     $dispose
   };
-  const store2 = reactive(process.env.NODE_ENV !== "production" || USE_DEVTOOLS ? assign(
-    {
-      _hmrPayload,
-      _customProperties: markRaw(/* @__PURE__ */ new Set())
-      // devtools custom properties
-    },
-    partialStore
-    // must be added later
-    // setupStore
-  ) : partialStore);
+  const store2 = reactive(partialStore);
   pinia._s.set($id, store2);
   const setupStore = pinia._e.run(() => {
     scope = effectScope();
@@ -1177,9 +1437,7 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
   for (const key in setupStore) {
     const prop = setupStore[key];
     if (isRef(prop) && !isComputed(prop) || isReactive(prop)) {
-      if (process.env.NODE_ENV !== "production" && hot) {
-        set(hotState.value, key, toRef(setupStore, key));
-      } else if (!isOptionsStore) {
+      if (!isOptionsStore) {
         if (initialState && shouldHydrate(prop)) {
           if (isRef(prop)) {
             prop.value = initialState[key];
@@ -1191,121 +1449,28 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
           pinia.state.value[$id][key] = prop;
         }
       }
-      if (process.env.NODE_ENV !== "production") {
-        _hmrPayload.state.push(key);
-      }
     } else if (typeof prop === "function") {
-      const actionValue = process.env.NODE_ENV !== "production" && hot ? prop : wrapAction(key, prop);
+      const actionValue = wrapAction(key, prop);
       {
         setupStore[key] = actionValue;
       }
-      if (process.env.NODE_ENV !== "production") {
-        _hmrPayload.actions[key] = prop;
-      }
       optionsForPlugin.actions[key] = prop;
-    } else if (process.env.NODE_ENV !== "production") {
-      if (isComputed(prop)) {
-        _hmrPayload.getters[key] = isOptionsStore ? (
-          // @ts-expect-error
-          options.getters[key]
-        ) : prop;
-      }
-    }
+    } else ;
   }
   {
     assign(store2, setupStore);
     assign(toRaw(store2), setupStore);
   }
   Object.defineProperty(store2, "$state", {
-    get: () => process.env.NODE_ENV !== "production" && hot ? hotState.value : pinia.state.value[$id],
+    get: () => pinia.state.value[$id],
     set: (state) => {
-      if (process.env.NODE_ENV !== "production" && hot) {
-        throw new Error("cannot set hotState");
-      }
       $patch(($state) => {
         assign($state, state);
       });
     }
   });
-  if (process.env.NODE_ENV !== "production") {
-    store2._hotUpdate = markRaw((newStore) => {
-      store2._hotUpdating = true;
-      newStore._hmrPayload.state.forEach((stateKey) => {
-        if (stateKey in store2.$state) {
-          const newStateTarget = newStore.$state[stateKey];
-          const oldStateSource = store2.$state[stateKey];
-          if (typeof newStateTarget === "object" && isPlainObject(newStateTarget) && isPlainObject(oldStateSource)) {
-            patchObject(newStateTarget, oldStateSource);
-          } else {
-            newStore.$state[stateKey] = oldStateSource;
-          }
-        }
-        set(store2, stateKey, toRef(newStore.$state, stateKey));
-      });
-      Object.keys(store2.$state).forEach((stateKey) => {
-        if (!(stateKey in newStore.$state)) {
-          del(store2, stateKey);
-        }
-      });
-      isListening = false;
-      isSyncListening = false;
-      pinia.state.value[$id] = toRef(newStore._hmrPayload, "hotState");
-      isSyncListening = true;
-      nextTick().then(() => {
-        isListening = true;
-      });
-      for (const actionName in newStore._hmrPayload.actions) {
-        const action = newStore[actionName];
-        set(store2, actionName, wrapAction(actionName, action));
-      }
-      for (const getterName in newStore._hmrPayload.getters) {
-        const getter = newStore._hmrPayload.getters[getterName];
-        const getterValue = isOptionsStore ? (
-          // special handling of options api
-          computed(() => {
-            setActivePinia(pinia);
-            return getter.call(store2, store2);
-          })
-        ) : getter;
-        set(store2, getterName, getterValue);
-      }
-      Object.keys(store2._hmrPayload.getters).forEach((key) => {
-        if (!(key in newStore._hmrPayload.getters)) {
-          del(store2, key);
-        }
-      });
-      Object.keys(store2._hmrPayload.actions).forEach((key) => {
-        if (!(key in newStore._hmrPayload.actions)) {
-          del(store2, key);
-        }
-      });
-      store2._hmrPayload = newStore._hmrPayload;
-      store2._getters = newStore._getters;
-      store2._hotUpdating = false;
-    });
-  }
-  if (USE_DEVTOOLS) {
-    const nonEnumerable = {
-      writable: true,
-      configurable: true,
-      // avoid warning on devtools trying to display this property
-      enumerable: false
-    };
-    ["_p", "_hmrPayload", "_getters", "_customProperties"].forEach((p) => {
-      Object.defineProperty(store2, p, assign({ value: store2[p] }, nonEnumerable));
-    });
-  }
   pinia._p.forEach((extender) => {
-    if (USE_DEVTOOLS) {
-      const extensions = scope.run(() => extender({
-        store: store2,
-        app: pinia._a,
-        pinia,
-        options: optionsForPlugin
-      }));
-      Object.keys(extensions || {}).forEach((key) => store2._customProperties.add(key));
-      assign(store2, extensions);
-    } else {
+    {
       assign(store2, scope.run(() => extender({
         store: store2,
         app: pinia._a,
@@ -1314,11 +1479,6 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
       })));
     }
   });
-  if (process.env.NODE_ENV !== "production" && store2.$state && typeof store2.$state === "object" && typeof store2.$state.constructor === "function" && !store2.$state.constructor.toString().includes("[native code]")) {
-    console.warn(`[🍍]: The "state" must be a plain object. It cannot be
-	state: () => new MyClass()
-Found in store "${store2.$id}".`);
-  }
   if (initialState && isOptionsStore && options.hydrate) {
     options.hydrate(store2.$state, initialState);
   }
@@ -1341,15 +1501,9 @@ function defineStore(idOrOptions, setup, setupOptions) {
     const currentInstance = getCurrentInstance();
     pinia = // in test mode, ignore the argument provided as we can always retrieve a
     // pinia instance with getActivePinia()
-    (process.env.NODE_ENV === "test" && activePinia && activePinia._testing ? null : pinia) || currentInstance && inject(piniaSymbol, null);
+    (pinia) || currentInstance && inject(piniaSymbol, null);
     if (pinia)
       setActivePinia(pinia);
-    if (process.env.NODE_ENV !== "production" && !activePinia) {
-      throw new Error(`[🍍]: getActivePinia was called with no active Pinia. Did you forget to install pinia?
-	const pinia = createPinia()
-	app.use(pinia)
-This will fail in production.`);
-    }
     pinia = activePinia;
     if (!pinia._s.has(id)) {
       if (isSetupStore) {
@@ -1357,24 +1511,8 @@ This will fail in production.`);
       } else {
         createOptionsStore(id, options, pinia);
       }
-      if (process.env.NODE_ENV !== "production") {
-        useStore2._pinia = pinia;
-      }
     }
     const store2 = pinia._s.get(id);
-    if (process.env.NODE_ENV !== "production" && hot) {
-      const hotId = "__hot:" + id;
-      const newStore = isSetupStore ? createSetupStore(hotId, setup, options, pinia, true) : createOptionsStore(hotId, assign({}, options), pinia, true);
-      hot._hotUpdate(newStore);
-      delete pinia.state.value[hotId];
-      pinia._s.delete(hotId);
-    }
-    if (process.env.NODE_ENV !== "production" && IS_CLIENT && currentInstance && currentInstance.proxy && // avoid adding stores that are just built for hot module replacement
-    !hot) {
-      const vm = currentInstance.proxy;
-      const cache = "_pStores" in vm ? vm._pStores : vm._pStores = {};
-      cache[id] = store2;
-    }
     return store2;
   }
   useStore2.$id = id;
@@ -1589,15 +1727,6 @@ const showError = (_err) => {
   }
   return err;
 };
-const clearError = async (options = {}) => {
-  const nuxtApp = useNuxtApp();
-  const error = useError();
-  nuxtApp.callHook("app:error:cleared", options);
-  if (options.redirect) {
-    await useRouter().replace(options.redirect);
-  }
-  error.value = null;
-};
 const createError = (err) => {
   const _err = createError$1(err);
   _err.__nuxt_error = true;
@@ -1680,7 +1809,7 @@ const router_CaKIoANnI2 = /* @__PURE__ */ defineNuxtPlugin({
       hooks[hook].push(guard);
       return () => hooks[hook].splice(hooks[hook].indexOf(guard), 1);
     };
-    const baseURL2 = useRuntimeConfig().app.baseURL;
+    useRuntimeConfig().app.baseURL;
     const route = reactive(getRouteFromPath(initialURL));
     async function handleNavigation(url, replace) {
       try {
@@ -1716,8 +1845,8 @@ const router_CaKIoANnI2 = /* @__PURE__ */ defineNuxtPlugin({
       options: {},
       install: () => Promise.resolve(),
       // Navigation
-      push: (url) => handleNavigation(url, false),
-      replace: (url) => handleNavigation(url, true),
+      push: (url) => handleNavigation(url),
+      replace: (url) => handleNavigation(url),
       back: () => window.history.go(-1),
       go: (delta) => window.history.go(delta),
       forward: () => window.history.go(1),
@@ -1798,7 +1927,7 @@ const router_CaKIoANnI2 = /* @__PURE__ */ defineNuxtPlugin({
         delete nuxtApp._processingMiddleware;
       });
       await router.replace(initialURL);
-      if (!isEqual(route.fullPath, initialURL)) {
+      if (!isEqual$1(route.fullPath, initialURL)) {
         await callWithNuxt(nuxtApp, navigateTo, [route.fullPath]);
       }
     });
@@ -1863,12 +1992,7 @@ function throwError(scope, m) {
   throw new ElementPlusError(`[${scope}] ${m}`);
 }
 function debugWarn(scope, message) {
-  if (process.env.NODE_ENV !== "production") {
-    const error = isString(scope) ? new ElementPlusError(`[${scope}] ${message}`) : scope;
-    console.warn(error);
-  }
 }
-const SCOPE = "utils/dom/style";
 function addUnit(value, defaultUnit = "px") {
   if (!value)
     return "";
@@ -1877,7 +2001,6 @@ function addUnit(value, defaultUnit = "px") {
   } else if (isString(value)) {
     return value;
   }
-  debugWarn(SCOPE, "binding value must be a string or number");
 }
 function scrollIntoView(container, selected) {
   if (!isClient)
@@ -2271,9 +2394,9 @@ function _sfc_render287(_ctx, _cache, $props, $setup, $data, $options) {
 var warning_filled_default = /* @__PURE__ */ export_helper_default(warning_filled_vue_vue_type_script_lang_default, [["render", _sfc_render287], ["__file", "warning-filled.vue"]]);
 const epPropKey = "__epPropKey";
 const definePropType = (val) => val;
-const isEpProp = (val) => isObject(val) && !!val[epPropKey];
+const isEpProp = (val) => isObject$1(val) && !!val[epPropKey];
 const buildProp = (prop, key) => {
-  if (!isObject(prop) || isEpProp(prop))
+  if (!isObject$1(prop) || isEpProp(prop))
     return prop;
   const { values, required, default: defaultValue, type, validator } = prop;
   const _validator = values || validator ? (val) => {
@@ -2396,7 +2519,6 @@ const useAttrs = (params = {}) => {
   });
   const instance = getCurrentInstance();
   if (!instance) {
-    debugWarn("use-attrs", "getCurrentInstance() returned null. useAttrs() must be called at the top of a setup function");
     return computed(() => ({}));
   }
   return computed(() => {
@@ -2406,11 +2528,6 @@ const useAttrs = (params = {}) => {
 };
 const useDeprecated = ({ from, replacement, scope, version: version2, ref: ref2, type = "API" }, condition) => {
   watch(() => unref(condition), (val) => {
-    if (val) {
-      debugWarn(scope, `[${type}] ${from} is about to be deprecated in version ${version2}, please use ${replacement} instead.
-For more detail, please visit: ${ref2}
-`);
-    }
   }, {
     immediate: true
   });
@@ -2795,7 +2912,6 @@ const createModelToggleComposable = (name) => {
     useModelToggleEmits: useModelToggleEmits2
   };
 };
-createModelToggleComposable("modelValue");
 const useProp = (name) => {
   const vm = getCurrentInstance();
   return computed(() => {
@@ -2911,13 +3027,6 @@ const useIdInjection = () => {
 };
 const useId = (deterministicId) => {
   const idInjection = useIdInjection();
-  if (!isClient && idInjection === defaultIdInjection) {
-    debugWarn("IdInjection", `Looks like you are using server rendering, you must provide a id provider to ensure the hydration process to be succeed
-usage: app.provide(ID_INJECTION_KEY, {
-  prefix: number,
-  current: number,
-})`);
-  }
   const namespace = useGetDerivedNamespace();
   const idRef = computed(() => unref(deterministicId) || `${namespace.value}-id-${idInjection.prefix}-${idInjection.current++}`);
   return idRef;
@@ -3594,8 +3703,8 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
       if (!isClient || type !== "textarea" || !textarea.value)
         return;
       if (autosize) {
-        const minRows = isObject(autosize) ? autosize.minRows : void 0;
-        const maxRows = isObject(autosize) ? autosize.maxRows : void 0;
+        const minRows = isObject$1(autosize) ? autosize.minRows : void 0;
+        const maxRows = isObject$1(autosize) ? autosize.maxRows : void 0;
         const textareaStyle2 = calcTextareaHeight(textarea.value, minRows, maxRows);
         textareaCalcStyle.value = {
           overflowY: "hidden",
@@ -3693,7 +3802,7 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
       focused.value = false;
       emit("blur", event);
       if (props.validateEvent) {
-        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "blur").catch((err) => debugWarn(err));
+        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "blur").catch((err) => debugWarn());
       }
     };
     const handleMouseLeave = (evt) => {
@@ -3721,7 +3830,7 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
       var _a;
       nextTick(() => resizeTextarea());
       if (props.validateEvent) {
-        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "change").catch((err) => debugWarn(err));
+        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "change").catch((err) => debugWarn());
       }
     });
     watch(nativeInputValue, () => setNativeInputValue());
@@ -4230,7 +4339,7 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
       }
     };
     function scrollTo(arg1, arg2) {
-      if (isObject(arg1)) {
+      if (isObject$1(arg1)) {
         wrapRef.value.scrollTo(arg1);
       } else if (isNumber(arg1) && isNumber(arg2)) {
         wrapRef.value.scrollTo(arg1, arg2);
@@ -4238,14 +4347,12 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
     }
     const setScrollTop = (value) => {
       if (!isNumber(value)) {
-        debugWarn(COMPONENT_NAME$2, "value must be a number");
         return;
       }
       wrapRef.value.scrollTop = value;
     };
     const setScrollLeft = (value) => {
       if (!isNumber(value)) {
-        debugWarn(COMPONENT_NAME$2, "value must be a number");
         return;
       }
       wrapRef.value.scrollLeft = value;
@@ -4436,12 +4543,10 @@ const OnlyChild = /* @__PURE__ */ defineComponent({
       if (!defaultSlot)
         return null;
       if (defaultSlot.length > 1) {
-        debugWarn(NAME, "requires exact only one valid child.");
         return null;
       }
       const firstLegitNode = findFirstLegitChild(defaultSlot);
       if (!firstLegitNode) {
-        debugWarn(NAME, "no valid child node found");
         return null;
       }
       return withDirectives(cloneVNode(firstLegitNode, attrs), [[forwardRefDirective]]);
@@ -4453,7 +4558,7 @@ function findFirstLegitChild(node) {
     return null;
   const children = node;
   for (const child of children) {
-    if (isObject(child)) {
+    if (isObject$1(child)) {
       switch (child.type) {
         case Comment:
           continue;
@@ -4585,8 +4690,6 @@ const getVisibleElement = (elements, container) => {
   }
 };
 const isHidden = (element, container) => {
-  if (process.env.NODE_ENV === "test")
-    return false;
   if (getComputedStyle(element).visibility === "hidden")
     return true;
   while (element) {
@@ -5309,9 +5412,6 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
       return props.transition || `${ns.namespace.value}-fade-in-linear`;
     });
     const persistentRef = computed(() => {
-      if (process.env.NODE_ENV === "test") {
-        return true;
-      }
       return props.persistent;
     });
     const shouldRender = computed(() => {
@@ -6624,9 +6724,7 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
     const numPrecision = computed(() => {
       const stepPrecision = getPrecision(props.step);
       if (!isUndefined(props.precision)) {
-        if (stepPrecision > props.precision) {
-          debugWarn("InputNumber", "precision should not be less than the decimal places of step");
-        }
+        if (stepPrecision > props.precision) ;
         return props.precision;
       } else {
         return Math.max(getPrecision(props.modelValue), stepPrecision);
@@ -6742,7 +6840,7 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
       emit(UPDATE_MODEL_EVENT, newVal);
       emit(CHANGE_EVENT, newVal, oldVal);
       if (props.validateEvent) {
-        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "change").catch((err) => debugWarn(err));
+        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "change").catch((err) => debugWarn());
       }
       data.currentValue = newVal;
     };
@@ -6774,7 +6872,7 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
       var _a;
       emit("blur", event);
       if (props.validateEvent) {
-        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "blur").catch((err) => debugWarn(err));
+        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "blur").catch((err) => debugWarn());
       }
     };
     watch(() => props.modelValue, (value) => {
@@ -7193,8 +7291,8 @@ const useSelect = (props, states, ctx) => {
     if (props.filterable && !props.multiple) {
       states.inputLength = 20;
     }
-    if (!isEqual$1(val, oldVal) && props.validateEvent) {
-      formItem == null ? void 0 : formItem.validate("change").catch((err) => debugWarn(err));
+    if (!isEqual(val, oldVal) && props.validateEvent) {
+      formItem == null ? void 0 : formItem.validate("change").catch((err) => debugWarn());
     }
   }, {
     flush: "post",
@@ -7459,7 +7557,7 @@ const useSelect = (props, states, ctx) => {
     handleQueryChange(e.target.value);
   }, debounce$1.value);
   const emitChange = (val) => {
-    if (!isEqual$1(props.modelValue, val)) {
+    if (!isEqual(props.modelValue, val)) {
       ctx.emit(CHANGE_EVENT, val);
     }
   };
@@ -7535,7 +7633,7 @@ const useSelect = (props, states, ctx) => {
     });
   };
   const getValueIndex = (arr = [], value) => {
-    if (!isObject(value))
+    if (!isObject$1(value))
       return arr.indexOf(value);
     const valueKey = props.valueKey;
     let index = -1;
@@ -7688,7 +7786,7 @@ const useSelect = (props, states, ctx) => {
     }
   };
   const getValueKey = (item) => {
-    return isObject(item.value) ? get(item.value, props.valueKey) : item.value;
+    return isObject$1(item.value) ? get(item.value, props.valueKey) : item.value;
   };
   const optionsAllDisabled = computed(() => optionsArray.value.filter((option) => option.visible).every((option) => option.disabled));
   const showTagList = computed(() => states.selected.slice(0, props.maxCollapseTags));
@@ -9203,7 +9301,6 @@ const useStops = (props, initData, minValue, maxValue) => {
     if (!props.showStops || props.min > props.max)
       return [];
     if (props.step === 0) {
-      debugWarn("ElSlider", "step should not be 0.");
       return [];
     }
     const stopCount = (props.max - props.min) / props.step;
@@ -9257,7 +9354,7 @@ const useWatch = (props, initData, minValue, maxValue, emit, elFormItem) => {
         initData.secondValue = val[1];
         if (valueChanged()) {
           if (props.validateEvent) {
-            (_a = elFormItem == null ? void 0 : elFormItem.validate) == null ? void 0 : _a.call(elFormItem, "change").catch((err) => debugWarn(err));
+            (_a = elFormItem == null ? void 0 : elFormItem.validate) == null ? void 0 : _a.call(elFormItem, "change").catch((err) => debugWarn());
           }
           initData.oldValue = val.slice();
         }
@@ -9271,7 +9368,7 @@ const useWatch = (props, initData, minValue, maxValue, emit, elFormItem) => {
         initData.firstValue = val;
         if (valueChanged()) {
           if (props.validateEvent) {
-            (_b = elFormItem == null ? void 0 : elFormItem.validate) == null ? void 0 : _b.call(elFormItem, "change").catch((err) => debugWarn(err));
+            (_b = elFormItem == null ? void 0 : elFormItem.validate) == null ? void 0 : _b.call(elFormItem, "change").catch((err) => debugWarn());
           }
           initData.oldValue = val;
         }
@@ -9785,7 +9882,7 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
       var _a;
       input.value.checked = val;
       if (props.validateEvent) {
-        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "change").catch((err) => debugWarn(err));
+        (_a = formItem == null ? void 0 : formItem.validate) == null ? void 0 : _a.call(formItem, "change").catch((err) => debugWarn());
       }
     });
     const handleChange = () => {
@@ -9807,19 +9904,18 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
       }
       const shouldChange = beforeChange();
       const isPromiseOrBool = [
-        isPromise(shouldChange),
+        isPromise$1(shouldChange),
         isBoolean(shouldChange)
       ].includes(true);
       if (!isPromiseOrBool) {
         throwError(COMPONENT_NAME, "beforeChange must return type `Promise<boolean>` or `boolean`");
       }
-      if (isPromise(shouldChange)) {
+      if (isPromise$1(shouldChange)) {
         shouldChange.then((result) => {
           if (result) {
             handleChange();
           }
         }).catch((e) => {
-          debugWarn(COMPONENT_NAME, `some error occurred: ${e}`);
         });
       } else if (shouldChange) {
         handleChange();
@@ -9994,23 +10090,6 @@ const __nuxt_component_3 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const base = "";
-const elCollapse = "";
-const elCollapseItem = "";
-const elButton = "";
-const elInput = "";
-const elTag = "";
-const elOption = "";
-const elOptionGroup = "";
-const elScrollbar = "";
-const elPopper = "";
-const elSelect = "";
-const elSlider = "";
-const elInputNumber = "";
-const elTooltip = "";
-const elPopover = "";
-const elSwitch = "";
-const elAlert = "";
 let inputs = [];
 let outputs = [];
 let midiInput;
@@ -10674,7 +10753,6 @@ const useStore = defineStore("main", {
     }
   }
 });
-const TopNav_vue_vue_type_style_index_0_scoped_53fdfcf0_lang = "";
 const _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -10725,7 +10803,6 @@ _sfc_main$8.setup = (props, ctx) => {
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
 const TopNav = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-53fdfcf0"]]);
-const MidiDownload_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$7 = {
   __name: "MidiDownload",
   __ssrInlineRender: true,
@@ -10867,7 +10944,6 @@ const euclidean = {
   generateEuclideanSequence,
   buildString
 };
-const Swatch_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$6 = {
   __name: "Swatch",
   __ssrInlineRender: true,
@@ -11008,8 +11084,6 @@ _sfc_main$5.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/_SettingsPane.vue");
   return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const uPlot_min = "";
-const Waveform_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$4 = {
   __name: "Waveform",
   __ssrInlineRender: true,
@@ -11042,7 +11116,6 @@ _sfc_main$4.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/Waveform.vue");
   return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const Notation_vue_vue_type_style_index_0_scoped_821ef629_lang = "";
 const _sfc_main$3 = {
   __name: "Notation",
   __ssrInlineRender: true,
@@ -11076,7 +11149,6 @@ _sfc_main$3.setup = (props, ctx) => {
   return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
 };
 const Notation = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-821ef629"]]);
-const OnWeaving_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$2 = {
   __name: "OnWeaving",
   __ssrInlineRender: true,
@@ -12249,8 +12321,8 @@ const _sfc_main = {
   __name: "nuxt-root",
   __ssrInlineRender: true,
   setup(__props) {
-    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/error-component-9681f730.js").then((r) => r.default || r));
-    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import("./_nuxt/island-renderer-772a2728.js").then((r) => r.default || r));
+    const ErrorComponent = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/error-component-9681f730.mjs').then((r) => r.default || r));
+    const IslandRenderer = /* @__PURE__ */ defineAsyncComponent(() => import('./_nuxt/island-renderer-772a2728.mjs').then((r) => r.default || r));
     const nuxtApp = useNuxtApp();
     nuxtApp.deferHydration();
     nuxtApp.ssrContext.url;
@@ -12314,12 +12386,6 @@ const plugins = normalizePlugins(_plugins);
   };
 }
 const entry$1 = (ctx) => entry(ctx);
-export {
-  _export_sfc as _,
-  useHead as a,
-  createError as c,
-  entry$1 as default,
-  navigateTo as n,
-  useRouter as u
-};
+
+export { _export_sfc as _, useHead as a, createError as c, entry$1 as default, navigateTo as n, useRouter as u };
 //# sourceMappingURL=server.mjs.map
