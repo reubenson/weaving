@@ -237,6 +237,8 @@ export const useStore = defineStore('main', {
           const [defaultInput] = inputs;
           const [defaultOutput] = outputs;
 
+          console.log('outputs', outputs);
+
           // if (this.inputPort) {
           // this.inputPort = defaultInput;
           // midi.setInput(defaultInput);

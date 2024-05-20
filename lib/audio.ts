@@ -14,7 +14,7 @@ function playNote(channel: number, note: number, noteLength: number, webSynth: a
     // play via external midi
     channel = 1; // should make into setting, need to uncomment for model:samples
     
-    midi.noteOn(channel+1, note, 127);
+    midi.noteOn(channel, note, 127);
 
     if (noteLength) {
       setTimeout(() => {

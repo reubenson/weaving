@@ -72,7 +72,7 @@
             />
           </el-select>
         </client-only>
-        <p class="setting-description">Note: MIDI event data will be transmitted from Channel 1</p>
+        <p class="setting-description">Note: MIDI event data will be transmitted from Channel 1. For best results, use this MIDI output feature on Chrome.</p>
       </settings-pane>
       <settings-pane :title="'Time Settings'">
         <p class="settings-description">Change the BPM (beats per minute) to modify how fast we advance through the sequence controlled in <em>Music Settings</em></p>

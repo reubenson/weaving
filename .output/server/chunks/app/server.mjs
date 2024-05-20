@@ -10104,6 +10104,7 @@ function setInput(name) {
 }
 function setOutput(name) {
   midiOutput = outputs.find((output) => output.name === name);
+  console.log("midiOutput", midiOutput);
 }
 function parseMidiMessage(message) {
   return {
@@ -10692,6 +10693,7 @@ const useStore = defineStore("main", {
         this.midiInputPorts = inputs2;
         this.midiOutputPorts = outputs2;
         const [defaultOutput] = outputs2;
+        console.log("outputs", outputs2);
         if (defaultOutput) {
           this.midiOutputPort = defaultOutput;
         }
@@ -11621,7 +11623,7 @@ const _sfc_main$2 = {
             if (_push2) {
               _push2(`<p class="setting-description"${_scopeId}>Select MIDI Device</p>`);
               _push2(ssrRenderComponent(_component_client_only, null, {}, _parent2, _scopeId));
-              _push2(`<p class="setting-description"${_scopeId}>Note: MIDI event data will be transmitted from Channel 1</p>`);
+              _push2(`<p class="setting-description"${_scopeId}>Note: MIDI event data will be transmitted from Channel 1. For best results, use this MIDI output feature on Chrome.</p>`);
             } else {
               return [
                 createVNode("p", { class: "setting-description" }, "Select MIDI Device"),
@@ -11641,7 +11643,7 @@ const _sfc_main$2 = {
                   ]),
                   _: 1
                 }),
-                createVNode("p", { class: "setting-description" }, "Note: MIDI event data will be transmitted from Channel 1")
+                createVNode("p", { class: "setting-description" }, "Note: MIDI event data will be transmitted from Channel 1. For best results, use this MIDI output feature on Chrome.")
               ];
             }
           }),
